@@ -1,0 +1,10 @@
+{
+  "workbench.colorTheme": "Solarized Dark",
+  "workbench.iconTheme": "vs-minimal",
+  "workbench.colorCustomizations": {
+    "activityBar.background": "#00831c",
+    "sideBar.background": "#00831c",
+    "titleBar.activeBackground": "#00831c"
+  },
+  "window.title": "EL-CAMPITO"
+}
