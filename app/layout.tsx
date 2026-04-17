@@ -6,37 +6,60 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Granja Agroecológica - Producción Familiar Artesanal",
-  description: "Huevos de Gallinas Libres, Miel Envasada y productos derivados. Origen Cañuelas",
+  description:
+    "Huevos de Gallinas Libres, Miel Envasada y productos derivados. Origen Cañuelas",
   generator: "El Campito",
-  manifest: "/manifest.json",
-  themeColor: "#4A0606",
-  appleWebApp: {
-    capable: true,
-    statusBarStyle: "default",
-    title: "El campito",
+
+  metadataBase: new URL("https://granja-el-campito.vercel.app"), // 
+  openGraph: {
+    title: "Granja Agroecológica",
+    description:
+      "Huevos de Gallinas Libres, Miel Envasada y productos artesanales",
+    url: "https://granja-el-campito.vercel.app", // 
+    siteName: "El Campito",
+    images: [
+      {
+        url: "/preview.png", // 👈 TU IMAGEN
+        width: 1200,
+        height: 630,
+        alt: "Granja Agroecológica El Campito",
+      },
+    ],
+    locale: "es_AR",
+    type: "website",
   },
+
+  twitter: {
+    card: "summary_large_image",
+    title: "Granja Agroecológica",
+    description:
+      "Huevos de Gallinas Libres, Miel Envasada y productos artesanales",
+    images: ["/preview.png"],
+  },
+
   icons: {
     icon: "/favicon.png",
     apple: "/icon-192.png",
+  },
+
+  manifest: "/manifest.json",
+  themeColor: "#4A0606",
+
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "El Campito",
   },
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html lang="es"translate="no">
-      <head>
-        <link rel="manifest" href="/manifest.json" />
-        <meta name="theme-color" content="#4A0606" />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <meta name="apple-mobile-web-app-title" content="El Campito" />
-        <link rel="apple-touch-icon" href="/icon-192.png" />
-      </head>
-      <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable}`}>
+    <html lang="es" translate="no">
+      <body className={`${GeistSans.variable} ${GeistMono.variable}`}>
         {children}
         <Analytics />
       </body>

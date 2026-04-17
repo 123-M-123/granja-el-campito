@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 
 const items = [
@@ -11,10 +12,57 @@ const items = [
 ]
 
 export default function BubbleNav() {
+  const [offset, setOffset] = useState({ x: 0, y: 0 })
+  const [target, setTarget] = useState({ x: 0, y: 0 })
+  const [active, setActive] = useState(false)
+
+  // 👇 SOLO cuando movés el mouse
+  useEffect(() => {
+    let timeout: NodeJS.Timeout
+
+    const handleMouseMove = (e: MouseEvent) => {
+      const x = (e.clientX / window.innerWidth - 0.5) * 10
+      const y = (e.clientY / window.innerHeight - 0.5) * 10
+
+      setTarget({ x, y })
+      setActive(true)
+
+      clearTimeout(timeout)
+      timeout = setTimeout(() => {
+        setActive(false) // 👈 se apaga si dejás de mover
+      }, 100)
+    }
+
+    window.addEventListener('mousemove', handleMouseMove)
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove)
+      clearTimeout(timeout)
+    }
+  }, [])
+
+  // 👇 SUAVIZADO SOLO SI ESTÁ ACTIVO
+  useEffect(() => {
+    if (!active) return
+
+    const interval = setInterval(() => {
+      setOffset(prev => ({
+        x: prev.x + (target.x - prev.x) * 0.08,
+        y: prev.y + (target.y - prev.y) * 0.08,
+      }))
+    }, 16)
+
+    return () => clearInterval(interval)
+  }, [target, active])
+
   return (
-    <div className="nav-container">
+    <div
+      className="nav-container"
+      style={{
+        transform: `translate(-50%, -50%) translate(${offset.x}px, ${offset.y}px)`
+      }}
+    >
       {items.map((item, i) => (
-        
         <div
           key={i}
           className="bubble-link"
@@ -28,15 +76,17 @@ export default function BubbleNav() {
               style={{
                 width: item.size,
                 height: item.size,
-                animationDelay: `${i * 0.6}s`,
+                animationDelay: `${Math.random() * 4}s`,
+                animationDuration: `${7 + Math.random() * 5}s`,
               }}
             >
-              <img src={`/burbujas/${item.label.toLowerCase()}.png`} />
-              <span>{item.label}</span>
+              <img
+                src={`/burbujas/${item.label.toLowerCase()}.png`}
+                className="bubble-img"
+              />
             </div>
           </Link>
         </div>
-
       ))}
     </div>
   )
