@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     siteName: "El Campito",
     images: [
       {
-        url: "/preview.png", // 👈 TU IMAGEN
+        url: "https://granja-el-campito.vercel.app/preview.png", // 👈 TU IMAGEN
         width: 1200,
         height: 630,
         alt: "Granja Agroecológica El Campito",
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
     title: "Granja Agroecológica",
     description:
       "Huevos de Gallinas Libres, Miel Envasada y productos artesanales",
-    images: ["/preview.png"],
+    images: ["https://granja-el-campito.vercel.app/preview.png"],
   },
 
   icons: {
