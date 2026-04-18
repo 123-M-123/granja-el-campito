@@ -1,11 +1,11 @@
 {
-  "name": "MB Compras — Bazar & Regalos",
-  "short_name": "MB Compras",
-  "description": "Bazar y regalos con envío a domicilio en CABA",
+  "name": "Granja Agroecológica - Producción Familiar Artesanal",
+  "short_name": "El Campito",
+  "description": "Huevos de Gallinas Libres, Miel Envasada y productos artesanales",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#FBD8B6",
-  "theme_color": "#4A0606",
+  "background_color": "#33df08",
+  "theme_color": "#33df08",
   "orientation": "portrait",
   "icons": [
     {
