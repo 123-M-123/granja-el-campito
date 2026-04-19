@@ -1,30 +1,35 @@
 'use client'
 
-import Bubbles from '@/app/components/effects/Bubbles'
-import BubbleNav from '@/app/components/navigation/BubbleNav'
+import BubbleNav from './navigation/BubbleNav'
 
 export default function HeroSection() {
   return (
-    <section className="relative h-screen w-full overflow-hidden bg-[#009245] flex items-center justify-center">
-      
-      {/* 🌿 Fondo animado */}
-      <Bubbles />
+    <section
+      style={{
+        position: 'relative',
+        width: '100%',
+        minHeight: 'calc(100vh - 110px)',
+        paddingTop: '-5px',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        textAlign: 'center',
+        overflow: 'hidden',
+      }}
+    >
+      <div style={{ zIndex: 2 }}>
+        <p style={{ opacity: 0.8 }}>Producción Familiar Artesanal</p>
 
-      {/* 🧭 Navegación en burbujas */}
-      <div className="relative z-10 w-full">
-        <BubbleNav />
-      </div>
-
-      {/* 🏷️ Título */}
-      <div className="absolute top-10 w-full text-center z-10 text-white">
-        <h1 className="text-4xl md:text-5xl font-bold drop-shadow-lg">
-          Granja Agroecológica
+        <h1 style={{ fontSize: '28px', fontWeight: 800 }}>
+          Entra ya a Nuestras Esferas de Producción
         </h1>
-        <p className="text-lg italic opacity-90">
-          Producción Familiar Artesanal
-        </p>
+
+        <p style={{ fontSize: '14px', opacity: 0.9 }}>
+          Y enterate de todo lo que hacemos        </p>
       </div>
 
+      <BubbleNav />
     </section>
   )
 }

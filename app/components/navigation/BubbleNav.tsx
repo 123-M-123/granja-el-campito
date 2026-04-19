@@ -1,92 +1,129 @@
 'use client'
 
-import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { useEffect, useState } from 'react'
 
-const items = [
-  { href: '/miel', label: 'Miel', size: 200, x: 0, y: -120 },
-  { href: '/huevos', label: 'Huevos', size: 150, x: -120, y: 80 },
-  { href: '/corderos', label: 'Corderos', size: 150, x: 120, y: 80 },
-  { href: '/ferias', label: 'Ferias', size: 120, x: -80, y: 180 },
-  { href: '/precios', label: 'Precios', size: 120, x: 80, y: 180 },
+type Item = {
+  href: string
+  label: string
+  x: number
+  y: number
+  size: number
+  delay: number
+}
+
+const desktopItems: Item[] = [
+  { href: '/quienes-somos', label: 'logo', x: 50, y: 30, size: 110, delay: 0 },
+  { href: '/miel', label: 'miel', x: 50, y: 55, size: 95, delay: 1 },
+  { href: '/huevos', label: 'huevos', x: 25, y: 60, size: 90, delay: 2 },
+  { href: '/corderos', label: 'corderos', x: 75, y: 40, size: 90, delay: 1.5 },
+  { href: '/ferias', label: 'ferias', x: 20, y: 45, size: 85, delay: 0.5 },
+  { href: '/precios', label: 'precios', x: 60, y: 70, size: 85, delay: 2.5 },
+]
+
+const mobileItems: Item[] = [
+  { href: '/quienes-somos', label: 'logo', x: 50, y: 28, size: 240, delay: 0 },
+  { href: '/miel', label: 'miel', x: 75, y: 68, size: 225, delay: 1 },
+  { href: '/huevos', label: 'huevos', x: 25, y: 90, size: 150, delay: 2 },
+  { href: '/corderos', label: 'corderos', x: 80, y: 92, size: 135, delay: 1.5 },
+  { href: '/ferias', label: 'ferias', x: 20, y: 68, size: 175, delay: 0.5 },
+  { href: '/precios', label: 'precios', x: 55, y: 82, size: 160, delay: 2.5 },
 ]
 
 export default function BubbleNav() {
-  const [offset, setOffset] = useState({ x: 0, y: 0 })
-  const [target, setTarget] = useState({ x: 0, y: 0 })
-  const [active, setActive] = useState(false)
+  const [items, setItems] = useState<Item[]>(desktopItems)
 
-  // 👇 SOLO cuando movés el mouse
   useEffect(() => {
-    let timeout: NodeJS.Timeout
-
-    const handleMouseMove = (e: MouseEvent) => {
-      const x = (e.clientX / window.innerWidth - 0.5) * 10
-      const y = (e.clientY / window.innerHeight - 0.5) * 10
-
-      setTarget({ x, y })
-      setActive(true)
-
-      clearTimeout(timeout)
-      timeout = setTimeout(() => {
-        setActive(false) // 👈 se apaga si dejás de mover
-      }, 100)
+    const update = () => {
+      if (window.innerWidth < 768) {
+        setItems(mobileItems)
+      } else {
+        setItems(desktopItems)
+      }
     }
 
-    window.addEventListener('mousemove', handleMouseMove)
-
-    return () => {
-      window.removeEventListener('mousemove', handleMouseMove)
-      clearTimeout(timeout)
-    }
+    update()
+    window.addEventListener('resize', update)
+    return () => window.removeEventListener('resize', update)
   }, [])
-
-  // 👇 SUAVIZADO SOLO SI ESTÁ ACTIVO
-  useEffect(() => {
-    if (!active) return
-
-    const interval = setInterval(() => {
-      setOffset(prev => ({
-        x: prev.x + (target.x - prev.x) * 0.08,
-        y: prev.y + (target.y - prev.y) * 0.08,
-      }))
-    }, 16)
-
-    return () => clearInterval(interval)
-  }, [target, active])
 
   return (
     <div
-      className="nav-container"
       style={{
-        transform: `translate(-50%, -50%) translate(${offset.x}px, ${offset.y}px)`
+        position: 'absolute',
+        inset: 0,
+        zIndex: 1,
       }}
     >
+      {/* ANIMACIÓN */}
+      <style>{`
+  @keyframes floatSoft {
+    0% {
+      transform: translate(-50%, -50%) translate(0px, 0px);
+    }
+    25% {
+      transform: translate(-50%, -50%) translate(6px, -10px);
+    }
+    50% {
+      transform: translate(-50%, -50%) translate(-6px, -14px);
+    }
+    75% {
+      transform: translate(-50%, -50%) translate(4px, -8px);
+    }
+    100% {
+      transform: translate(-50%, -50%) translate(0px, 0px);
+    }
+  }
+`}</style>
+
       {items.map((item, i) => (
-        <div
+        <Link
           key={i}
-          className="bubble-link"
+          href={item.href}
           style={{
-            transform: `translate(${item.x}px, ${item.y}px)`
+            position: 'absolute',
+            left: `${item.x}%`,
+            top: `${item.y}%`,
+            transform: 'translate(-50%, -50%)',
+            width: item.size,
+            height: item.size,
+            borderRadius: '50%',
+            overflow: 'hidden',
+            display: 'block',
+            boxShadow: '0 10px 25px rgba(0,0,0,0.25)',
+            animation: `floatSoft 6s ease-in-out infinite`,
+            animationDelay: `${item.delay}s`,
+            transition: 'transform 0.25s ease, box-shadow 0.25s ease',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.animation = 'none'
+            e.currentTarget.style.transform =
+              'translate(-50%, -50%) scale(1.12)'
+            e.currentTarget.style.boxShadow =
+              '0 18px 35px rgba(0,0,0,0.35)'
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.animation = `floatSoft 6s ease-in-out infinite`
+            e.currentTarget.style.transform =
+              'translate(-50%, -50%) scale(1)'
+            e.currentTarget.style.boxShadow =
+              '0 10px 25px rgba(0,0,0,0.25)'
           }}
         >
-          <Link href={item.href}>
-            <div
-              className="bubble-nav"
-              style={{
-                width: item.size,
-                height: item.size,
-                animationDelay: `${Math.random() * 4}s`,
-                animationDuration: `${7 + Math.random() * 5}s`,
-              }}
-            >
-              <img
-                src={`/burbujas/${item.label.toLowerCase()}.png`}
-                className="bubble-img"
-              />
-            </div>
-          </Link>
-        </div>
+          <img
+            src={
+              item.label === 'logo'
+                ? '/logo-b.png'
+                : `/burbujas/${item.label}.png`
+            }
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              display: 'block',
+            }}
+          />
+        </Link>
       ))}
     </div>
   )

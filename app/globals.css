@@ -46,11 +46,10 @@ body {
   position: absolute;
   bottom: -150px;
   border-radius: 50%;
-  background-image: url('/bubble.png');
   background-size: cover;
   opacity: 0.6;
 
-  animation: floatUp linear infinite;
+ 
 }
 
 @keyframes floatUp {
@@ -81,67 +80,57 @@ body {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+ 
 }
 
 .bubble-link {
   position: absolute;
 }
 
+
 .bubble-nav {
   position: relative;
   border-radius: 50%;
-overflow: hidden;
+
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
 
-  padding: 10px;
-  text-align: center;
-  font-weight: bold;
-  color: white;
-
   cursor: pointer;
 
-  animation: floatWater 8s ease-in-out infinite;/* 👈 ACÁ */
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+  padding: 0 !important;
+  overflow: hidden;
+
   transition: transform 0.3s ease;
-
-  background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.4), rgba(255,255,255,0.05));
-
-  box-shadow:
-    inset -15px -15px 30px rgba(0,0,0,0.25),
-    inset 15px 15px 30px rgba(255,255,255,0.25),
-    0 10px 30px rgba(0,0,0,0.2);
-
 }
 
 .bubble-nav:hover {
   transform: scale(1.1);
 }
 
-
-
-@keyframes floatSoft {
-  0% { transform: translateY(0px); }
-  50% { transform: translateY(-20px); }
-  100% { transform: translateY(0px); }
+.bubble-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  pointer-events: none;
+  background: transparent;
 }
 
-/* =========================
-   RESPONSIVE (CLAVE)
-========================= */
-
-@media (max-width: 768px) {
-  .bubble-nav {
-    transform: scale(0.8);
-  }
-
-  .nav-container {
+.bubble-label {
   position: absolute;
-  top: 50%;
+  bottom: -28px;
   left: 50%;
-}
+  transform: translateX(-50%);
+  font-size: 13px;
+  font-weight: 600;
+  color: white;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.5);
+  pointer-events: none;
 }
 
 .bubble-nav::after {
@@ -156,53 +145,128 @@ overflow: hidden;
   filter: blur(8px);
 }
 
+/* =========================
+   ANIMACIÓN AGUA
+========================= */
+
 @keyframes floatWater {
-  0% {
-    transform: translate(0px, 0px) rotate(0deg);
+  0% { transform: translate(0px, 0px); }
+  25% { transform: translate(6px, -10px); }
+  50% { transform: translate(-6px, -20px); }
+  75% { transform: translate(8px, -10px); }
+  100% { transform: translate(0px, 0px); }
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 768px) {
+
+  .nav-container {
+    top: 55%;
   }
 
-  20% {
-    transform: translate(6px, -12px) rotate(1deg);
-  }
-
-  40% {
-    transform: translate(-8px, -28px) rotate(-1deg);
-  }
-
-  60% {
-    transform: translate(10px, -40px) rotate(1deg);
-  }
-
-  80% {
-    transform: translate(-6px, -20px) rotate(-1deg);
-  }
-
-  100% {
-    transform: translate(0px, 0px) rotate(0deg);
-  }
+ 
 
 }
 
-.bubble-img {
+/* =========================
+   LOGO (SI LO SEGUÍS USANDO)
+========================= */
+
+.logoBubble {
+  display: none; /* 🔥 lo anulamos porque ahora es parte del sistema */
+}
+
+/* =========================
+   HEADER LIMPIO (RESET)
+========================= */
+
+.header {
+  position: relative;
   width: 100%;
-  height: 100%;
-  object-fit: cover; /* 🔥 clave */
-  border-radius: 50%;
-  pointer-events: none;
+  min-height: 110px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 10px 16px;
+
+  background: #0a8f3c; /* limpio, sin imagen */
 }
 
-.bubble-label {
-  position: absolute;
-  bottom: -28px; /* 👈 lo baja fuera de la burbuja */
-
-  left: 50%;
-  transform: translateX(-50%);
-
-  font-size: 13px;
-  font-weight: 600;
-  color: white;
-
-  text-shadow: 0 2px 6px rgba(0,0,0,0.5);
-
-  pointer-events: none;
+/* columnas */
+.header-left,
+.header-right {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
 }
+
+.header-center {
+  flex: 1;
+  text-align: center;
+}
+
+/* LOGO */
+.logo {
+  width: 80px;
+  height: auto;
+}
+
+/* ICONOS */
+.icon {
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+}
+
+/* TEXTO */
+.header-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
+.title {
+  font-size: 14px;
+}
+
+.subtitle {
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+  .header {
+    min-height: 70px;
+    padding: 6px 10px;
+  }
+
+  .logo {
+    width: 45px;
+  }
+
+  .icon {
+    width: 26px;
+    height: 26px;
+  }
+
+  .title {
+    font-size: 11px;
+  }
+
+  .subtitle {
+    font-size: 10px;
+  }
+}
+
+.bubble-link:nth-child(1) .bubble-nav { animation-duration: 7s; }
+.bubble-link:nth-child(2) .bubble-nav { animation-duration: 9s; }
+.bubble-link:nth-child(3) .bubble-nav { animation-duration: 6s; }
+.bubble-link:nth-child(4) .bubble-nav { animation-duration: 8s; }
+.bubble-link:nth-child(5) .bubble-nav { animation-duration: 10s; }
+.bubble-link:nth-child(6) .bubble-nav { animation-duration: 7.5s; }
