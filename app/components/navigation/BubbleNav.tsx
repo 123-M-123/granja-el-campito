@@ -55,26 +55,15 @@ export default function BubbleNav() {
         zIndex: 1,
       }}
     >
-      {/* ANIMACIÓN */}
       <style>{`
-  @keyframes floatSoft {
-    0% {
-      transform: translate(-50%, -50%) translate(0px, 0px);
-    }
-    25% {
-      transform: translate(-50%, -50%) translate(6px, -10px);
-    }
-    50% {
-      transform: translate(-50%, -50%) translate(-6px, -14px);
-    }
-    75% {
-      transform: translate(-50%, -50%) translate(4px, -8px);
-    }
-    100% {
-      transform: translate(-50%, -50%) translate(0px, 0px);
-    }
-  }
-`}</style>
+        @keyframes floatSoft {
+          0% { transform: translate(-50%, -50%) translate(0px, 0px); }
+          25% { transform: translate(-50%, -50%) translate(6px, -10px); }
+          50% { transform: translate(-50%, -50%) translate(-6px, -14px); }
+          75% { transform: translate(-50%, -50%) translate(4px, -8px); }
+          100% { transform: translate(-50%, -50%) translate(0px, 0px); }
+        }
+      `}</style>
 
       {items.map((item, i) => (
         <Link
@@ -94,20 +83,6 @@ export default function BubbleNav() {
             animation: `floatSoft 6s ease-in-out infinite`,
             animationDelay: `${item.delay}s`,
             transition: 'transform 0.25s ease, box-shadow 0.25s ease',
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.animation = 'none'
-            e.currentTarget.style.transform =
-              'translate(-50%, -50%) scale(1.12)'
-            e.currentTarget.style.boxShadow =
-              '0 18px 35px rgba(0,0,0,0.35)'
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.animation = `floatSoft 6s ease-in-out infinite`
-            e.currentTarget.style.transform =
-              'translate(-50%, -50%) scale(1)'
-            e.currentTarget.style.boxShadow =
-              '0 10px 25px rgba(0,0,0,0.25)'
           }}
         >
           <img

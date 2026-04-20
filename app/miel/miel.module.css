@@ -1,0 +1,131 @@
+.page {
+  padding: 60px 24px;
+  color: white;
+}
+
+/* HERO */
+.hero {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.hero h1 {
+  font-family: 'Eras', sans-serif;
+  font-weight: 700;
+  font-size: 52px;
+  color: #064f2a;
+}
+
+.hero p {
+  font-family: 'Eras', sans-serif;
+  font-weight: 600;
+  font-size: 20px;
+  color: #d9f5e3;
+}
+
+/* SECCIONES */
+.section {
+  margin-bottom: 60px;
+  text-align: center;
+}
+
+.section h2 {
+  font-family: 'Eras', sans-serif;
+  font-weight: 600;
+  font-size: 32px;
+  margin-bottom: 30px;
+}
+
+/* BURBUJAS */
+.bubbles {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 24px;
+}
+
+.bubble {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  background: radial-gradient(circle at 30% 30%, #fff8cc, #f5c542);
+
+  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+  cursor: pointer;
+
+  transition: transform 0.2s ease;
+  overflow: hidden;
+}
+
+.bubble:hover {
+  transform: scale(1.1);
+}
+
+/* IMAGEN */
+.bubble img {
+  width: 70px;
+  height: 70px;
+  object-fit: contain;
+}
+
+/* TEXTO */
+.bubble span {
+  margin-top: 6px;
+  font-family: 'Eras', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  color: #3a2c00;
+}
+
+/* DESKTOP */
+@media (min-width: 768px) {
+  .hero h1 {
+    font-size: 64px;
+  }
+
+  .section h2 {
+    font-size: 36px;
+  }
+
+  .bubble {
+    width: 160px;
+    height: 160px;
+  }
+
+  .bubble img {
+    width: 90px;
+    height: 90px;
+  }
+
+  .bubble span {
+    font-size: 16px;
+  }
+}
+
+/* ANIMACIÓN FLOTANTE */
+@keyframes float {
+  0%   { transform: translateY(0px) translateX(0px); }
+  25%  { transform: translateY(-10px) translateX(4px); }
+  50%  { transform: translateY(-18px) translateX(0px); }
+  75%  { transform: translateY(-10px) translateX(-4px); }
+  100% { transform: translateY(0px) translateX(0px); }
+}
+
+/* aplicamos animación */
+.bubble {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* DESFASE PARA QUE NO SE MUEVAN TODAS IGUAL */
+.bubble:nth-child(1) { animation-duration: 6s; }
+.bubble:nth-child(2) { animation-duration: 7s; }
+.bubble:nth-child(3) { animation-duration: 5.5s; }
+.bubble:nth-child(4) { animation-duration: 6.5s; }
+.bubble:nth-child(5) { animation-duration: 7.5s; }
+.bubble:nth-child(6) { animation-duration: 5s; }
