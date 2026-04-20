@@ -13,12 +13,12 @@ type Item = {
 }
 
 const desktopItems: Item[] = [
-  { href: '/quienes-somos', label: 'logo', x: 50, y: 30, size: 110, delay: 0 },
-  { href: '/miel', label: 'miel', x: 50, y: 55, size: 95, delay: 1 },
-  { href: '/huevos', label: 'huevos', x: 25, y: 60, size: 90, delay: 2 },
-  { href: '/corderos', label: 'corderos', x: 75, y: 40, size: 90, delay: 1.5 },
-  { href: '/ferias', label: 'ferias', x: 20, y: 45, size: 85, delay: 0.5 },
-  { href: '/precios', label: 'precios', x: 60, y: 70, size: 85, delay: 2.5 },
+  { href: '/quienes-somos', label: 'logo', x: 50, y: 30, size: 250, delay: 0 },
+  { href: '/miel', label: 'miel', x: 50, y: 65, size: 220, delay: 1 },
+  { href: '/huevos', label: 'huevos', x: 25, y: 60, size: 150, delay: 2 },
+  { href: '/corderos', label: 'corderos', x: 75, y: 40, size: 135, delay: 1.5 },
+  { href: '/ferias', label: 'ferias', x: 20, y: 45, size: 175, delay: 0.5 },
+  { href: '/precios', label: 'precios', x: 60, y: 70, size: 160, delay: 2.5 },
 ]
 
 const mobileItems: Item[] = [
