@@ -1,131 +1,129 @@
-'use client';
+'use client'
 
-import { useEffect, useRef, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
-import { Suspense } from 'react';
+import { useRouter } from 'next/navigation'
+import styles from './checkout.module.css'
+import { useCart } from '../store/useCart'
+import { generarQR } from '../utils/qr'
 
-declare global {
-  interface Window {
-    MercadoPago: any;
-  }
-}
-
-function CheckoutContent() {
-  const searchParams = useSearchParams();
-  const brickContainer = useRef<HTMLDivElement>(null);
-  const brickRendered = useRef(false);
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(true);
-
-  const titulo = searchParams?.get('titulo') || '';
-  const precio = Number(searchParams?.get('precio')) || 0;
-  const descripcion = searchParams?.get('descripcion') || '';
-
-  useEffect(() => {
-    if (brickRendered.current) return;
-    brickRendered.current = true;
-
-    const initBrick = async () => {
-      try {
-        const res = await fetch('/api/create-preference', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            title: titulo,
-            price: precio,
-            quantity: 1,
-            description: descripcion,
-          }),
-        });
-
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error || 'Error creando preferencia');
-
-        const preferenceId = data.id;
-
-        const script = document.createElement('script');
-        script.src = 'https://sdk.mercadopago.com/js/v2';
-        script.async = true;
-        document.body.appendChild(script);
-
-        script.onload = async () => {
-          const mp = new window.MercadoPago(
-            process.env.NEXT_PUBLIC_MP_PUBLIC_KEY!,
-            { locale: 'es-AR' }
-          );
-
-          const bricksBuilder = mp.bricks();
-
-          await bricksBuilder.create('payment', 'payment-brick-container', {
-            initialization: {
-              amount: precio,
-              preferenceId: preferenceId,
-            },
-            customization: {
-  paymentMethods: {
-    creditCard: 'all',
-    debitCard: 'all',
-    mercadoPago: 'all',
-    ticket: 'all',
-  },
-},
-            callbacks: {
-              onReady: () => setLoading(false),
-              onSubmit: async ({ formData, selectedPaymentMethod }: any) => {
-  // Si es pago con cuenta MP, la redirección la maneja MP solo
-  if (selectedPaymentMethod?.type === 'wallet_purchase') {
-    return;
-  }
-
-  const result = await fetch('/api/process-payment', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(formData),
-  });
-  const payment = await result.json();
-
-  if (payment.status === 'approved') {
-    window.location.href = '/success';
-  } else if (payment.status === 'pending' || payment.status === 'in_process') {
-    window.location.href = '/pending';
-  } else {
-    window.location.href = '/failure';
-  }
-},
-              onError: (error: any) => {
-                console.error('Brick error:', error);
-                setError('Ocurrió un error con el formulario de pago.');
-              },
-            },
-          });
-        };
-      } catch (err: any) {
-        setError(err.message || 'Error inesperado');
-        setLoading(false);
-      }
-    };
-
-    initBrick();
-  }, []);
-
-  return (
-    <div className="max-w-xl mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-2">Finalizar compra</h1>
-      <p className="text-gray-600 mb-1">{titulo}</p>
-      <p className="text-xl font-bold mb-6">
-        $ {precio.toLocaleString('es-AR')}
-      </p>
-      {loading && <p className="text-gray-500">Cargando formulario de pago...</p>}
-      {error && <p className="text-red-500">{error}</p>}
-      <div id="payment-brick-container" ref={brickContainer} />
-    </div>
-  );
-}
+type Metodo = 'transferencia' | 'tarjeta' | 'cuenta_mp' | 'otros' | null
 
 export default function CheckoutPage() {
+  const { items, total, metodo, setMetodo } = useCart()
+  const router = useRouter()
+
+  if (items.length === 0) {
+    return <div className={styles.empty}>Carrito vacío</div>
+  }
+
+  const producto = items[0]
+
+  const totalFinal =
+    metodo === 'transferencia' ? Math.round(total * 0.9) : total
+
+  const qrUrl = generarQR({
+    alias: 'alias.ejemplo.mp',
+    monto: totalFinal,
+  })
+
+  const handlePagar = () => {
+    if (metodo === 'tarjeta' || metodo === 'cuenta_mp') {
+      router.push('/checkout/pago')
+    }
+  }
+
   return (
-    <Suspense fallback={<div className="max-w-xl mx-auto p-6">Cargando...</div>}>
-      <CheckoutContent />
-    </Suspense>
-  );
+    <div className={styles.container}>
+      {/* RESUMEN */}
+      <div className={styles.card}>
+        <p className={styles.label}>Finalizar compra</p>
+        <h2 className={styles.title}>{producto.producto.nombre}</h2>
+        <p className={styles.price}>$ {totalFinal}</p>
+      </div>
+
+      {/* MÉTODOS */}
+      <p className={styles.subtitle}>Elegí cómo pagar</p>
+
+      <div className={styles.grid}>
+        <button
+          className={`${styles.method} ${
+            metodo === 'transferencia' ? styles.active : ''
+          }`}
+          onClick={() => setMetodo('transferencia')}
+        >
+          💸 Transferencia
+          <span>10% OFF</span>
+        </button>
+
+        <button
+          className={`${styles.method} ${
+            metodo === 'tarjeta' ? styles.active : ''
+          }`}
+          onClick={() => setMetodo('tarjeta')}
+        >
+          💳 Tarjeta / Efectivo
+        </button>
+
+        <button
+          className={`${styles.method} ${
+            metodo === 'cuenta_mp' ? styles.active : ''
+          }`}
+          onClick={() => setMetodo('cuenta_mp')}
+        >
+          🟢 Cuenta MP
+        </button>
+
+        <button
+          className={`${styles.method} ${
+            metodo === 'otros' ? styles.active : ''
+          }`}
+          onClick={() => setMetodo('otros')}
+        >
+          📲 Otros
+        </button>
+      </div>
+
+      {/* CONTENIDO DINÁMICO */}
+
+      {/* TRANSFERENCIA */}
+      {metodo === 'transferencia' && (
+        <div className={styles.box}>
+          <p className={styles.ok}>
+            Pagando por transferencia obtenés descuento
+          </p>
+
+          <p className={styles.alias}>alias.ejemplo.mp</p>
+
+          <input type="file" className={styles.file} />
+
+          <button className={styles.confirm}>
+            Confirmar pedido
+          </button>
+        </div>
+      )}
+
+      {/* MP */}
+      {(metodo === 'tarjeta' || metodo === 'cuenta_mp') && (
+        <div className={styles.box}>
+          <p className={styles.mpTitle}>Pagá con MercadoPago</p>
+
+          <button className={styles.pay} onClick={handlePagar}>
+            Pagar
+          </button>
+        </div>
+      )}
+
+      {/* QR */}
+      {metodo === 'otros' && (
+        <div className={styles.box}>
+          <p className={styles.qrTitle}>Escaneá para pagar</p>
+
+          <img src={qrUrl} alt="QR pago" className={styles.qr} />
+
+          <p className={styles.alias}>alias.ejemplo.mp</p>
+
+          <p className={styles.monto}>Monto: $ {totalFinal}</p>
+        </div>
+      )}
+    </div>
+  )
 }

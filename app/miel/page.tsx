@@ -29,9 +29,9 @@ export default function Miel() {
 
         <div className={styles.bubbles}>
           {[
-            { id: "miel-2kg", nombre: "2KG", img: "/miel-2kg.png" },
-            { id: "miel-1kg", nombre: "1KG", img: "/miel-1kg.png" },
-            { id: "miel-05kg", nombre: "1/2KG", img: "/miel-05kg.png" }
+            { id: "miel-2kg", nombre: "2KG", img: "./products/miel-2kg.png" },
+            { id: "miel-1kg", nombre: "1KG", img: "./products/miel-1kg.png" },
+            { id: "miel-05kg", nombre: "1/2KG", img: "./products/miel-05kg.png" }
           ].map((item) => (
             <div 
               key={item.id}
@@ -56,7 +56,7 @@ export default function Miel() {
               className={styles.bubble}
               onClick={() => handleClick(`caramelo-${v}`)}
             >
-              <img src={`/caramelo-${v}.png`} alt={`V${v}`} />
+              <img src={`./products/caramelo-${v}.png`} alt={`V${v}`} />
               <span>V{v}</span>
             </div>
           ))}
@@ -69,9 +69,9 @@ export default function Miel() {
 
         <div className={styles.bubbles}>
           {[
-            { id: "polen", nombre: "Polen", img: "/polen.png" },
-            { id: "tintura", nombre: "Tintura", img: "/tintura.png" },
-            { id: "panal", nombre: "Panal", img: "/panal.png" }
+            { id: "polen", nombre: "Polen", img: "./products/polen.png" },
+            { id: "tintura", nombre: "Tintura", img: "./products/tintura.png" },
+            { id: "panal", nombre: "Panal", img: "./products/panal.png" }
           ].map((item) => (
             <div 
               key={item.id}

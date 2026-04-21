@@ -1,7 +1,9 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import styles from './ProductModal.module.css'
+import { addToCart } from '../store/cart'
 
 type Producto = {
   id: string
@@ -19,10 +21,11 @@ type Props = {
 
 export default function ProductModal({ open, producto, onClose }: Props) {
   const [envio, setEnvio] = useState(0)
+  const router = useRouter()
 
   if (!open || !producto) return null
 
-  const total = producto.precioTransfer + envio
+  const total = producto.precio + envio
 
   const handleConsultar = () => {
     const mensaje = `Hola! Quiero ${producto.nombre}.\nTotal: $${total} comprado desde la web El Campito`
@@ -31,13 +34,12 @@ export default function ProductModal({ open, producto, onClose }: Props) {
   }
 
   const handlePagar = () => {
-    // placeholder para integrar carrito / pago después
-    console.log('Ir a pagar:', {
-      producto,
-      envio,
-      total,
-    })
-  }
+ addToCart(producto, envio)
+console.log('AGREGADO AL CARRITO')
+window.location.href = '/cart'
+}
+console.log('ENVIO:', envio, typeof envio)
+console.log('PRODUCTO:', producto)
 
   return (
     <div className={styles.overlay} onClick={onClose}>
@@ -54,26 +56,29 @@ export default function ProductModal({ open, producto, onClose }: Props) {
 
         <h2 className={styles.title}>{producto.nombre}</h2>
 
-        <p className={styles.precioOriginal}>
+        <p className={styles.precioTransfer}>
           ${producto.precio}
         </p>
 
-        <p className={styles.precioTransfer}>
-          ${producto.precioTransfer}
+        <p className={styles.descuentoInfo}>
+          10% OFF pagando por transferencia
         </p>
 
         {/* SELECT ENVÍO */}
         <select
-          className={styles.select}
-          onChange={(e) => setEnvio(Number(e.target.value))}
-          defaultValue="0"
-        >
-          <option value="0">Retiro desde puntos de distribución (Gratis)</option>
-          <option value="3000">Envio Zona 1 - $3000</option>
-          <option value="5000">Envio Zona 2 - $5000</option>
-          <option value="7000">Envio Zona 3 - $7000</option>
-          <option value="9000">Envio Zona 4 - $9000</option>
-        </select>
+  className={styles.select}
+  onChange={(e) => {
+    const value = Number(e.target.value)
+    console.log('SELECT ENVIO:', value)
+    setEnvio(value)
+  }}
+>
+  <option value={0}>Retiro gratis</option>
+  <option value={3000}>Zona 1 ($3000)</option>
+  <option value={5000}>Zona 2 ($5000)</option>
+  <option value={7000}>Zona 3 ($7000)</option>
+  <option value={9000}>Zona 4 ($9000)</option>
+</select>
 
         {/* TOTAL */}
         <div className={styles.total}>
@@ -87,9 +92,16 @@ export default function ProductModal({ open, producto, onClose }: Props) {
             Consultar
           </button>
 
-          <button className={styles.pagar} onClick={handlePagar}>
-            Continuar / Pagar
-          </button>
+          <button
+  className={styles.pay}
+  onClick={() => {
+    console.log('CLICK FUNCIONA')
+    addToCart(producto, envio)
+    window.location.href = '/cart'
+  }}
+>
+  Continuar / Pagar
+</button>
         </div>
       </div>
     </div>

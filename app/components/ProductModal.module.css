@@ -166,3 +166,10 @@
 .pagar:hover {
   transform: scale(1.05);
 }
+
+.descuentoInfo {
+  margin-top: 6px;
+  font-size: 13px;
+  color: #ffeb3b;
+  font-weight: 500;
+}
