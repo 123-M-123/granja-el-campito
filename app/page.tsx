@@ -48,7 +48,7 @@ function Toast() {
 function AppContent() {
   return (
     <div className="app-content">
-      <Header />
+      
       <HeroSection />
 
       {/* TODO lo del carrito desactivado temporalmente */}

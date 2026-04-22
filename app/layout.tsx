@@ -1,8 +1,9 @@
-import type { Metadata } from "next";
-import { GeistSans } from "geist/font/sans";
-import { GeistMono } from "geist/font/mono";
-import { Analytics } from "@vercel/analytics/next";
-import "./globals.css";
+import type { Metadata } from "next"
+import { GeistSans } from "geist/font/sans"
+import { GeistMono } from "geist/font/mono"
+import { Analytics } from "@vercel/analytics/next"
+import Header from "./components/Header"
+import "./globals.css"
 
 export const metadata: Metadata = {
   title: "Granja Agroecológica - Producción Familiar Artesanal",
@@ -10,16 +11,17 @@ export const metadata: Metadata = {
     "Huevos de Gallinas Libres, Miel Envasada y productos derivados. Origen Cañuelas",
   generator: "El Campito",
 
-  metadataBase: new URL("https://granja-el-campito.vercel.app"), // 
+  metadataBase: new URL("https://granja-el-campito.vercel.app"),
+
   openGraph: {
     title: "Granja Agroecológica",
     description:
       "Huevos de Gallinas Libres, Miel Envasada y productos artesanales",
-    url: "https://granja-el-campito.vercel.app", // 
+    url: "https://granja-el-campito.vercel.app",
     siteName: "El Campito",
     images: [
       {
-        url: "https://granja-el-campito.vercel.app/preview-v2.png", // 👈 TU IMAGEN
+        url: "https://granja-el-campito.vercel.app/preview-v2.png",
         width: 1200,
         height: 630,
         alt: "Granja Agroecológica El Campito",
@@ -50,19 +52,27 @@ export const metadata: Metadata = {
     statusBarStyle: "default",
     title: "El Campito",
   },
-};
+}
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: React.ReactNode
 }) {
   return (
     <html lang="es" translate="no">
       <body className={`${GeistSans.variable} ${GeistMono.variable}`}>
-        {children}
+        
+        {/* HEADER GLOBAL */}
+        <Header />
+
+        {/* CONTENIDO */}
+        <main>
+          {children}
+        </main>
+
         <Analytics />
       </body>
     </html>
-  );
+  )
 }

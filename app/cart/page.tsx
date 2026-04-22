@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 import styles from './cart.module.css'
-import { useCart } from '../store/useCart'
+import { useCart } from '../store/useCartStore'
 
 export default function CartPage() {
   const { items, total, removeFromCart, clearCart } = useCart()
@@ -21,10 +21,17 @@ export default function CartPage() {
           <img src={item.producto.imagen} className={styles.img} />
 
           <div className={styles.info}>
-            <p>{item.producto.nombre}</p>
+            <p className={styles.name}>{item.producto.nombre}</p>
+
             <p>Cantidad: {item.cantidad}</p>
-            <p>
-              $ {item.producto.precio * item.cantidad + item.envio}
+
+            <p className={styles.envio}>
+              Envío: ${item.envio}
+            </p>
+
+            <p className={styles.price}>
+              Subtotal: $
+              {item.producto.precioTransfer * item.cantidad + item.envio}
             </p>
           </div>
 

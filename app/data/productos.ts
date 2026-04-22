@@ -1,8 +1,8 @@
 export type Producto = {
   id: string
   nombre: string
-  precio: number          // precio publicado (con +10%)
-  precioTransfer: number  // precio real (descuento)
+  precio: number          // precio publicado (+10%)
+  precioTransfer: number  // precio real
   imagen: string
   stock: number
 }
@@ -16,7 +16,7 @@ export const productos: Producto[] = [
     nombre: 'Miel 2kg',
     precio: subir10(12000),
     precioTransfer: 12000,
-    imagen: '/productos/miel-2kg.png',
+    imagen: '/products/miel-2kg.png',
     stock: 10,
   },
   {
@@ -24,7 +24,7 @@ export const productos: Producto[] = [
     nombre: 'Miel 1kg',
     precio: subir10(6500),
     precioTransfer: 6500,
-    imagen: '/productos/miel-1kg.png',
+    imagen: '/products/miel-1kg.png',
     stock: 10,
   },
   {
@@ -32,17 +32,17 @@ export const productos: Producto[] = [
     nombre: 'Miel 1/2kg',
     precio: subir10(3500),
     precioTransfer: 3500,
-    imagen: '/productos/miel-500.png',
+    imagen: '/products/miel-500.png',
     stock: 10,
   },
 
-  // 🍬 CARAMELOS (precio base 2200 → transfer 2000)
-  ...[1,2,3,4,5,6].map(i => ({
+  // 🍬 CARAMELOS
+  ...[1, 2, 3, 4, 5, 6].map((i) => ({
     id: `caramelo-${i}`,
     nombre: `Caramelo Propóleo v${i}`,
     precio: 2200,
     precioTransfer: 2000,
-    imagen: `/productos/caramelo-${i}.png`,
+    imagen: `/products/caramelo-${i}.png`,
     stock: 10,
   })),
 
@@ -52,7 +52,7 @@ export const productos: Producto[] = [
     nombre: 'Polen 50gr',
     precio: subir10(2600),
     precioTransfer: 2600,
-    imagen: '/productos/polen.png',
+    imagen: '/products/polen.png',
     stock: 10,
   },
   {
@@ -60,7 +60,7 @@ export const productos: Producto[] = [
     nombre: 'Tintura de Propóleo',
     precio: subir10(6000),
     precioTransfer: 6000,
-    imagen: '/productos/tintura.png',
+    imagen: '/products/tintura.png',
     stock: 10,
   },
   {
@@ -68,7 +68,7 @@ export const productos: Producto[] = [
     nombre: 'Miel en Panal',
     precio: subir10(6500),
     precioTransfer: 6500,
-    imagen: '/productos/panal.png',
+    imagen: '/products/panal.png',
     stock: 10,
   },
 ]

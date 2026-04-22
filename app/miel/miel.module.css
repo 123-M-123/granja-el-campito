@@ -1,86 +1,94 @@
 .page {
-  padding: 60px 24px;
+  padding: 60px 16px;
   color: white;
 }
 
 /* HERO */
 .hero {
   text-align: center;
-  margin-bottom: 60px;
+  margin-bottom: 50px;
 }
 
 .hero h1 {
   font-family: 'Eras', sans-serif;
   font-weight: 700;
-  font-size: 52px;
+  font-size: 42px;
   color: #064f2a;
 }
 
 .hero p {
   font-family: 'Eras', sans-serif;
   font-weight: 600;
-  font-size: 20px;
+  font-size: 16px;
   color: #d9f5e3;
 }
 
 /* SECCIONES */
 .section {
-  margin-bottom: 60px;
+  margin-bottom: 50px;
   text-align: center;
 }
 
 .section h2 {
   font-family: 'Eras', sans-serif;
   font-weight: 600;
-  font-size: 32px;
-  margin-bottom: 30px;
+  font-size: 26px;
+  margin-bottom: 20px;
 }
 
-/* BURBUJAS */
+/* GRID BURBUJAS (CLAVE PARA 3 COLUMNAS) */
 .bubbles {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 24px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 👈 SIEMPRE 3 EN MOBILE */
+  gap: 20px;
+  justify-items: center;
 }
 
+/* BURBUJA */
 .bubble {
-  width: 130px;
-  height: 130px;
+  position: relative;
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
+  overflow: hidden;
 
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  background: transparent;
+  border: none;
 
-  background: radial-gradient(circle at 30% 30%, #fff8cc, #f5c542);
-
-  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
   cursor: pointer;
 
   transition: transform 0.2s ease;
-  overflow: hidden;
+
+  animation: float 6s ease-in-out infinite;
 }
 
+/* HOVER */
 .bubble:hover {
   transform: scale(1.1);
+  animation-play-state: paused;
 }
 
-/* IMAGEN */
+/* IMAGEN (ARREGLADO 🔥) */
 .bubble img {
-  width: 70px;
-  height: 70px;
-  object-fit: contain;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
-/* TEXTO */
+/* TEXTO AFUERA */
 .bubble span {
-  margin-top: 6px;
+  position: absolute;
+  top: -18px;
+  left: 50%;
+  transform: translateX(-50%);
+
   font-family: 'Eras', sans-serif;
-  font-weight: 600;
-  font-size: 14px;
-  color: #3a2c00;
+  font-weight: 700;
+  font-size: 11px;
+  color: white;
+  pointer-events: none;
 }
 
 /* DESKTOP */
@@ -93,36 +101,29 @@
     font-size: 36px;
   }
 
-  .bubble {
-    width: 160px;
-    height: 160px;
+  .bubbles {
+    grid-template-columns: repeat(4, 1fr);
   }
 
-  .bubble img {
-    width: 90px;
-    height: 90px;
+  .bubble {
+    width: 140px;
+    height: 140px;
   }
 
   .bubble span {
-    font-size: 16px;
+    font-size: 14px;
+    top: -22px;
   }
 }
 
-/* ANIMACIÓN FLOTANTE */
+/* ANIMACIÓN */
 @keyframes float {
-  0%   { transform: translateY(0px) translateX(0px); }
-  25%  { transform: translateY(-10px) translateX(4px); }
-  50%  { transform: translateY(-18px) translateX(0px); }
-  75%  { transform: translateY(-10px) translateX(-4px); }
-  100% { transform: translateY(0px) translateX(0px); }
+  0%   { transform: translateY(0px); }
+  50%  { transform: translateY(-12px); }
+  100% { transform: translateY(0px); }
 }
 
-/* aplicamos animación */
-.bubble {
-  animation: float 6s ease-in-out infinite;
-}
-
-/* DESFASE PARA QUE NO SE MUEVAN TODAS IGUAL */
+/* DESFASE */
 .bubble:nth-child(1) { animation-duration: 6s; }
 .bubble:nth-child(2) { animation-duration: 7s; }
 .bubble:nth-child(3) { animation-duration: 5.5s; }

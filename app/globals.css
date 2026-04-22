@@ -1,21 +1,38 @@
 @import "tailwindcss";
 
 /* =========================
-   BASE
+   VARIABLES GLOBALES
 ========================= */
 
 :root {
   --background: #009245;
   --foreground: #ffffff;
+
+  /* 🔥 HEADER CONTROL CENTRAL */
+  --header-h-mobile: 85px;
+  --header-h-desktop:115px;
 }
+
+/* =========================
+   BASE
+========================= */
 
 body {
   margin: 0;
   padding: 0;
-  font-family: Inter, system-ui, sans-serif;
+  font-family: 'Eras Medium', sans-serif;
   background: var(--background);
   color: var(--foreground);
   overflow-x: hidden;
+
+  /* 🔥 SOLO USA VARIABLES */
+  padding-top: var(--header-h-mobile);
+}
+
+@media (min-width: 768px) {
+  body {
+    padding-top: var(--header-h-desktop);
+  }
 }
 
 /* =========================
@@ -48,8 +65,6 @@ body {
   border-radius: 50%;
   background-size: cover;
   opacity: 0.6;
-
- 
 }
 
 @keyframes floatUp {
@@ -57,15 +72,12 @@ body {
     transform: translateY(0) scale(0.8);
     opacity: 0;
   }
-
   20% {
     opacity: 0.7;
   }
-
   50% {
     transform: translateY(-50vh) translateX(40px) scale(1);
   }
-
   100% {
     transform: translateY(-120vh) translateX(-40px) scale(1.2);
     opacity: 0;
@@ -73,29 +85,25 @@ body {
 }
 
 /* =========================
-   BURBUJAS NAVEGACIÓN
+   BURBUJAS NAV
 ========================= */
 
 .nav-container {
   position: absolute;
   top: 50%;
   left: 50%;
- 
 }
 
 .bubble-link {
   position: absolute;
 }
 
-
 .bubble-nav {
   position: relative;
   border-radius: 50%;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   cursor: pointer;
 
   background: transparent !important;
@@ -162,25 +170,13 @@ body {
 ========================= */
 
 @media (max-width: 768px) {
-
   .nav-container {
     top: 55%;
   }
-
- 
-
 }
 
 /* =========================
-   LOGO (SI LO SEGUÍS USANDO)
-========================= */
-
-.logoBubble {
-  display: none; /* 🔥 lo anulamos porque ahora es parte del sistema */
-}
-
-/* =========================
-   HEADER LIMPIO (RESET)
+   HEADER (SOLO ESTRUCTURA)
 ========================= */
 
 .header {
@@ -189,29 +185,26 @@ body {
   align-items: center;
 
   width: 100%;
-  position: absolute;
+  height: var(--header-h-mobile);
+
+  position: fixed;
   top: 0;
   left: 0;
-  z-index: 10;
+  z-index: 100;
 
   padding: 10px 20px;
 }
 
+@media (min-width: 768px) {
+  .header {
+    height: var(--header-h-desktop);
+  }
+}
+
 /* columnas */
-.left {
-  display: flex;
-  justify-content: flex-start;
-}
-
-.center {
-  display: flex;
-  justify-content: center;
-}
-
-.right {
-  display: flex;
-  justify-content: flex-end;
-}
+.left { display: flex; justify-content: flex-start; }
+.center { display: flex; justify-content: center; }
+.right { display: flex; justify-content: flex-end; }
 
 /* logo */
 .logo {
@@ -228,7 +221,7 @@ body {
 /* ===== MOBILE ===== */
 @media (max-width: 768px) {
   .logo {
-    width: 65vw; /* 2/3 pantalla aprox */
+    width: 65vw;
   }
 
   .icon {
@@ -237,46 +230,35 @@ body {
   }
 }
 
-.bubble-link:nth-child(1) .bubble-nav { animation-duration: 7s; }
-.bubble-link:nth-child(2) .bubble-nav { animation-duration: 9s; }
-.bubble-link:nth-child(3) .bubble-nav { animation-duration: 6s; }
-.bubble-link:nth-child(4) .bubble-nav { animation-duration: 8s; }
-.bubble-link:nth-child(5) .bubble-nav { animation-duration: 10s; }
-.bubble-link:nth-child(6) .bubble-nav { animation-duration: 7.5s; }
+/* =========================
+   TIPOGRAFÍA
+========================= */
 
-/* ERAS LIGHT */
 @font-face {
   font-family: 'Eras';
   src: url('/fonts/ERASLGHT.woff2') format('woff2');
   font-weight: 300;
-  font-style: normal;
   font-display: swap;
 }
 
-/* ERAS MEDIUM */
 @font-face {
   font-family: 'Eras';
   src: url('/fonts/ERASMD.woff2') format('woff2');
   font-weight: 500;
-  font-style: normal;
   font-display: swap;
 }
 
-/* ERAS DEMI */
 @font-face {
   font-family: 'Eras';
   src: url('/fonts/ERASDEMI.woff2') format('woff2');
   font-weight: 600;
-  font-style: normal;
   font-display: swap;
 }
 
-/* ERAS BOLD */
 @font-face {
   font-family: 'Eras';
   src: url('/fonts/ERASBD.woff2') format('woff2');
   font-weight: 700;
-  font-style: normal;
   font-display: swap;
 }
 
@@ -285,13 +267,20 @@ body {
   -webkit-text-stroke: 2px black;
   text-shadow: 0 0 2px black;
 }
-body {
-  font-family: 'Eras Medium', sans-serif;
-}
 
-.page { padding: 40px 20px; color: white; } 
-.hero-page { text-align: center; margin-bottom: 40px; } 
-.hero-page h1 { font-size: 36px; margin-bottom: 10px; } 
-.hero-page p { opacity: 0.8; } 
-.content { display: grid; gap: 20px; } 
-.card { background: rgba(255,255,255,0.1); padding: 20px; border-radius: 12px; }
+/* =========================
+   GENERALES
+========================= */
+
+.page { padding: 40px 20px; color: white; }
+.hero-page { text-align: center; margin-bottom: 40px; }
+.hero-page h1 { font-size: 36px; margin-bottom: 10px; }
+.hero-page p { opacity: 0.8; }
+
+.content { display: grid; gap: 20px; }
+
+.card {
+  background: rgba(255,255,255,0.1);
+  padding: 20px;
+  border-radius: 12px;
+}

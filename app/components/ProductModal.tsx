@@ -1,17 +1,9 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
 import styles from './ProductModal.module.css'
-import { addToCart } from '../store/cart'
-
-type Producto = {
-  id: string
-  nombre: string
-  precio: number
-  precioTransfer: number
-  imagen: string
-}
+import { Producto } from '../data/productos'
+import { useCart } from '../store/useCartStore'
 
 type Props = {
   open: boolean
@@ -19,34 +11,37 @@ type Props = {
   onClose: () => void
 }
 
-export default function ProductModal({ open, producto, onClose }: Props) {
+export default function ProductModal({
+  open,
+  producto,
+  onClose,
+}: Props) {
   const [envio, setEnvio] = useState(0)
-  const router = useRouter()
+  const { addToCart } = useCart()
 
   if (!open || !producto) return null
 
-  const total = producto.precio + envio
+  const total = producto.precioTransfer + envio
 
-  const handleConsultar = () => {
-    const mensaje = `Hola! Quiero ${producto.nombre}.\nTotal: $${total} comprado desde la web El Campito`
-    const url = `https://wa.me/5492262557322?text=${encodeURIComponent(mensaje)}`
-    window.open(url, '_blank')
+  const handleAdd = () => {
+    addToCart(producto, envio) // ✅ CORRECTO
+    onClose()
   }
 
-  const handlePagar = () => {
- addToCart(producto, envio)
-console.log('AGREGADO AL CARRITO')
-window.location.href = '/cart'
-}
-console.log('ENVIO:', envio, typeof envio)
-console.log('PRODUCTO:', producto)
+  const telefono = '5492262557322'
+  const mensaje = `Hola! Estoy comprando en la web-El Campito, quiero consultar por ${producto.nombre}. Precio: $${total}. Quiero coordinar puntos de Retiro o ¿tenés disponibilidad para el envio? Gracias!`
+
+  const whatsappUrl = `https://wa.me/${telefono}?text=${encodeURIComponent(
+    mensaje
+  )}`
 
   return (
     <div className={styles.overlay} onClick={onClose}>
-      <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
-        <button className={styles.close} onClick={onClose}>
-          ✕
-        </button>
+      <div
+        className={styles.modal}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <h2 className={styles.title}>{producto.nombre}</h2>
 
         <img
           src={producto.imagen}
@@ -54,55 +49,61 @@ console.log('PRODUCTO:', producto)
           className={styles.image}
         />
 
-        <h2 className={styles.title}>{producto.nombre}</h2>
-
-        <p className={styles.precioTransfer}>
+        <p className={styles.precioOriginal}>
           ${producto.precio}
         </p>
 
-        <p className={styles.descuentoInfo}>
-          10% OFF pagando por transferencia
+        <p className={styles.precioTransfer}>
+          ${producto.precioTransfer}
         </p>
 
-        {/* SELECT ENVÍO */}
+        <p className={styles.descuentoInfo}>
+          10% OFF con transferencia (Alias MP)
+        </p>
+
         <select
-  className={styles.select}
-  onChange={(e) => {
-    const value = Number(e.target.value)
-    console.log('SELECT ENVIO:', value)
-    setEnvio(value)
-  }}
->
-  <option value={0}>Retiro gratis</option>
-  <option value={3000}>Zona 1 ($3000)</option>
-  <option value={5000}>Zona 2 ($5000)</option>
-  <option value={7000}>Zona 3 ($7000)</option>
-  <option value={9000}>Zona 4 ($9000)</option>
-</select>
+          className={styles.select}
+          onChange={(e) => setEnvio(Number(e.target.value))}
+        >
+          <option value={0}>
+            Retiro gratis por Puntos de Distribución
+          </option>
+          <option value={3000}>
+            (Consultar) Envio Zona 1 ($3000)
+          </option>
+          <option value={5000}>
+            (Consultar) Envio Zona 2 ($5000)
+          </option>
+          <option value={7000}>
+            (Consultar) Envio Zona 3 ($7000)
+          </option>
+          <option value={9000}>
+            (Consultar) Envio Zona 4 ($9000)
+          </option>
+        </select>
 
-        {/* TOTAL */}
-        <div className={styles.total}>
-          Total: ${total}
-        </div>
+        <p className={styles.total}>Total: ${total}</p>
 
-        {/* BOTONES */}
-        <div className={styles.actions}>
-          <button className={styles.consultar} onClick={handleConsultar}>
-            <img src="/whats.png" alt="WhatsApp" />
-            Consultar
-          </button>
+        <button className={styles.pagar} onClick={handleAdd}>
+          Agregar al carrito
+        </button>
 
-          <button
-  className={styles.pay}
-  onClick={() => {
-    console.log('CLICK FUNCIONA')
-    addToCart(producto, envio)
-    window.location.href = '/cart'
-  }}
->
-  Continuar / Pagar
-</button>
-        </div>
+        <button className={styles.close} onClick={onClose}>
+          ✕
+        </button>
+
+        <a
+          href={whatsappUrl}
+          target="_blank"
+          className={styles.consultar}
+        >
+          <img
+            src="/whats.png"
+            alt="WhatsApp"
+            className={styles.whatsappIcon}
+          />
+          CONSULTAR
+        </a>
       </div>
     </div>
   )

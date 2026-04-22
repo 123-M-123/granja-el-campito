@@ -17,6 +17,8 @@
   position: relative;
   color: white;
   text-align: center;
+
+  font-family: 'Eras', sans-serif; /* 👈 ESTO FALTABA */
 }
 
 .close {
@@ -31,31 +33,51 @@
 }
 
 .title {
-  font-size: 20px;
+  font-size: 30px;
   margin-bottom: 10px;
+  font-family: 'Eras', sans-serif;
+  font-weight: 800;
 }
 
-.imageBox {
-  width: 120px;
-  height: 120px;
-  margin: 0 auto 10px;
-  border-radius: 50%;
-  overflow: hidden;
-  border: 2px solid white;
-}
-
-.imageBox img {
-  width: 100%;
-  height: 100%;
+/* 🖼 imagen */
+.image {
+  width: 110px;
+  height: 110px;
   object-fit: cover;
+  border-radius: 50%;
+  margin: 10px auto;
+  display: block;
+  border: 2px solid #fff;
 }
 
-.content {
-  font-size: 14px;
-  margin-bottom: 15px;
+/* 💰 precios */
+.precioBox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
 }
 
-/* 🔥 SELECT ARREGLADO */
+.precioOriginal {
+  text-decoration: line-through;
+  opacity: 0.6;
+  font-size: 22px;
+}
+
+.precioTransfer {
+  font-size: 20px;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+.descuentoInfo {
+  margin-top: 4px;
+  font-size: 18px;
+  color: #086d16;
+  font-weight: 500;
+}
+
+/* 🚚 select */
 .select {
   width: 100%;
   margin-top: 10px;
@@ -68,13 +90,12 @@
   color: #000;
 }
 
-/* opciones */
+/* ⚠️ IMPORTANTE: colores por zona */
 .select option {
   color: #000;
   background: #fff;
 }
 
-/* colores por zona */
 .select option[value="3000"] {
   background: #2ecc71;
   color: #fff;
@@ -95,81 +116,117 @@
   color: #fff;
 }
 
-.button {
-  background: #ffb300;
-  color: black;
-  border: none;
-  padding: 10px;
-  border-radius: 8px;
-  font-weight: bold;
-  cursor: pointer;
-  width: 100%;
-}
-
-.button:hover {
-  transform: scale(1.05);
-}
-
+/* 💵 total */
 .total {
-  margin-top: 16px;
-  font-size: 20px;
+  margin-top: 10px;
+  font-size: 18px;
   font-weight: bold;
-  text-align: center;
 }
 
+/* 📦 acciones */
 .actions {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  margin-top: 15px;
+  margin-top: 10px;
 }
 
-.consultar {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-
-  background: transparent;
-  border: 2px solid #25D366;
-  color: #25D366;
-
-  padding: 10px;
-  border-radius: 8px;
-  font-weight: bold;
-  cursor: pointer;
-  width: 100%;
-}
-
-.consultar img {
-  width: 18px;
-  height: 18px;
-}
-
-.consultar:hover {
-  background: #25D366;
-  color: white;
-}
-
+/* 🟡 BOTÓN AGREGAR AL CARRITO) */
 .pagar {
-  background: #ffb300;
-  color: black;
+  background: #9dff00;
+  color: rgb(1, 82, 7);
   border: none;
-
   padding: 12px;
   border-radius: 8px;
   font-weight: bold;
   cursor: pointer;
   width: 100%;
+  transition: all 0.2s ease;
 }
 
 .pagar:hover {
   transform: scale(1.05);
 }
 
-.descuentoInfo {
-  margin-top: 6px;
-  font-size: 13px;
-  color: #ffeb3b;
-  font-weight: 500;
+/* 🟢 whatsapp */
+.consultar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  background: #1ebe5d;
+  color: white;
+  font-weight: bold;
+  text-decoration: none;
+
+  padding: 10px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
 }
+
+.consultar:hover {
+  background: #25D366;
+}
+
+.whatsappIcon {
+  width: 26px;
+  height: 26px;
+}
+
+.title {
+  font-family: 'Eras', sans-serif;
+  font-weight: 600; /* Demi */
+}
+
+.precioTransfer {
+  font-family: 'Eras', sans-serif;
+  font-weight: 700; /* Bold */
+}
+
+.descuentoInfo {
+  font-family: 'Eras', sans-serif;
+  font-weight: 500; /* Medium */
+}
+/* ===== FIX VISUAL CARRITO ===== */
+
+.modal {
+  background: #a7e4ac !important; /* verde claro */
+  color: #0b5d2a !important;     /* texto oscuro */
+}
+
+/* títulos */
+.title {
+  color: #0b5d2a !important;
+}
+
+/* precios */
+.precioTransfer {
+  color: #0b5d2a !important;
+}
+
+.precioOriginal {
+  color: #2e7d32 !important;
+}
+
+/* total */
+.total {
+  color: #0b5d2a !important;
+  font-size: 20px;
+}
+/* ===== boton cerrar===== */
+.close {
+  top: 12px;
+  right: 12px;
+  background: #0b5d2a;
+  color: white;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+

@@ -1,18 +1,24 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import styles from './miel.module.css'
 import ProductModal from '../components/ProductModal'
 import { Producto, productos } from '../data/productos'
 
 export default function Miel() {
-
   const [selected, setSelected] = useState<Producto | null>(null)
 
   const handleClick = (id: string) => {
     const prod = productos.find(p => p.id === id)
     if (prod) setSelected(prod)
   }
+const [mounted, setMounted] = useState(false)
+
+useEffect(() => {
+  setMounted(true)
+}, [])
+
+if (!mounted) return null
 
   return (
     <main className={styles.page}>
@@ -29,9 +35,9 @@ export default function Miel() {
 
         <div className={styles.bubbles}>
           {[
-            { id: "miel-2kg", nombre: "2KG", img: "./products/miel-2kg.png" },
-            { id: "miel-1kg", nombre: "1KG", img: "./products/miel-1kg.png" },
-            { id: "miel-05kg", nombre: "1/2KG", img: "./products/miel-05kg.png" }
+            { id: "miel-2kg", nombre: "2KG", img: "/products/miel-2kg.png" },
+            { id: "miel-1kg", nombre: "1KG", img: "/products/miel-1kg.png" },
+            { id: "miel-05kg", nombre: "1/2KG", img: "/products/miel-05kg.png" }
           ].map((item) => (
             <div 
               key={item.id}
@@ -47,7 +53,7 @@ export default function Miel() {
 
       {/* 2. CARAMELOS */}
       <section className={styles.section}>
-        <h2>Caramelos de Propóleo</h2>
+        <h2>Caramelos de Miel</h2>
 
         <div className={styles.bubbles}>
           {[1,2,3,4,5,6].map((v) => (
@@ -56,7 +62,7 @@ export default function Miel() {
               className={styles.bubble}
               onClick={() => handleClick(`caramelo-${v}`)}
             >
-              <img src={`./products/caramelo-${v}.png`} alt={`V${v}`} />
+              <img src={`/products/caramelo-${v}.png`} alt={`V${v}`} />
               <span>V{v}</span>
             </div>
           ))}
@@ -69,9 +75,9 @@ export default function Miel() {
 
         <div className={styles.bubbles}>
           {[
-            { id: "polen", nombre: "Polen", img: "./products/polen.png" },
-            { id: "tintura", nombre: "Tintura", img: "./products/tintura.png" },
-            { id: "panal", nombre: "Panal", img: "./products/panal.png" }
+            { id: "polen", nombre: "Polen", img: "/products/polen.png" },
+            { id: "tintura", nombre: "Tintura", img: "/products/tintura.png" },
+            { id: "panal", nombre: "Panal", img: "/products/panal.png" }
           ].map((item) => (
             <div 
               key={item.id}

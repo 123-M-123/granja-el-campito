@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { useCart } from '../../store/useCart'
+import { useCart } from '../../store/useCartStore'
 import { useRouter } from 'next/navigation'
 
 declare global {

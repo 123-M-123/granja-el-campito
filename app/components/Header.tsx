@@ -1,31 +1,60 @@
 'use client'
 
+import { useState } from 'react'
+import styles from './Header.module.css'
+import { useCart } from '../store/useCartStore'
+import CartModal from './CartModal'
+
 export default function Header() {
+  const { items } = useCart()
+  const [openCart, setOpenCart] = useState(false)
+
+  const totalItems = items.reduce(
+    (acc, item) => acc + item.cantidad,
+    0
+  )
+
   return (
-    <header className="header">
-      
-      {/* IZQUIERDA */}
-      <div className="left">
-        <a
-          href="https://www.instagram.com/el_campito_agroecologico/"
-          target="_blank"
-        >
-          <img src="/icons/instagram.png" className="icon" />
-        </a>
-      </div>
+    <>
+      <header className={styles.header}>
 
-      {/* CENTRO */}
-      <div className="center">
-        <img src="/logo.png" className="logo" />
-      </div>
+        {/* IZQUIERDA */}
+        <div className={styles.left}>
+          <a
+            href="https://www.instagram.com/el_campito_agroecologico/"
+            target="_blank"
+          >
+            <img src="/icons/instagram.png" className={styles.icon} />
+          </a>
+        </div>
 
-      {/* DERECHA */}
-      <div className="right">
-        <a href="/carrito">
-          <img src="/icons/cart.png" className="icon" />
-        </a>
-      </div>
+        {/* CENTRO */}
+        <div className={styles.center}>
+          <img src="/logo.png" className={styles.logo} />
+        </div>
 
-    </header>
+        {/* DERECHA */}
+        <div className={styles.right}>
+          <button
+            className={styles.cart}
+            onClick={() => setOpenCart(true)}
+          >
+            <img src="/icons/cart.png" className={styles.icon} />
+
+            {totalItems > 0 && (
+              <span className={styles.badge}>
+                {totalItems}
+              </span>
+            )}
+          </button>
+        </div>
+
+      </header>
+
+      <CartModal
+        open={openCart}
+        onClose={() => setOpenCart(false)}
+      />
+    </>
   )
 }
