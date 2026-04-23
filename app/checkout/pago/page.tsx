@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { useCart } from '../../store/useCartStore'
+import { useCartStore } from '../../store/useCartStore'
 import { useRouter } from 'next/navigation'
 
 declare global {
@@ -11,7 +11,7 @@ declare global {
 }
 
 export default function PagoPage() {
-  const { items, total } = useCart()
+  const { items, total } = useCartStore()
   const router = useRouter()
 
   const brickContainer = useRef<HTMLDivElement>(null)
