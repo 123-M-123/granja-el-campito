@@ -21,11 +21,12 @@ type CartState = {
   items: CartItem[]
   total: number
   addToCart: (producto: Producto, envio: number) => void
-  removeFromCart: (id: string) => void
+  removeFromCart: (id: string, envio: number) => void
+  updateEnvio: (id: string, oldEnvio: number, newEnvio: number) => void
   clearCart: () => void
 }
 
-export const useCart = create<CartState>()(
+export const useCartStore = create<CartState>()(
   persist(
     (set) => ({
       items: [],
@@ -36,14 +37,15 @@ export const useCart = create<CartState>()(
           const existing = state.items.find(
             (i) =>
               i.producto.id === producto.id &&
-              i.envio === envio // 🔥 clave para separar por envío
+              i.envio === envio
           )
 
-          let newItems
+          let newItems: CartItem[]
 
           if (existing) {
             newItems = state.items.map((i) =>
-              i.producto.id === producto.id && i.envio === envio
+              i.producto.id === producto.id &&
+              i.envio === envio
                 ? { ...i, cantidad: i.cantidad + 1 }
                 : i
             )
@@ -68,11 +70,44 @@ export const useCart = create<CartState>()(
           }
         }),
 
-      removeFromCart: (id) =>
+      removeFromCart: (id, envio) =>
         set((state) => {
           const newItems = state.items.filter(
-            (i) => i.producto.id !== id
+            (i) =>
+              !(
+                i.producto.id === id &&
+                i.envio === envio
+              )
           )
+
+          const total = newItems.reduce(
+            (acc, item) =>
+              acc +
+              item.producto.precioTransfer * item.cantidad +
+              item.envio,
+            0
+          )
+
+          return {
+            items: newItems,
+            total,
+          }
+        }),
+
+      updateEnvio: (id, oldEnvio, newEnvio) =>
+        set((state) => {
+          const newItems = state.items.map((item) => {
+            if (
+              item.producto.id === id &&
+              item.envio === oldEnvio
+            ) {
+              return {
+                ...item,
+                envio: newEnvio,
+              }
+            }
+            return item
+          })
 
           const total = newItems.reduce(
             (acc, item) =>
@@ -95,7 +130,7 @@ export const useCart = create<CartState>()(
         }),
     }),
     {
-      name: 'cart-storage-v2', // 🔥 CAMBIADO → limpia estado viejo
+      name: 'cart-storage-v4',
     }
   )
 )

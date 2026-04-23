@@ -2,11 +2,11 @@
 
 import { useState } from 'react'
 import styles from './Header.module.css'
-import { useCart } from '../store/useCartStore'
+import { useCartStore } from '../store/useCartStore'
 import CartModal from './CartModal'
 
 export default function Header() {
-  const { items } = useCart()
+  const { items } = useCartStore()
   const [openCart, setOpenCart] = useState(false)
 
   const totalItems = items.reduce(

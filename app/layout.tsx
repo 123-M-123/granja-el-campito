@@ -3,6 +3,7 @@ import { GeistSans } from "geist/font/sans"
 import { GeistMono } from "geist/font/mono"
 import { Analytics } from "@vercel/analytics/next"
 import Header from "./components/Header"
+import ConditionalHeader from "./components/ConditionalHeader"
 import "./globals.css"
 
 export const metadata: Metadata = {
@@ -21,7 +22,7 @@ export const metadata: Metadata = {
     siteName: "El Campito",
     images: [
       {
-        url: "https://granja-el-campito.vercel.app/preview-v2.png",
+        url: "https://granja-el-campito.vercel.app/preview-v3.png",
         width: 1200,
         height: 630,
         alt: "Granja Agroecológica El Campito",
@@ -36,7 +37,7 @@ export const metadata: Metadata = {
     title: "Granja Agroecológica",
     description:
       "Huevos de Gallinas Libres, Miel Envasada y productos artesanales",
-    images: ["https://granja-el-campito.vercel.app/preview-v2.png"],
+    images: ["https://granja-el-campito.vercel.app/preview-v3.png"],
   },
 
   icons: {
@@ -62,14 +63,11 @@ export default function RootLayout({
   return (
     <html lang="es" translate="no">
       <body className={`${GeistSans.variable} ${GeistMono.variable}`}>
-        
-        {/* HEADER GLOBAL */}
-        <Header />
 
-        {/* CONTENIDO */}
-        <main>
-          {children}
-        </main>
+        {/* HEADER CONDICIONAL */}
+        <ConditionalHeader />
+
+        <main>{children}</main>
 
         <Analytics />
       </body>

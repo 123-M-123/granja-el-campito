@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import styles from './ProductModal.module.css'
 import { Producto } from '../data/productos'
-import { useCart } from '../store/useCartStore'
+import { useCartStore } from '../store/useCartStore'
 
 type Props = {
   open: boolean
@@ -17,7 +17,7 @@ export default function ProductModal({
   onClose,
 }: Props) {
   const [envio, setEnvio] = useState(0)
-  const { addToCart } = useCart()
+  const { addToCart } = useCartStore()
 
   if (!open || !producto) return null
 

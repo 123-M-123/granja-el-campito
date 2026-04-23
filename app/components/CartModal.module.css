@@ -8,13 +8,12 @@
 /* PANEL */
 .modal {
   position: absolute;
-
   top: 90px;
   right: 10px;
 
-  width: 78%;
-  max-width: 320px;
-  height: 75vh;
+  width: 85%;
+  max-width: 350px;
+  height: 80vh;
 
   background: #96bfa5;
   border-radius: 16px;
@@ -23,12 +22,11 @@
 
   display: flex;
   flex-direction: column;
-  padding: 16px;
+  padding: 10px;
 
   animation: slideIn 0.25s ease;
 }
 
-/* DESKTOP */
 @media (min-width: 768px) {
   .modal {
     top: 120px;
@@ -40,7 +38,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 12px;
+  margin-bottom: 6px;
 }
 
 .title {
@@ -55,9 +53,9 @@
   color: white;
   border: none;
   border-radius: 6px;
-  width: 30px;
-  height: 30px;
-  font-size: 16px;
+  width: 28px;
+  height: 28px;
+  font-size: 14px;
   cursor: pointer;
 }
 
@@ -68,24 +66,24 @@
 
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 7px; /* 🔥 muy compacto */
 }
 
 /* CARD */
 .card {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
 
   background: #7faa8e;
-  padding: 14px;
-  border-radius: 12px;
+  padding: 0px; /* 🔥 reducido fuerte */
+  border-radius: 10px;
 }
 
 /* IMG */
 .img {
-  width: 80px;   /* 🔥 +25% */
-  height: 80px;
+  width: 84px;   /* 🔥 +30% */
+  height: 84px;
   border-radius: 50%;
   object-fit: cover;
 }
@@ -95,22 +93,64 @@
   flex: 1;
   font-size: 18px; /* 🔥 +50% */
   font-family: 'Eras', sans-serif;
+  color: #035217;
+
+  display: flex;
+  flex-direction: column;
+  gap: 2px; /* 🔥 súper compacto */
 }
 
+/* FILAS */
+.row,
+.subtotalRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* SEPARADOR */
+.divider {
+  height: 1px;
+  background: rgba(15, 61, 46, 0.2);
+  margin: 1px 0;
+}
+
+/* TEXTOS */
 .name {
-  font-weight: 500;
+  font-weight: 600;
   color: #0f3d2e;
+  font-size: 18px;
 }
 
 .desc {
-  color: #2e6b52;
+  color: #1c6300;
+  font-size: 15px;
+}
+
+.productoLabel,
+.envioLabel,
+.subtotalLabel {
+  font-size: 15px;
+}
+
+/* PRECIOS */
+.price {
+  color: #135700;
+  font-weight: 500;
   font-size: 16px;
 }
 
-.price {
+.envio {
+  color: #2e7d32;
+  font-weight: 500;
+  font-size: 16px;
+}
+
+.subtotal {
+  color: #1b5e20;
   font-weight: 600;
-  color: #0b2f24;
-  font-size: 18px;
+  font-size: 16px;
+  text-align: right;
 }
 
 /* REMOVE */
@@ -119,21 +159,21 @@
   color: white;
   border: none;
   border-radius: 6px;
-  width: 28px;
-  height: 28px;
-  font-size: 14px;
+  width: 26px;
+  height: 26px;
+  font-size: 13px;
   cursor: pointer;
 }
 
 /* FOOTER */
 .footer {
-  margin-top: 12px;
+  margin-top: 6px;
 }
 
 .total {
   font-family: 'Eras', sans-serif;
   font-weight: 500;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
   color: #0f3d2e;
   font-size: 20px; /* 🔥 +50% */
 }
@@ -141,27 +181,25 @@
 /* BOTONES */
 .actions {
   display: flex;
-  gap: 10px;
+  gap: 6px;
 }
 
 .clear,
 .buy {
   flex: 1;
-  padding: 12px;
+  padding: 10px;
   border-radius: 8px;
   cursor: pointer;
   border: none;
   font-family: 'Eras', sans-serif;
-  font-size: 16px; /* 🔥 más grande */
+  font-size: 16px;
 }
 
-/* VACIAR */
 .clear {
   background: #5f7f6a;
   color: #0f3d2e;
 }
 
-/* COMPRAR */
 .buy {
   background: #0f3d2e;
   color: white;
@@ -182,11 +220,7 @@
 /* MOBILE */
 @media (max-width: 480px) {
   .modal {
-    width: 72%;
+    width: 88%;
     top: 95px;
-  }
-
-  .info {
-    font-size: 17px;
   }
 }
