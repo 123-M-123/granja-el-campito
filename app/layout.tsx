@@ -6,22 +6,23 @@ import ConditionalHeader from "./components/ConditionalHeader"
 import "./globals.css"
 
 export const metadata: Metadata = {
-  title: "Granja Agroecológica - Producción Familiar Artesanal",
-  description: "Huevos de Gallinas Libres, Miel Envasada y productos derivados. Origen Cañuelas",
+  title: "Granja Agroecológica - El Campito Cañuelas",
+  description: "Somos distribuidores de: Huevos de Gallinas Libres, Miel Envasada y sus productos derivados, Origen Cañuelas",
   generator: "El Campito",
   metadataBase: new URL("https://granja-el-campito.vercel.app"),
 
   openGraph: {
-    title: "Granja Agroecológica",
-    description: "Huevos de Gallinas Libres, Miel Envasada y productos artesanales",
+    title: "Granja Agroecológica | El Campito | Cañuelas",
+    description: "Somos distribuidores de: Huevos de Gallinas Libres, Miel Envasada y sus productos derivados, Origen Cañuelas",
+  
     url: "https://granja-el-campito.vercel.app",
     siteName: "El Campito",
     images: [
       {
-        url: "/og/image.png",
+        url: "/og/image.jpg",
         width: 1200,
         height: 630,
-        type: "image/png",
+        type: "image/jpg",
         alt: "Granja Agroecológica El Campito",
       },
     ],
@@ -31,9 +32,9 @@ export const metadata: Metadata = {
 
   twitter: {
     card: "summary_large_image",
-    title: "Granja Agroecológica",
-    description: "Huevos de Gallinas Libres, Miel Envasada y productos artesanales",
-    images: ["/og/image.png"],
+    title: "Granja Agroecológica | El Campito | Cañuelas",
+    description: "Somos distribuidores de: Huevos de Gallinas Libres, Miel Envasada y sus productos derivados, Origen Cañuelas",
+    images: ["/og/image.jpg"],
   },
 
   icons: {
@@ -54,7 +55,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="es" translate="no">
       <head>
-        <meta name="theme-color" content="#4A0606" />
+        <meta name="theme-color" content="#008a29" />
       </head>
       <body className={`${GeistSans.variable} ${GeistMono.variable}`}>
         <ConditionalHeader />

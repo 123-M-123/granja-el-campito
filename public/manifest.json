@@ -1,11 +1,11 @@
 {
-  "name": "El Campito - Granja Agroecológica",
-  "short_name": "El Campito",
-  "description": "Huevos de Gallinas Libres, Miel Envasada y productos artesanales",
+  "name": "Granja Agroecológica - El Campito Cañuelas",
+  "short_name": "El Campito - Granja",
+  "description": "Somos distribuidores de: Huevos de Gallinas Libres, Miel Envasada y sus productos derivados, Origen Cañuelas",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#33df08",
-  "theme_color": "#33df08",
+  "background_color": "#008a29",
+  "theme_color": "#008a29",
   "orientation": "portrait",
   "icons": [
     {
