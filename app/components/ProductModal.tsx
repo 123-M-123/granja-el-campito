@@ -29,7 +29,7 @@ export default function ProductModal({
   }
 
   const telefono = '5492262557322'
-  const mensaje = `Hola! Estoy comprando en la web-El Campito, quiero consultar por ${producto.nombre}. Precio: $${total}. Quiero coordinar puntos de Retiro o ¿tenés disponibilidad para el envio? Gracias!`
+  const mensaje = `Hola! Estoy comprando en la web-El Campito, quiero consultar por ${producto.nombre}. Precio: $${total}. Me pasas info para coordinar puntos de Retiro o ¿tenés disponibilidad para el envio? Gracias!`
 
   const whatsappUrl = `https://wa.me/${telefono}?text=${encodeURIComponent(
     mensaje

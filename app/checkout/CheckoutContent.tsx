@@ -34,9 +34,9 @@ type Metodo = 'alias' | 'tarjeta' | 'mp' | 'otros' | 'qr';
 
 const OPCIONES: { id: Metodo; emoji: string; label: string; sub: string }[] = [
   { id: 'alias',   emoji: '🏦', label: 'Transferencia',     sub: 'Obtené descuento pagando directo' },
+  { id: 'qr', emoji: '📲', label: 'QR (apps bancarias)', sub: 'Pagá con MODO, Ualá, Cta DNi, Nar-X o bancos' },
   { id: 'tarjeta', emoji: '💳', label: 'Tarjeta / Efectivo', sub: 'Medios por fuera de MercadoPago'  },
   { id: 'mp',      emoji: '🔵', label: 'Cuenta MP',          sub: 'Usá tu saldo o tarjetas en MP'    },
-{ id: 'qr', emoji: '📲', label: 'QR (apps bancarias)', sub: 'Pagá con MODO, Ualá, Cta DNi, Nar-X o bancos' },
   { id: 'otros',   emoji: '🌐', label: 'Otros métodos',      sub: 'Próximamente'                     },
   
 ];
@@ -67,7 +67,7 @@ function OpcionBtn({ op, activo, onClick }: { op: typeof OPCIONES[0]; activo: bo
 function CheckoutContent() {
   const searchParams = useSearchParams();
   const brickContainer = useRef<HTMLDivElement>(null);
-
+const [pagado, setPagado] = useState(false)
   const [metodo,      setMetodo]      = useState<Metodo>('alias');
   const [error,       setError]       = useState('');
   const [loading,     setLoading]     = useState(true);
@@ -91,11 +91,9 @@ const descripcion = `Compra de ${cart.length} productos`;
 
   // ── Brick Tarjeta/Efectivo (sin wallet MP) ────────────────────────
  useEffect(() => {
-  if (metodo !== 'qr') {
-    setQrUrl(null)
-    return
-  }
-   const generarQR = async () => {
+  if (metodo !== 'qr') return
+
+  const generarQR = async () => {
     try {
       const res = await fetch('/api/create-qr', {
         method: 'POST',
@@ -114,7 +112,47 @@ const descripcion = `Compra de ${cart.length} productos`;
   }
 
   generarQR()
-}, [metodo, titulo, precio])
+}, [metodo])
+
+useEffect(() => {
+  if (!qrUrl) return
+
+  const interval = setInterval(async () => {
+    try {
+      const res = await fetch('/api/check-payment')
+      const data = await res.json()
+
+      if (data.paid) {
+        setPagado(true)
+        clearInterval(interval)
+      }
+    } catch (e) {
+      console.error('Polling error', e)
+    }
+  }, 5000)
+
+  return () => clearInterval(interval)
+}, [qrUrl])
+
+useEffect(() => {
+  if (!qrUrl) return
+
+  const interval = setInterval(async () => {
+    try {
+      const res = await fetch('/api/check-payment')
+      const data = await res.json()
+
+      if (data.paid) {
+        setPagado(true)
+        clearInterval(interval)
+      }
+    } catch (e) {
+      console.error('Polling error', e)
+    }
+  }, 5000)
+
+  return () => clearInterval(interval)
+}, [qrUrl])
 
   useEffect(() => {
     if (metodo !== 'tarjeta') return;
@@ -382,33 +420,48 @@ const descripcion = `Compra de ${cart.length} productos`;
       Escaneá este QR con tu app bancaria (MODO, Ualá, Cuenta DNI, Naranja X o MercadoPago)
     </p>
 
-    {qrUrl ? (
-  <img
-    src={qrUrl}
-    alt="QR de pago"
-    style={{
-      width: '100%',
-      maxWidth: 260,
-      borderRadius: 12,
-      display: 'block',
-      margin: '0 auto'
-    }}
-  />
-) : (
-  <div style={{
-    width: '100%',
-    height: 220,
-    background: '#eee',
-    borderRadius: 12,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    fontSize: '0.9rem',
-    color: '#666'
-  }}>
-    Generando QR...
-  </div>
-)}
+    {pagado ? (
+      <div style={{
+        width: '100%',
+        height: 220,
+        background: '#e6f9ec',
+        borderRadius: 12,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontSize: '1rem',
+        color: '#1a7f37',
+        fontWeight: 600
+      }}>
+        ✅ Pago confirmado
+      </div>
+    ) : qrUrl ? (
+      <img
+        src={qrUrl}
+        alt="QR de pago"
+        style={{
+          width: '100%',
+          maxWidth: 260,
+          borderRadius: 12,
+          display: 'block',
+          margin: '0 auto'
+        }}
+      />
+    ) : (
+      <div style={{
+        width: '100%',
+        height: 220,
+        background: '#eee',
+        borderRadius: 12,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontSize: '0.9rem',
+        color: '#666'
+      }}>
+        Generando QR...
+      </div>
+    )}
   </div>
 )}
         {/* ── Panel Otros métodos ── */}

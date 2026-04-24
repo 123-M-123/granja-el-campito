@@ -18,15 +18,24 @@ export async function POST(req: Request) {
 
     // ── Crear preferencia ─────────────────────────
     const preference = {
-      items: [
-        {
-          title: titulo,
-          quantity: 1,
-          currency_id: 'ARS',
-          unit_price: Number(precio),
-        },
-      ],
-    };
+  items: [
+    {
+      title: titulo,
+      quantity: 1,
+      currency_id: 'ARS',
+      unit_price: Number(precio),
+    },
+  ],
+
+  // 👇 ACA VA OPCION B
+  external_reference: JSON.stringify({
+  cliente: 'elcampito',
+  productos: titulo,
+  total: precio,
+}),
+
+  notification_url: `${process.env.NEXT_PUBLIC_BASE_URL}/api/webhook`,
+};
 
     const res = await fetch('https://api.mercadopago.com/checkout/preferences', {
       method: 'POST',

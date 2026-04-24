@@ -91,10 +91,10 @@ export default function CartModal({ open, onClose }: Props) {
                       }
                     >
                       <option value={0}>Retiro</option>
-                      <option value={3000}>Zona 1</option>
-                      <option value={5000}>Zona 2</option>
-                      <option value={7000}>Zona 3</option>
-                      <option value={9000}>Zona 4</option>
+                      <option value={3000}>Zona 1-Costo 3000</option>
+                      <option value={5000}>Zona 2-Costo 5000</option>
+                      <option value={7000}>Zona 3-Costo 7000</option>
+                      <option value={9000}>Zona 4-Costo 9000</option>
                     </select>
                   </div>
 
