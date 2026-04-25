@@ -36,6 +36,7 @@ const mobileItems: Item[] = [
 
 export default function BubbleNav() {
   const [items, setItems] = useState<Item[]>(desktopItems)
+  const [mounted, setMounted] = useState(false) // 👈 agregado (fix hydration)
 
   useEffect(() => {
     const update = () => {
@@ -47,9 +48,14 @@ export default function BubbleNav() {
     }
 
     update()
+    setMounted(true) // 👈 agregado
+
     window.addEventListener('resize', update)
     return () => window.removeEventListener('resize', update)
   }, [])
+
+  // 👇 BLOQUEA render hasta que haya width real
+  if (!mounted) return null
 
   return (
     <div
@@ -112,7 +118,6 @@ export default function BubbleNav() {
           />
         )
 
-        // 👉 WHATSAPP
         if (isWhatsapp) {
           return (
             <a
@@ -127,7 +132,6 @@ export default function BubbleNav() {
           )
         }
 
-        // 👉 LINKS NORMALES
         return (
           <Link key={i} href={item.href} style={commonStyles}>
             {img}

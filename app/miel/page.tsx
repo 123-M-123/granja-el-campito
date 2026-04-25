@@ -37,7 +37,7 @@ if (!mounted) return null
           {[
             { id: "miel-2kg", nombre: "2KG", img: "/products/miel-2kg.png" },
             { id: "miel-1kg", nombre: "1KG", img: "/products/miel-1kg.png" },
-            { id: "miel-05kg", nombre: "1/2KG", img: "/products/miel-05kg.png" }
+            { id: "miel-500", nombre: "1/2KG", img: "/products/miel-500.png" }
           ].map((item) => (
             <div 
               key={item.id}
@@ -56,7 +56,7 @@ if (!mounted) return null
         <h2>Caramelos de Miel</h2>
 
         <div className={styles.bubbles}>
-          {[1,2,3,4,5,6].map((v) => (
+          {[1,2,3,4,5,6,7].map((v) => (
             <div 
               key={v}
               className={styles.bubble}

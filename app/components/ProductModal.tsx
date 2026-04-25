@@ -66,19 +66,19 @@ export default function ProductModal({
           onChange={(e) => setEnvio(Number(e.target.value))}
         >
           <option value={0}>
-            Retiro gratis por Puntos de Distribución
+            Consultar Retiro gratis por Puntos de Distribución
           </option>
           <option value={3000}>
-            (Consultar) Envio Zona 1 ($3000)
+            (Consultar) Envio | Zona 1 | Valor Estimado ($3.000)
           </option>
           <option value={5000}>
-            (Consultar) Envio Zona 2 ($5000)
+            (Consultar) Envio | Zona 2 | Valor Estimado($5.000)
           </option>
           <option value={7000}>
-            (Consultar) Envio Zona 3 ($7000)
+            (Consultar) Envio | Zona 3 | Valor Estimado ($7.000)
           </option>
           <option value={9000}>
-            (Consultar) Envio Zona 4 ($9000)
+            (Consultar) Envio | Zona 4 | Valor Estimado ($9.000)
           </option>
         </select>
 
