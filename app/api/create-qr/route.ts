@@ -11,31 +11,39 @@ export async function POST(req: Request) {
     }
 
     const MP_ACCESS_TOKEN = process.env.MP_ACCESS_TOKEN;
+    const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
     if (!MP_ACCESS_TOKEN) {
       return NextResponse.json({ error: 'MP_ACCESS_TOKEN no configurado' }, { status: 500 });
     }
 
-    // ── Crear preferencia ─────────────────────────
+    // 🔥 PREFERENCIA COMPLETA (IMPORTANTE)
     const preference = {
-  items: [
-    {
-      title: titulo,
-      quantity: 1,
-      currency_id: 'ARS',
-      unit_price: Number(precio),
-    },
-  ],
+      items: [
+        {
+          title: titulo,
+          quantity: 1,
+          currency_id: 'ARS',
+          unit_price: Number(precio),
+        },
+      ],
 
-  // 👇 ACA VA OPCION B
-  external_reference: JSON.stringify({
-  cliente: 'elcampito',
-  productos: titulo,
-  total: precio,
-}),
+      external_reference: JSON.stringify({
+        cliente: 'elcampito',
+        productos: titulo,
+        total: precio,
+      }),
 
-  notification_url: `${process.env.NEXT_PUBLIC_BASE_URL}/api/webhook`,
-};
+      notification_url: `${BASE_URL}/api/webhook`,
+
+      back_urls: {
+        success: `${BASE_URL}/success`,
+        failure: `${BASE_URL}/failure`,
+        pending: `${BASE_URL}/pending`,
+      },
+
+      auto_return: 'approved',
+    };
 
     const res = await fetch('https://api.mercadopago.com/checkout/preferences', {
       method: 'POST',
@@ -55,12 +63,13 @@ export async function POST(req: Request) {
 
     const link = data.init_point;
 
-    // ── GENERAR QR BASE64 ─────────────────────────
+    console.log('LINK DE PAGO:', link); // 🔥 PARA DEBUG
+
     const qrBase64 = await QRCode.toDataURL(link);
 
     return NextResponse.json({
-      qr: qrBase64, // 👈 esto es la imagen
-      link,         // 👈 por si lo querés usar también
+      qr: qrBase64,
+      link,
     });
 
   } catch (error) {
