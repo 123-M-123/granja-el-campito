@@ -8,12 +8,12 @@ export default function HeroSection() {
     <section className={styles.hero}>
 
       <div className={styles.content}>
-        <p className={styles.kicker}>
+        <p className={styles.subtitle}>
           Producción Familiar Artesanal
         </p>
 
         <h1 className={styles.title}>
-          Entra ya a Nuestras <br />
+          Entra a Nuestras <br />
           Esferas de Producción
         </h1>
 
