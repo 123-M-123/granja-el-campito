@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import Script from "next/script"
 import { GeistSans } from "geist/font/sans"
 import { GeistMono } from "geist/font/mono"
 import { Analytics } from "@vercel/analytics/next"
@@ -51,13 +52,25 @@ export const metadata: Metadata = {
   },
 }
 
-
-
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="es" translate="no">
       <head>
         <meta name="theme-color" content="#008a29" />
+
+        {/* Google tag (gtag.js) */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-N88KRR1LFX"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-N88KRR1LFX');
+          `}
+        </Script>
       </head>
       <body className={`${GeistSans.variable} ${GeistMono.variable}`}>
         <ConditionalHeader />
