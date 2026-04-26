@@ -11,6 +11,10 @@ type Props = {
   onClose: () => void
 }
 
+// 🔥 FORMATEADOR
+const formatPrice = (n: number) =>
+  new Intl.NumberFormat('es-AR').format(n)
+
 export default function ProductModal({
   open,
   producto,
@@ -24,12 +28,12 @@ export default function ProductModal({
   const total = producto.precioTransfer + envio
 
   const handleAdd = () => {
-    addToCart(producto, envio) // ✅ CORRECTO
+    addToCart(producto, envio)
     onClose()
   }
 
   const telefono = '5492262557322'
-  const mensaje = `Hola! Estoy comprando en la web-El Campito, quiero consultar por ${producto.nombre}. Precio: $${total}. Me pasas info para coordinar puntos de Retiro o ¿tenés disponibilidad para el envio? Gracias!`
+  const mensaje = `Hola! Estoy comprando en la web-El Campito, quiero consultar por ${producto.nombre}. Precio: $${formatPrice(total)}. Me pasas info para coordinar puntos de Retiro o ¿tenés disponibilidad para el envio? Gracias!`
 
   const whatsappUrl = `https://wa.me/${telefono}?text=${encodeURIComponent(
     mensaje
@@ -50,11 +54,11 @@ export default function ProductModal({
         />
 
         <p className={styles.precioOriginal}>
-          ${producto.precio}
+          ${formatPrice(producto.precio)}
         </p>
 
         <p className={styles.precioTransfer}>
-          ${producto.precioTransfer}
+          ${formatPrice(producto.precioTransfer)}
         </p>
 
         <p className={styles.descuentoInfo}>
@@ -72,7 +76,7 @@ export default function ProductModal({
             (Consultar) Envio | Zona 1 | Valor Estimado ($3.000)
           </option>
           <option value={5000}>
-            (Consultar) Envio | Zona 2 | Valor Estimado($5.000)
+            (Consultar) Envio | Zona 2 | Valor Estimado ($5.000)
           </option>
           <option value={7000}>
             (Consultar) Envio | Zona 3 | Valor Estimado ($7.000)
@@ -82,7 +86,9 @@ export default function ProductModal({
           </option>
         </select>
 
-        <p className={styles.total}>Total: ${total}</p>
+        <p className={styles.total}>
+          Total: ${formatPrice(total)}
+        </p>
 
         <button className={styles.pagar} onClick={handleAdd}>
           Agregar al carrito

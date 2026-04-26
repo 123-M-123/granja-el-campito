@@ -4,6 +4,7 @@ import { GeistMono } from "geist/font/mono"
 import { Analytics } from "@vercel/analytics/next"
 import ConditionalHeader from "./components/ConditionalHeader"
 import "./globals.css"
+import BackButton from "./components/BackButton"
 
 export const metadata: Metadata = {
   title: "Granja Agroecológica - El Campito Cañuelas",
@@ -14,7 +15,6 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Granja Agroecológica | El Campito | Cañuelas",
     description: "Somos distribuidores de: Huevos de Gallinas Libres, Miel Envasada y sus productos derivados, Origen Cañuelas",
-  
     url: "https://granja-el-campito.vercel.app",
     siteName: "El Campito",
     images: [
@@ -51,6 +51,8 @@ export const metadata: Metadata = {
   },
 }
 
+
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="es" translate="no">
@@ -60,6 +62,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={`${GeistSans.variable} ${GeistMono.variable}`}>
         <ConditionalHeader />
         <main>{children}</main>
+
+        {/* 👇 BOTÓN VOLVER GLOBAL */}
+        <BackButton />
+
         <Analytics />
       </body>
     </html>
