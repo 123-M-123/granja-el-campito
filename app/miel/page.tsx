@@ -25,8 +25,8 @@ if (!mounted) return null
 
       {/* HERO */}
       <section className={styles.hero}>
-        <h1>Nuestra Miel</h1>
-        <p>Productos naturales, puros y elaborados en la granja</p>
+        <h1>Nuestra Miel Pura de Abejas</h1>
+        <p>Del campo a tu mesa: productos cuidadosamente elaborados, bajo estrictas normas de higiene y salubridad, con sellado hermético que garantiza frescura y confianza</p>
       </section>
 
       {/* 1. MIEL ENVASADA */}
@@ -53,7 +53,7 @@ if (!mounted) return null
 
       {/* 2. CARAMELOS */}
       <section className={styles.section}>
-        <h2>Caramelos de Miel</h2>
+        <h2>Caramelos de Miel, Bolsitas de 10 U.</h2>
 
         <div className={styles.bubbles}>
           {[1,2,3,4,5,6,7].map((v) => (
@@ -71,7 +71,7 @@ if (!mounted) return null
 
       {/* 3. EXTRAS */}
       <section className={styles.section}>
-        <h2>Otros Productos</h2>
+        <h2>Más Productos Derivados</h2>
 
         <div className={styles.bubbles}>
           {[

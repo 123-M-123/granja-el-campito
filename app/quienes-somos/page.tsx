@@ -106,6 +106,14 @@ export default function QuienesSomos() {
           href="https://wa.me/5492262557322?text=Hola!%20Soy%20de%20una%20localidad%20y%20quiero%20información%20para%20distribuir%20sus%20productos"
           target="_blank"
           className={styles.btn}
+          onClick={() => {
+            if (typeof window !== 'undefined' && window.gtag) {
+              window.gtag('event', 'click_whatsapp', {
+                event_category: 'engagement',
+                event_label: 'quienes_somos',
+              })
+            }
+          }}
         >
           <img src="/whats.png" />
           PEDIR INFORMACIÓN

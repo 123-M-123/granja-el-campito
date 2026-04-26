@@ -102,6 +102,14 @@ export default function ProductModal({
           href={whatsappUrl}
           target="_blank"
           className={styles.consultar}
+          onClick={() => {
+            if (typeof window !== 'undefined' && window.gtag) {
+              window.gtag('event', 'click_whatsapp', {
+                event_category: 'engagement',
+                event_label: 'product_modal',
+              })
+            }
+          }}
         >
           <img
             src="/whats.png"

@@ -37,7 +37,7 @@ export const productos: Producto[] = [
   },
 
   // 🍬 CARAMELOS
-  ...[1, 2, 3, 4, 5, 6].map((i) => ({
+  ...[1, 2, 3, 4, 5, 6, 7].map((i) => ({
     id: `caramelo-${i}`,
     nombre: `Pack 10u Caramelos Miel Con..(Nro)${i}`,
     precio: 2222,

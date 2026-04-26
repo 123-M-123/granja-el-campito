@@ -13,14 +13,14 @@ type Item = {
 }
 
 const desktopItems: Item[] = [
-  { href: '/quienes-somos', label: 'logo', x: 50, y: 30, size: 250, delay: 0 },
-  { href: '/miel', label: 'miel', x: 50, y: 65, size: 220, delay: 1 },
-  { href: '/huevos', label: 'huevos', x: 25, y: 60, size: 150, delay: 2 },
-  { href: '/corderos', label: 'corderos', x: 75, y: 40, size: 135, delay: 1.5 },
-  { href: '/ferias', label: 'ferias', x: 20, y: 45, size: 175, delay: 0.5 },
-  { href: '/precios', label: 'precios', x: 60, y: 70, size: 160, delay: 2.5 },
-  { href: '/envios', label: 'envios', x: 35, y: 62, size: 70, delay: 3.5 },
-  { href: '/wp', label: 'wp', x: 35, y: 62, size: 70, delay: 5 },
+  { href: '/quienes-somos', label: 'logo', x: 50, y: 80, size: 300, delay: 0 },
+  { href: '/miel', label: 'miel', x: 80, y: 35, size: 350, delay: 1 },
+  { href: '/huevos', label: 'huevos', x: 20, y: 75, size: 260, delay: 2 },
+  { href: '/corderos', label: 'corderos', x: 80, y: 80, size: 255, delay: 1.5 },
+  { href: '/ferias', label: 'ferias', x: 20, y: 35, size: 305, delay: 0.5 },
+  { href: '/precios', label: 'precios', x: 35, y: 80, size: 210, delay: 2.5 },
+  { href: '/envios', label: 'envios', x: 65, y: 75, size: 200, delay: 3.5 },
+  { href: '/wp', label: 'wp', x: 35, y: 50, size: 120, delay: 5 },
 ]
 
 const mobileItems: Item[] = [
@@ -36,7 +36,7 @@ const mobileItems: Item[] = [
 
 export default function BubbleNav() {
   const [items, setItems] = useState<Item[]>(desktopItems)
-  const [mounted, setMounted] = useState(false) // 👈 agregado (fix hydration)
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
     const update = () => {
@@ -48,13 +48,12 @@ export default function BubbleNav() {
     }
 
     update()
-    setMounted(true) // 👈 agregado
+    setMounted(true)
 
     window.addEventListener('resize', update)
     return () => window.removeEventListener('resize', update)
   }, [])
 
-  // 👇 BLOQUEA render hasta que haya width real
   if (!mounted) return null
 
   return (
@@ -125,6 +124,14 @@ export default function BubbleNav() {
               href={whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => {
+                if (typeof window !== 'undefined' && window.gtag) {
+                  window.gtag('event', 'click_whatsapp', {
+                    event_category: 'engagement',
+                    event_label: 'bubble_nav',
+                  })
+                }
+              }}
               style={commonStyles}
             >
               {img}
