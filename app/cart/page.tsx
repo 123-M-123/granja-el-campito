@@ -8,12 +8,18 @@ export default function CartPage() {
   const { items, total, removeFromCart, clearCart } = useCartStore()
   const router = useRouter()
 
+  // 🔥 SOLO agregado: formato pesos argentino con punto miles
+  const formatPrice = (value: number) =>
+    new Intl.NumberFormat('es-AR').format(value)
+
   console.log('CART ITEMS:', items)
 
   if (items.length === 0) {
     return <div className={styles.empty}>Carrito vacío</div>
   }
-<h1 style={{ color: 'red' }}>CART PAGE REAL</h1>
+
+  <h1 style={{ color: 'red' }}>CART PAGE REAL</h1>
+
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>Tu carrito</h1>
@@ -45,25 +51,27 @@ export default function CartPage() {
 
               {/* PRECIO PRODUCTO */}
               <p className={styles.price}>
-                Producto: $ {precioProducto}
+                Producto: $ {formatPrice(precioProducto)}
               </p>
 
               {/* ENVÍO */}
               {item.envio > 0 && (
                 <p className={styles.envio}>
-                  Envío: $ {item.envio}
+                  Envío: $ {formatPrice(item.envio)}
                 </p>
               )}
 
               {/* SUBTOTAL */}
               <p className={styles.subtotal}>
-                Subtotal: $ {subtotal}
+                Subtotal: $ {formatPrice(subtotal)}
               </p>
             </div>
 
             <button
               className={styles.remove}
-             onClick={() => removeFromCart(item.producto.id, item.envio)}
+              onClick={() =>
+                removeFromCart(item.producto.id, item.envio)
+              }
             >
               ✕
             </button>
@@ -72,7 +80,7 @@ export default function CartPage() {
       })}
 
       <div className={styles.total}>
-        Total: $ {total}
+        Total: $ {formatPrice(total)}
       </div>
 
       <div className={styles.actions}>
