@@ -9,22 +9,45 @@ export async function POST(req: Request) {
   try {
     const body = await req.json()
 
-    const metodo = body.metodo
+    const metodo = body.metodo || 'tarjeta'
 
-    const items = body.items.map((item: any) => {
-      let price = Number(item.price)
+    let items = []
 
-      // 🔥 DESCUENTO SOLO SI TRANSFERENCIA
-      if (metodo === 'transferencia') {
+    // ✅ Si viene carrito real
+    if (body.items && Array.isArray(body.items)) {
+      items = body.items.map((item: any) => {
+        let price = Number(item.price)
+
+        if (metodo === 'transferencia' || metodo === 'alias') {
+          price = Math.round(price * 0.9)
+        }
+
+        return {
+          title: item.title,
+          unit_price: price,
+          quantity: Number(item.quantity),
+          currency_id: 'ARS',
+        }
+      })
+    }
+
+    // ✅ Si viene formato simple desde Bricks actual
+    else {
+      let price = Number(body.price)
+
+      if (metodo === 'transferencia' || metodo === 'alias') {
         price = Math.round(price * 0.9)
       }
 
-      return {
-        title: item.title,
-        unit_price: price,
-        quantity: Number(item.quantity),
-      }
-    })
+      items = [
+        {
+          title: body.title || 'Compra',
+          unit_price: price,
+          quantity: Number(body.quantity || 1),
+          currency_id: 'ARS',
+        },
+      ]
+    }
 
     const preference = new Preference(client)
 
@@ -36,7 +59,8 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ id: result.id })
   } catch (error: any) {
-    console.error(error)
+    console.error('ERROR MP:', error)
+
     return NextResponse.json(
       { error: 'Error creando preferencia' },
       { status: 500 }

@@ -8,17 +8,17 @@ export default function CartPage() {
   const { items, total, removeFromCart, clearCart } = useCartStore()
   const router = useRouter()
 
-  // 🔥 SOLO agregado: formato pesos argentino con punto miles
+  // 🔥 FIX REAL: formato manual fijo (NO depende del navegador mobile)
   const formatPrice = (value: number) =>
-    new Intl.NumberFormat('es-AR').format(value)
+    Math.round(value)
+      .toString()
+      .replace(/\B(?=(\d{3})+(?!\d))/g, '.')
 
   console.log('CART ITEMS:', items)
 
   if (items.length === 0) {
     return <div className={styles.empty}>Carrito vacío</div>
   }
-
-  <h1 style={{ color: 'red' }}>CART PAGE REAL</h1>
 
   return (
     <div className={styles.container}>
@@ -49,19 +49,16 @@ export default function CartPage() {
 
               <p>Cantidad: {item.cantidad}</p>
 
-              {/* PRECIO PRODUCTO */}
               <p className={styles.price}>
                 Producto: $ {formatPrice(precioProducto)}
               </p>
 
-              {/* ENVÍO */}
               {item.envio > 0 && (
                 <p className={styles.envio}>
                   Envío: $ {formatPrice(item.envio)}
                 </p>
               )}
 
-              {/* SUBTOTAL */}
               <p className={styles.subtotal}>
                 Subtotal: $ {formatPrice(subtotal)}
               </p>

@@ -24,16 +24,16 @@ export default function BackButton() {
       onClick={handleBack}
       style={{
         position: 'fixed',
-        bottom: '20px',
+        bottom: '30px',
         left: '20px',
         zIndex: 200,
         background: '#0f3d2e',
         color: 'white',
         border: 'none',
         borderRadius: '50%',
-        width: '50px',
-        height: '50px',
-        fontSize: '30px',
+        width: '60px',
+        height: '60px',
+        fontSize: '40px',
         cursor: 'pointer',
         boxShadow: '0 6px 12px rgba(0,0,0,0.3)',
       }}
