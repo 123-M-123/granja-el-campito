@@ -26,11 +26,11 @@ const desktopItems: Item[] = [
 const mobileItems: Item[] = [
   { href: '/quienes-somos', label: 'logo', x: 50, y: 19, size: 240, delay: 0 },
   { href: '/miel', label: 'miel', x: 75, y: 59, size: 225, delay: 1 },
-  { href: '/huevos', label: 'huevos', x: 25, y: 87, size: 150, delay: 2 },
-  { href: '/corderos', label: 'corderos', x: 80, y: 78, size: 135, delay: 1.5 },
-  { href: '/ferias', label: 'ferias', x: 21, y: 61, size: 175, delay: 0.5 },
+  { href: '/huevos', label: 'huevos', x: 25, y: 87, size: 120, delay: 2 },
+  { href: '/corderos', label: 'corderos', x: 80, y: 78, size: 115, delay: 1.5 },
+  { href: '/ferias', label: 'ferias', x: 21, y: 61, size: 185, delay: 0.5 },
   { href: '/precios', label: 'precios', x: 45, y: 76, size: 160, delay: 2.5 },
-  { href: '/envios', label: 'envios', x: 78, y: 90, size: 140, delay: 3.5 },
+  { href: '/envios', label: 'envios', x: 78, y: 90, size: 100, delay: 3.5 },
   { href: '/wp', label: 'wp', x: 52, y: 89, size: 90, delay: 5 },
 ]
 

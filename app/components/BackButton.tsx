@@ -31,14 +31,14 @@ export default function BackButton() {
         color: 'white',
         border: 'none',
         borderRadius: '50%',
-        width: '42px',
-        height: '42px',
-        fontSize: '18px',
+        width: '50px',
+        height: '50px',
+        fontSize: '30px',
         cursor: 'pointer',
         boxShadow: '0 6px 12px rgba(0,0,0,0.3)',
       }}
     >
-      ←
+      ⟵
     </button>
   )
 }

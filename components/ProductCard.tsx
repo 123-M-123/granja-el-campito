@@ -48,7 +48,7 @@ export default function ProductCard({ product }: { product: Product }) {
         <p className="text-gray-600 text-sm mt-1">{product.descripcion}</p>
         <div className="mt-4">
           <p className="text-lg font-bold">
-            $ {product.precio.toLocaleString('es-AR')}
+            $ {new Intl.NumberFormat('es-AR').format(product.precio)}
           </p>
         </div>
         <button
@@ -85,7 +85,7 @@ export default function ProductCard({ product }: { product: Product }) {
               <h3 className="font-bold text-lg">{product.titulo}</h3>
               <p className="text-gray-600 text-sm">{product.descripcion}</p>
               <p className="text-xl font-bold mt-2">
-                $ {product.precio.toLocaleString('es-AR')}
+                $ {new Intl.NumberFormat('es-AR').format(product.precio)}
               </p>
               <button
                 onClick={handleBuy}

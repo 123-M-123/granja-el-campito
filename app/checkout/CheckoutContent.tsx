@@ -298,7 +298,7 @@ useEffect(() => {
             {titulo}
           </p>
           <p style={{ fontSize: '1.6rem', fontWeight: 800, color: K.text, margin: 0, letterSpacing: '-0.02em' }}>
-            $ {precio.toLocaleString('es-AR')}
+            $ {new Intl.NumberFormat('es-AR').format(precio)}
           </p>
         </div>
 
