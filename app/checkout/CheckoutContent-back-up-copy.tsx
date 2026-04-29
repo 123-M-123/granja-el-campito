@@ -50,17 +50,6 @@ function OpcionBtn({
   activo: boolean;
   onClick: () => void;
 }) {
-  const activeBg =
-    op.id === 'alias'
-      ? '#bcfae2'
-      : op.id === 'qr'
-      ? '#ddfde5'
-      : op.id === 'tarjeta'
-      ? '#fff8de'
-      : op.id === 'mp'
-      ? '#dff3ff'
-      : '#f3f3f3';
-
   return (
     <button
       onClick={onClick}
@@ -71,9 +60,9 @@ function OpcionBtn({
         cursor: 'pointer',
         textAlign: 'left',
         border: `2px solid ${activo ? '#2D6BE4' : '#E2E0DC'}`,
-        background: activeBg,
+        background: activo ? '#ffffff' : op.bg,
         transition: '0.2s',
-        opacity: 1,
+        opacity: op.id === 'otros' ? 1 : 1,
       }}
     >
       <img
@@ -140,14 +129,6 @@ const precioFinal =
     : metodo === 'qr'
     ? total * 1.053
     : total * 1.111;
-    
-const precioLista = Math.round(total * 1.111);
-const ahorroAlias = precioLista - total;
-const ahorroQr = precioLista - Math.round(total * 1.053);
-
-
-
-
 
 const titulo = 'Compra en El Campito';
 const precio = total;
@@ -386,66 +367,6 @@ useEffect(() => {
           <p style={{ fontSize: '1.6rem', fontWeight: 800, color: K.text, margin: 0, letterSpacing: '-0.02em' }}>
            $ {new Intl.NumberFormat('es-AR').format(Math.round(precioFinal))}
           </p>
-          {metodo === 'alias' && (
-  <p
-    style={{
-      marginTop: '0.45rem',
-      marginBottom: 0,
-      fontSize: '0.88rem',
-      fontWeight: 700,
-      color: '#666',
-    }}
-  >
-    Ahorrás $
-    {new Intl.NumberFormat('es-AR').format(ahorroAlias)}
-    {' '}pagando por transferencia
-  </p>
-)}
-
-{metodo === 'qr' && (
-  <p
-    style={{
-      marginTop: '0.45rem',
-      marginBottom: 0,
-      fontSize: '0.88rem',
-      fontWeight: 700,
-      color: '#666',
-    }}
-  >
-    Ahorrás $
-    {new Intl.NumberFormat('es-AR').format(ahorroQr)}
-    {' '}pagando con QR
-  </p>
-)}
-
-{(metodo === 'tarjeta' || metodo === 'mp' || metodo === 'otros') && (
-  <p
-    style={{
-      marginTop: '0.45rem',
-      marginBottom: 0,
-      fontSize: '0.88rem',
-      fontWeight: 700,
-      color: '#666',
-    }}
-  >
-    Precio final con costos incluidos
-  </p>
-)}
-
-{(metodo === 'tarjeta' || metodo === 'mp' || metodo === 'otros') && (
-  <p
-    style={{
-      marginTop: '0.2rem',
-      marginBottom: 0,
-      fontSize: '0.74rem',
-      color: '#777',
-      lineHeight: 1.3,
-    }}
-  >
-    Pagando por transferencia ahorrabas $
-    {new Intl.NumberFormat('es-AR').format(ahorroAlias)}
-  </p>
-)}
         </div>
 
         {/* Selector métodos */}
@@ -733,54 +654,22 @@ useEffect(() => {
             </p>
             <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', marginBottom: '1.25rem' }}>
               {[
-  { nombre: 'Cripto', icono: '/ico-ui/cripto.png' },
-  { nombre: 'PayPal', icono: '/ico-ui/paypal.png' },
-  { nombre: 'Apple Pay', icono: '/ico-ui/a-pay.png' },
-  { nombre: 'Google Pay', icono: '/ico-ui/g-pay.png' },
-  { nombre: 'Stripe', icono: '/ico-ui/stripe.png' },
-  { nombre: 'Otros', icono: '/ico-ui/otros.png' },
+  { nombre: 'PayPal',  emoji: '🅿️', color: '#003087' },
+  { nombre: 'Stripe',  emoji: '🔷', color: '#635BFF' },
+  { nombre: 'Cripto',  emoji: '₿',  color: '#000000' },
+{ nombre: 'Apple Pay',   emoji: '🍎', color: '#6B2FA0' },
+{ nombre: 'Google Pay',   emoji: '🌐', color: '#6B2FA0' },
+{ nombre: 'Wise',   emoji: '🏦', color: '#6B2FA0' },
 
 ].map(p => (
-  <div
-    key={p.nombre}
-    style={{
-      flex: '1 1 100px',
-      padding: '1rem 0.75rem',
-      borderRadius: 10,
-      border: `1.5px solid ${K.border}`,
-      textAlign: 'center',
-    }}
-  >
-    <img
-      src={p.icono}
-      alt={p.nombre}
-      style={{
-        width: 34,
-        height: 34,
-        objectFit: 'contain',
-        marginBottom: '0.45rem',
-      }}
-    />
-
-    <div
-      style={{
-        fontSize: '0.8rem',
-        fontWeight: 700,
-        color: K.text,
-      }}
-    >
-      {p.nombre}
-    </div>
-
-    <div
-      style={{
-        fontSize: '0.65rem',
-        color: K.muted,
-        marginTop: '0.2rem',
-      }}
-    >
-      Próximamente
-    </div>
+  <div key={p.nombre} style={{
+    flex: '1 1 100px', padding: '1rem 0.75rem', borderRadius: 10,
+    border: `1.5px solid ${K.border}`, textAlign: 'center',
+    cursor: 'default',
+  }}>
+    <div style={{ fontSize: '1.5rem', marginBottom: '0.3rem' }}>{p.emoji}</div>
+    <div style={{ fontSize: '0.8rem', fontWeight: 700, color: p.color }}>{p.nombre}</div>
+    <div style={{ fontSize: '0.65rem', color: K.muted, marginTop: '0.2rem' }}>Próximamente</div>
   </div>
 ))}
             </div>
