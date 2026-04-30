@@ -515,10 +515,10 @@ useEffect(() => {
       }}
     >
       {metodo === 'alias' &&
-        'Pagando por transferencia obtenés un descuento especial. Consultá el monto final por WhatsApp.'}
+        'PAGANDO POR TRANFERENCIA TENES 10% OFF!!. Transferí y luego subí el comprobante.'}
 
       {metodo === 'qr' &&
-        'Escaneá el QR y pagá desde MODO, Ualá, Cuenta DNI, bancos o billeteras compatibles.'}
+        'DESCUENTO 5%!! COMBINA PROMOS CON BANCOS Y BILLETERAS VIRTUALES COMPATIBLES CON QR 3.0'}
 
       {metodo === 'tarjeta' &&
         'Pagá con crédito, débito o efectivo en Pago Fácil / Rapipago mediante Mercado Pago.'}
