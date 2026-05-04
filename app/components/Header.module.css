@@ -32,8 +32,8 @@
   .header {
     height: var(--header-h-desktop); /* 👈 sincronizado con globals */
 
-    --icon-size: 75px;
-    --logo-size: 122px;
+    --icon-size: 65px;
+    --logo-size: 110px;
     --badge-size: 28px;
 
     padding: 0 24px;

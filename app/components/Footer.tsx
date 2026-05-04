@@ -7,7 +7,7 @@ export default function Footer() {
       {/* FOOTER CLIENTE (normal, baja con el contenido) */}
       <footer
         style={{
-          background: '#1f723f',
+          background: '#064f2a',
           textAlign: 'center',
           padding: '1rem',
           borderTop: '3px solid #ffffff',
@@ -15,29 +15,29 @@ export default function Footer() {
       >
         <p
           style={{
-            fontSize: '0.80rem',
-            color: '#013220', 
+            fontSize: '0.85rem',
+            color: '#9de2c9', 
             fontWeight: 700,
             lineHeight: '1.4',
           }}
         >
-         El Campito, Cañuelas 
+         Granja Agroecológica | El Campito
         </p>
 
         <p
           style={{
-            fontSize: '0.75rem',
-            color: '#013220', opacity: 0.75,
+            fontSize: '0.8rem',
+            color: '#9de2c9', opacity: 0.75,
             lineHeight: '1.4',
           }}
         >
-         Granja Agroecológica &nbsp;|&nbsp; (Distribuidora)
+         (Distribuidora) &nbsp;|&nbsp; , Cañuelas 
         </p>
 
         <p
           style={{
-            fontSize: '0.75rem',
-            color: '#013220', opacity: 0.75,
+            fontSize: '0.8rem',
+            color: '#9de2c9', opacity: 0.75,
             lineHeight: '1.4',
           }}
         >
@@ -51,7 +51,7 @@ export default function Footer() {
       {/* FOOTER TU MARCA (fijo abajo SIEMPRE) */}
       <footer
         style={{
-          background: '#1f723f',
+          background: '#064f2a',
           textAlign: 'center',
           padding: '0.9rem 1rem',
           borderTop: 'none',
@@ -64,7 +64,7 @@ export default function Footer() {
       >
        <p
   style={{
-    fontSize: '0.75rem',
+    fontSize: '0.8rem',
     fontWeight: 700,
     lineHeight: '1.4',
     margin: 0,
@@ -75,7 +75,7 @@ export default function Footer() {
     target="_blank"
     rel="noopener noreferrer"
     style={{
-      color: '#013220', 
+      color: '#9de2c9', 
       textDecoration: 'underline',
       display: 'inline-flex',
       alignItems: 'center',
@@ -88,7 +88,7 @@ export default function Footer() {
 </p>
         <p
           style={{
-            fontSize: '0.8rem',
+            fontSize: '0.85rem',
             lineHeight: '1.4',
             margin: 0,
           }}
@@ -96,7 +96,7 @@ export default function Footer() {
           <a
             href="https://tienda-de-tiendas.vercel.app"
             style={{
-              color: '#013220', opacity: 0.75,
+              color: '#9de2c9', opacity: 0.75,
               textDecoration: 'none',
             }}
           >
@@ -106,7 +106,7 @@ export default function Footer() {
 
         <p
           style={{
-            fontSize: '0.75rem',
+            fontSize: '0.8rem',
             lineHeight: '1.4',
             margin: 0,
           }}
@@ -114,7 +114,7 @@ export default function Footer() {
           <a
             href="mailto:marcosrenemarti@gmail.com"
             style={{
-              color: '#013220', opacity: 0.75,
+              color: '#9de2c9', opacity: 0.75,
               textDecoration: 'none',
             }}
           >

@@ -1,74 +1,94 @@
+/* ========================= */
+/* CONTENEDOR PRINCIPAL HERO */
+/* ========================= */
 .hero {
-  position: relative;
-  width: 100%;
-  min-height: calc(100vh - var(--header-h-mobile)); /* 🔥 más alto */
-  
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  overflow: visible; /* 🔥 no corta burbujas */
+  position: relative; /* permite posicionar elementos internos */
+  width: 100%; /* ocupa todo el ancho */
 
-  padding: 8px 14px;
+  /* altura mínima según header mobile */
+  min-height: calc(100vh - var(--header-h-mobile));
+
+  display: flex; /* layout flexible */
+  flex-direction: column; /* elementos en columna */
+  justify-content: center; /* centra vertical */
+  align-items: center; /* centra horizontal */
+  text-align: center; /* texto centrado */
+
+  overflow: visible; /* no corta burbujas */
+  padding: 8px 14px; /* espacio interno */
 }
 
-/* DESKTOP */
-@media (min-width: 768px) {
-  .hero {
-    min-height: calc(100vh - var(--header-h-desktop));
-  }
-}
-
-/* CONTENEDOR TEXTO */
+/* ========================= */
+/* CONTENEDOR DEL TEXTO */
+/* ========================= */
 .content {
-  z-index: 2;
-  max-width: 560px;
+  z-index: 2; /* por encima de burbujas */
+  max-width: 768px; /* límite de ancho */
 
-  transform: translateY(-80px);
+  /* sube el bloque de texto */
+  transform: translateY(-105px);
 }
 
-/* TEXTO SUPERIOR */
+/* ========================= */
+/* TEXTO SUPERIOR (kicker) */
+/* ========================= */
 .kicker {
   font-family: 'Eras', sans-serif;
-  font-weight: 600;
-  font-size: 17px;
+  font-weight: 600; /* semi-bold */
+  font-size: 17px; /* tamaño mobile */
 
   color: #064f2a;
-  line-height: 1.15;
+  line-height: 1.15; /* interlineado */
 }
 
-/* TITULO */
+/* ========================= */
+/* TITULO PRINCIPAL */
+/* ========================= */
 .title {
   font-family: 'Eras', sans-serif;
-  font-weight: 700;
-  font-size: 34px;
+  font-weight: 700; /* bold */
+  font-size: 34px; /* tamaño mobile */
 
   margin: 2px 0;
   line-height: 1.1;
 }
 
-/* TEXTO INFERIOR */
+/* ========================= */
+/* SUBTITULO */
+/* ========================= */
 .subtitle {
   font-family: 'Eras', sans-serif;
   font-weight: 700;
-  font-size: 18px;
+  font-size: 18px; /* mobile */
 
   color: #043d21;
   line-height: 1.15;
 }
 
-/* DESKTOP */
+/* ========================= */
+/* DESKTOP (>= 768px) */
+/* ========================= */
 @media (min-width: 768px) {
+
+  /* ajusta altura según header desktop */
+  .hero {
+    min-height: calc(100vh - var(--header-h-desktop));
+
+    /* baja el hero completo (por header grande) */
+    transform: translateY(195px);
+  }
+
+  /* 🔥 ACA CONTROLÁS EL TAMAÑO EN DESKTOP */
   .title {
-    font-size: 54px;
+    font-size: 42px; /* antes 54 → ahora más chico */
   }
 
   .subtitle {
-    font-size: 20px;
+    font-size: 16px; /* más chico para acompañar */
   }
 
   .kicker {
-    font-size: 18px;
+    font-size: 14px; /* más chico */
+    font-weight: 500; /* menos pesado */
   }
 }
