@@ -38,7 +38,7 @@ export async function getBannersFromSheets() {
   const apiKey = process.env.GOOGLE_API_KEY;
   const sheetId = process.env.GOOGLE_SHEET_ID;
   const sociosElCampito = ["elianamarti90@gmail.com", "exequiel.devita@gmail.com"];
-  const range = 'Banners Publicidad!A2:D'; 
+  const range = 'Baners Publicidad!A2:D'; 
   const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?key=${apiKey}`;
 
   try {
