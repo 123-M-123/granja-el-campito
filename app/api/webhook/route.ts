@@ -1,44 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
-
-const SHEET_ID      = process.env.GOOGLE_SHEET_ID || ''
-const CLIENT_ID     = process.env.GOOGLE_CLIENT_ID || ''
-const CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET || ''
-const REFRESH_TOKEN = process.env.GOOGLE_REFRESH_TOKEN || ''
-const ACCESS_TOKEN  = process.env.MP_ACCESS_TOKEN || ''
-
-async function getAccessToken(): Promise<string> {
-  const res = await fetch('https://oauth2.googleapis.com/token', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: new URLSearchParams({
-      client_id:     CLIENT_ID,
-      client_secret: CLIENT_SECRET,
-      refresh_token: REFRESH_TOKEN,
-      grant_type:    'refresh_token',
-    }),
-  })
-  const data = await res.json()
-  if (!data.access_token) throw new Error('No se pudo obtener access token')
-  return data.access_token
-}
-
-async function agregarEnSheet(token: string, fila: any[]) {
-  const range = 'webhoock MP!A:G' 
-  const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(range)}:append?valueInputOption=RAW`
-  
-  await fetch(url, {
-    method: 'POST',
-    headers: {
-      Authorization:  `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ values: [fila] }),
-  })
-}
+import { savePaymentToMaster } from '@/lib/googleSheets' // 👈 Usamos el nuevo motor JSON
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
+    console.log('🔔 Webhook Recibido en El Campito:', body)
 
     // Solo procesamos avisos de pago
     if (body.type !== 'payment') {
@@ -51,9 +17,10 @@ export async function POST(request: NextRequest) {
     }
 
     // Consultar detalle a Mercado Pago
+    // Usamos el token de MP que ya tenés en las variables de entorno
     const mpRes = await fetch(
       `https://api.mercadopago.com/v1/payments/${paymentId}`,
-      { headers: { Authorization: `Bearer ${ACCESS_TOKEN}` } }
+      { headers: { Authorization: `Bearer ${process.env.MP_ACCESS_TOKEN}` } }
     )
     
     if (!mpRes.ok) {
@@ -72,27 +39,28 @@ export async function POST(request: NextRequest) {
       timeZone: 'America/Argentina/Buenos_Aires'
     })
 
-    // Capturamos el mail del vendedor (external_reference)
-    const emailVendedor = pago.external_reference || 'elianamarti90@gmail.com'
+    // Capturamos el mail del vendedor (external_reference o metadata)
+    const emailVendedor = pago.metadata?.vendedor || pago.external_reference || 'elianamarti90@gmail.com'
 
-    // Armamos la fila respetando tus nuevas columnas
+    // 📊 Armamos la fila para las 7 columnas de la Maestra (webhoock MP)
     const fila = [
       emailVendedor,                       // Col A: Vendedor
       fecha,                               // Col B: Fecha
       pago.description || 'Compra Online', // Col C: Producto
       pago.transaction_amount || 0,        // Col D: Precio
       'PAGADO',                            // Col E: Estado
-      pago.payer?.email || '',             // Col F: Comprador
+      paymentId.toString(),                // Col F: ID Pago / Comprobante
+      pago.payment_method_id               // Col G: Notas / Método
     ]
 
-    const token = await getAccessToken()
-    await agregarEnSheet(token, fila)
+    // 🚀 GUARDADO SEGURO: Usamos la cuenta de servicio (JSON)
+    await savePaymentToMaster(fila)
 
-    console.log('✅ Venta registrada en Excel para El Campito:', emailVendedor)
+    console.log('✅ Venta registrada en Maestra para El Campito:', emailVendedor)
     return NextResponse.json({ status: 'ok' }, { status: 200 })
 
-  } catch (error) {
-    console.error('Error en webhook El Campito:', error)
+  } catch (error: any) {
+    console.error('Error en webhook El Campito:', error.message)
     return NextResponse.json({ error: 'Error interno' }, { status: 500 })
   }
 }
