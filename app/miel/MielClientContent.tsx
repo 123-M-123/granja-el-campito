@@ -1,6 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
-import styles from './miel.css' // Verificá si es .module.css o .css según tu proyecto
+import styles from './miel.module.css' // Verificá si es .module.css o .css según tu proyecto
 import ProductModal from '../components/ProductModal'
 import { Producto } from '../data/productos'
 
