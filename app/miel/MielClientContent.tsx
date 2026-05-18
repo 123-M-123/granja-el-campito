@@ -31,9 +31,9 @@ export default function MielClientContent({ productos, banners }: { productos: P
   if (!mounted) return null
 
   // 🔥 FIX DE CATEGORÍAS: Ahora buscamos en minúsculas para coincidir con el motor
-  const mieles = productos.filter(p => p.categoria === "miel envasada")
-  const caramelos = productos.filter(p => p.categoria === "caramelo")
-  const otros = productos.filter(p => p.categoria === "otros derivados")
+ const mieles = productos.filter(p => p.categoria?.toLowerCase().trim() === "miel envasada")
+  const caramelos = productos.filter(p => p.categoria?.toLowerCase().trim() === "caramelo")
+  const otros = productos.filter(p => p.categoria?.toLowerCase().trim() === "otros derivados")
 
   return (
     <main className={styles.page}>
