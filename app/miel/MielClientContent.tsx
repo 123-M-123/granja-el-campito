@@ -1,7 +1,6 @@
-// C:\Users\Marcos\proyectos ordenados 1y2\el-campito\app\miel\MielClientContent.tsx
 'use client'
 import { useState, useEffect } from 'react'
-import styles from './miel.module.css'
+import styles from './miel.css' // Verificá si es .module.css o .css según tu proyecto
 import ProductModal from '../components/ProductModal'
 import { Producto } from '../data/productos'
 
@@ -16,9 +15,8 @@ export default function MielClientContent({ productos, banners }: { productos: P
     if (prod) setSelected(prod)
   }
 
-  // Módulo de Banner Independiente
   const renderBanner = (ubicacion: string) => {
-    const banner = banners.find(b => b.ubicacion === ubicacion);
+    const banner = banners.find(b => b.ubicacion === ubicacion.toLowerCase());
     if (!banner) return null;
     
     const content = (
@@ -27,14 +25,15 @@ export default function MielClientContent({ productos, banners }: { productos: P
       </div>
     );
 
-    return banner.linkDestino ? <a href={banner.linkDestino} target="_blank">{content}</a> : content;
+    return banner.linkDestino ? <a href={banner.linkDestino} target="_blank" rel="noopener noreferrer">{content}</a> : content;
   }
 
   if (!mounted) return null
 
-  const mieles = productos.filter(p => p.categoria === "Miel Envasada")
-  const caramelos = productos.filter(p => p.categoria === "Caramelo")
-  const otros = productos.filter(p => p.categoria === "Otros Derivados")
+  // 🔥 FIX DE CATEGORÍAS: Ahora buscamos en minúsculas para coincidir con el motor
+  const mieles = productos.filter(p => p.categoria === "miel envasada")
+  const caramelos = productos.filter(p => p.categoria === "caramelo")
+  const otros = productos.filter(p => p.categoria === "otros derivados")
 
   return (
     <main className={styles.page}>
@@ -43,18 +42,17 @@ export default function MielClientContent({ productos, banners }: { productos: P
         <p>Del campo a tu mesa...</p>
       </section>
 
-      {/* MODULO DE PUBLICIDAD: Aparece si en el Excel dice "hero-miel" */}
       {renderBanner("hero-miel")}
 
       <section className={styles.section}>
         <h2>Miel Envasada</h2>
         <div className={styles.bubbles}>
-          {mieles.map((item) => (
+          {mieles.length > 0 ? mieles.map((item) => (
             <div key={item.id} className={styles.bubble} onClick={() => handleClick(item.id)}>
               <img src={item.imagen} alt={item.nombre} />
               <span>{item.nombre.toLowerCase().replace(/miel/g, '').trim().toUpperCase()}</span>
             </div>
-          ))}
+          )) : <p style={{color: 'white', opacity: 0.6}}>Cargando productos...</p>}
         </div>
       </section>
 

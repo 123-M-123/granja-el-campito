@@ -2,6 +2,8 @@
 import { getProductsFromSheets, getBannersFromSheets } from '@/lib/googleSheets'
 import MielClientContent from './MielClientContent'
 
+
+export const revalidate = 1; // 👈 AGREGAR ESTA LÍNEA AQUÍ
 export default async function MielPage() {
   const [productosLive, bannersLive] = await Promise.all([
     getProductsFromSheets(),
