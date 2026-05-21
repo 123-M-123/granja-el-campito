@@ -41,7 +41,7 @@
 
 .bannerWrapper {
   width: 100%;
-  border-radius: 2rem; /* Puntas bien redondeadas */
+  border-radius: 1.3rem; /* Puntas bien redondeadas */
   overflow: hidden;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
   transition: transform 0.3s ease;

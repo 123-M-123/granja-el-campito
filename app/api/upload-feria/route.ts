@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-// 📂 Poné acá el ID de la carpeta de Drive donde querés recibir las fotos de la gente
-const FOLDER_ID      = '1oMY4j8SkKqgDmE3LzGEp1K2SqcarXY_G' 
+// 📂 IMPORTANTE: Asegurate que este ID sea el de tu carpeta Glamour actual
+const FOLDER_ID      = '1m72MaKJbUjqBG6vSGRexE319gYnp1y5g' 
 const SHEET_ID       = process.env.GOOGLE_SHEET_ID!
 const CLIENT_ID      = process.env.GOOGLE_CLIENT_ID!
 const CLIENT_SECRET  = process.env.GOOGLE_CLIENT_SECRET!
@@ -21,18 +21,25 @@ async function getAccessToken(): Promise<string> {
 }
 
 async function agregarEnSheet(token: string, nombre: string, linkDrive: string, fecha: string): Promise<void> {
-  // 🔥 ACA CAMBIAMOS EL NOMBRE DE LA PESTAÑA
+  // Aseguramos que el nombre de la pestaña coincida con tu captura
   const range = "'subida de fotos'!A:C" 
   const values = [[fecha, nombre, linkDrive]]
 
-  await fetch(
-    `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(range)}:append?valueInputOption=RAW`,
+  console.log(`Intentando escribir en Planilla: ${SHEET_ID} - Pestaña: subida de fotos`)
+
+  const res = await fetch(
+    `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(range)}:append?valueInputOption=USER_ENTERED`,
     {
       method:  'POST',
       headers: { Authorization:  `Bearer ${token}`, 'Content-Type': 'application/json' },
       body: JSON.stringify({ values }),
     }
   )
+  if (!res.ok) {
+    const err = await res.json()
+    console.error("Error Sheets:", err)
+    throw new Error('Error al escribir en Sheet')
+  }
 }
 
 async function subirADrive(token: string, archivo: File, nombre: string): Promise<string> {
@@ -40,12 +47,14 @@ async function subirADrive(token: string, archivo: File, nombre: string): Promis
   const form = new FormData()
   form.append('metadata', new Blob([metadata], { type: 'application/json' }))
   form.append('file', archivo)
+
   const res = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,webViewLink', {
     method: 'POST', headers: { Authorization: `Bearer ${token}` }, body: form,
   })
   const data = await res.json()
-  
-  // Hacer pública para que Eliana la vea
+  if (!data.id) throw new Error('Error subiendo a Drive')
+
+  // Hacer el archivo público
   await fetch(`https://www.googleapis.com/drive/v3/files/${data.id}/permissions`, {
     method: 'POST',
     headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
@@ -69,6 +78,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ ok: true })
   } catch (err: any) {
+    console.error("🔥 CRASH API FERIA:", err.message)
     return NextResponse.json({ error: err.message }, { status: 500 })
   }
 }
