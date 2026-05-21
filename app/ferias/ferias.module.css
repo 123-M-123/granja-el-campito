@@ -70,3 +70,65 @@
   .hero h1 { font-size: 64px; }
   .hero p { font-size: 18px; }
 }
+
+/* Títulos entre banners */
+.sectionTitle {
+  font-family: 'Eras', sans-serif;
+  font-weight: 600;
+  font-size: 24px;
+  color: #064f2a;
+  text-align: center;
+  margin: 20px 0 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Caja de subida de fotos */
+.uploadBox {
+  background: rgba(6, 79, 42, 0.1);
+  border: 2px dashed #064f2a;
+  border-radius: 1.5rem;
+  padding: 30px;
+  text-align: center;
+  margin: 20px 0;
+}
+
+.uploadBox p {
+  color: #064f2a;
+  font-weight: 700;
+  margin-bottom: 10px;
+  font-family: 'Eras', sans-serif;
+}
+
+.uploadLink {
+  display: inline-block;
+  background: #064f2a;
+  color: white;
+  padding: 12px 25px;
+  border-radius: 50px;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 14px;
+  transition: transform 0.2s ease;
+}
+
+.uploadLink:hover {
+  transform: scale(1.05);
+  background: #086d3a;
+}
+
+@media (min-width: 768px) {
+  .sectionTitle {
+    font-size: 32px;
+    margin: 40px 0 20px;
+  }
+}
+
+.fileInput {
+  background: white;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #064f2a;
+  font-family: 'Eras', sans-serif;
+  font-size: 14px;
+}
