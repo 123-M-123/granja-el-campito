@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 
 // 📂 IMPORTANTE: Asegurate que este ID sea el de tu carpeta Glamour actual
-const FOLDER_ID      = '1m72MaKJbUjqBG6vSGRexE319gYnp1y5g' 
+const FOLDER_ID      = '1mwHyAMlFFPUepBJ7BJ3tx2s2TxQzgsFu' 
 const SHEET_ID       = process.env.GOOGLE_SHEET_ID!
 const CLIENT_ID      = process.env.GOOGLE_CLIENT_ID!
 const CLIENT_SECRET  = process.env.GOOGLE_CLIENT_SECRET!
