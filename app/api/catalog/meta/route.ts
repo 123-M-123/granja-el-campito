@@ -3,8 +3,9 @@ import { NextResponse } from "next/server";
 
 export const revalidate = 3600; // Se actualiza cada 1 hora
 
-// Función para limpiar textos y evitar el error "expecting ';'"
+// Función para limpiar textos y evitar errores de XML
 function escapeXml(unsafe: string) {
+  if (!unsafe) return "";
   return unsafe.replace(/[<>&"']/g, (m) => {
     switch (m) {
       case '<': return '&lt;';
@@ -32,7 +33,6 @@ export async function GET() {
     products.forEach((p) => {
       const availability = p.stock > 0 ? "in stock" : "out of stock";
       
-      // Limpiamos los campos uno por uno para que Meta no los rechace
       const title = escapeXml(p.nombre);
       const description = escapeXml(p.descripcion || "Miel pura de abejas y derivados agroecológicos.");
       const category = escapeXml(p.categoria || "Food, Beverages & Tobacco > Food Items");
@@ -59,7 +59,6 @@ export async function GET() {
     return new NextResponse(xml, {
       headers: {
         "Content-Type": "application/xml; charset=utf-8",
-        "Cache-Control": "s-maxage=3600, stale-while-revalidate",
       },
     });
   } catch (error) {
