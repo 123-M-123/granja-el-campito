@@ -1,4 +1,5 @@
 import { google } from 'googleapis';
+import { slugify } from './utils';
 
 const auth = new google.auth.GoogleAuth({
   credentials: {
@@ -9,11 +10,9 @@ const auth = new google.auth.GoogleAuth({
 });
 
 const sheets = google.sheets({ version: 'v4', auth });
-
 const MASTER_ID = process.env.MASTER_PAYMENTS_SHEET_ID;
 const CLIENT_ID = process.env.CLIENT_CONTENT_SHEET_ID;
 
-// Verificá que estos emails coincidan EXACTAMENTE con lo que escribió Eliana en la Columna A
 const sociosElCampito = ["elianamarti90@gmail.com", "exequiel.devita@gmail.com"];
 
 function getDriveDirectLink(url: string) {
@@ -26,81 +25,78 @@ function getDriveDirectLink(url: string) {
 
 export async function getProductsFromSheets() {
   try {
-    // 💡 IMPORTANTE: Asegurate que en el Excel diga 'Carga de productos' (con DE)
-    const range = "'Carga de productos'!A2:H"; 
-    
-    const response = await sheets.spreadsheets.values.get({
-      spreadsheetId: CLIENT_ID,
-      range,
-    });
-
+    const range = "'Carga de productos'!A2:O"; // Rango O para futuras galerías
+    const response = await sheets.spreadsheets.values.get({ spreadsheetId: CLIENT_ID, range });
     const rows = response.data.values;
     
-    if (!rows || rows.length === 0) {
-      console.error("❌ EL CAMPITO: No se encontraron filas en la planilla.");
-      return [];
-    }
-
-    console.log(`✅ EL CAMPITO: Se encontraron ${rows.length} filas.`);
+    if (!rows) return [];
 
     return rows
-      .filter((row: any) => {
-        const emailEnSheet = row[0]?.trim().toLowerCase();
-        const estaAutorizado = sociosElCampito.includes(emailEnSheet);
-        if (!estaAutorizado) console.warn(`⚠️ Fila ignorada. Email no autorizado: [${emailEnSheet}]`);
-        return estaAutorizado;
-      })
-      .map((row: any) => ({
-        id: row[1]?.toString() || "",
-        nombre: row[2]?.toString() || "",
-        precio: Math.round((Number(row[3]) || 0) * 1.1),
-        precioTransfer: Number(row[3]) || 0,
-        descripcion: row[4] || "",
-        imagen: getDriveDirectLink(row[5] || ""),
-        // Guardamos la categoría tal cual está en el Excel para no romper el filtro del componente
-        categoria: row[6]?.toString().trim() || "", 
-        stock: Number(row[7]) || 0,
-      }));
+      .filter((row: any) => sociosElCampito.includes(row[0]?.trim().toLowerCase()))
+      .map((row: any) => {
+        const precioBase = Number(row[3]) || 0;
+        const catRaw = row[6]?.toString().trim() || "sin categoría";
+        
+        // Lógica de Asterisco para El Campito (si la llegaras a usar)
+        const esEspecial = catRaw.startsWith('*');
+        const categoriaLimpia = catRaw.replace('*', '').trim();
+
+        return {
+          id: row[1]?.toString() || "",
+          nombre: row[2]?.toString() || "",
+          // 🚜 Lógica El Campito: +10% en precio lista
+          precio: Math.round(precioBase * 1.111),
+          precioTransfer: precioBase,
+          descripcion: row[4] || "",
+          imagen: getDriveDirectLink(row[5] || ""),
+          categoria: categoriaLimpia,
+          categoriaSlug: slugify(categoriaLimpia),
+          tipo: esEspecial ? 'especial' : 'normal',
+          stock: Number(row[7]) || 0,
+        };
+      });
   } catch (error: any) {
-    console.error("🔥 ERROR GOOGLE API EL CAMPITO:", error.message);
+    console.error("🔥 Error Sheets El Campito:", error.message);
     return [];
   }
 }
 
+/**
+ * 🚩 BANNERS: Con Cache Busting para El Campito
+ */
 export async function getBannersFromSheets() {
   try {
-    const range = "'Baners Publicidad'!A2:D"; 
-    const response = await sheets.spreadsheets.values.get({
-      spreadsheetId: MASTER_ID,
-      range,
-    });
+    const range = "'Baners Publicidad'!A2:E"; // Aumentado a E
+    const response = await sheets.spreadsheets.values.get({ spreadsheetId: MASTER_ID, range });
     const rows = response.data.values;
     if (!rows) return [];
 
     return rows
       .filter((row: any) => sociosElCampito.includes(row[0]?.trim().toLowerCase()))
-      .map((row: any) => ({
-        imagen: getDriveDirectLink(row[1] || ""),
-        ubicacion: row[2]?.toString().toLowerCase().trim() || "",
-        linkDestino: row[3] || null
-      }));
-  } catch (error: any) {
-    console.error("Error en getBannersFromSheets El Campito:", error.message);
-    return [];
-  }
+      .map((row: any) => {
+        const baseImg = getDriveDirectLink(row[1] || "");
+        const version = row[4] || "1"; // Columna E
+
+        return {
+          imagen: `${baseImg}&v=${version}`, // Rompe el caché
+          ubicacion: row[2]?.toString().toLowerCase().trim() || "",
+          linkDestino: row[3] || null
+        };
+      });
+  } catch (error: any) { return []; }
 }
 
+/**
+ * 💰 REGISTRO DE PAGOS: Actualizado a 10 columnas para el nuevo CRM
+ */
 export async function savePaymentToMaster(paymentData: any[]) {
   try {
     await sheets.spreadsheets.values.append({
       spreadsheetId: MASTER_ID,
-      range: "'webhoock MP'!A:G",
+      range: "'webhoock MP'!A:J", // Aumentado a J
       valueInputOption: 'USER_ENTERED',
       requestBody: { values: [paymentData] },
     });
     return { success: true };
-  } catch (error: any) {
-    console.error("Error guardando pago en Maestra:", error.message);
-    throw error;
-  }
+  } catch (error: any) { throw error; }
 }
