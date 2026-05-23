@@ -1,6 +1,8 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import Link from 'next/link'
+import { X, ShoppingBag, ArrowLeft, Share2, Eraser, ChevronRight, Camera } from 'lucide-react'
 import styles from './ferias.module.css'
 
 export default function FeriasClientContent({ banners }: { banners: any[] }) {
@@ -38,22 +40,33 @@ export default function FeriasClientContent({ banners }: { banners: any[] }) {
     }
   }
 
-  // Lógica para filtrar banners
-  const getBanner = (slug: string) => banners.find(b => b.ubicacion === slug)
+  // 🔄 NUEVA LÓGICA: En lugar de find (uno), usamos filter (todos)
+  const getBannerGroup = (slug: string) => banners.filter(b => b.ubicacion === slug)
+
   const bannersRestantes = banners.filter(b => {
     const parts = b.ubicacion.split('-')
     const num = parseInt(parts[1])
-    return b.ubicacion.includes('feria') && num >= 4
+    // Excluimos las fijas y las que tienen año (feria-2026, etc)
+    return b.ubicacion.includes('feria') && num >= 4 && num < 2000 
   })
 
-  const BannerBlock = ({ banner }: { banner: any }) => {
-    if (!banner) return null
-    const content = <img src={banner.imagen} alt={banner.ubicacion} className={styles.bannerImg} />
+  // Componente para dibujar un grupo de banners del mismo tag
+  const BannerGroup = ({ tag }: { tag: string }) => {
+    const items = getBannerGroup(tag)
+    if (items.length === 0) return null
     return (
-      <div className={styles.bannerWrapper}>
-        {banner.linkDestino ? (
-          <a href={banner.linkDestino} target="_blank" rel="noopener noreferrer">{content}</a>
-        ) : content}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '15px', width: '100%' }}>
+        {items.map((banner, index) => (
+          <div key={`${tag}-${index}`} className={styles.bannerWrapper}>
+            {banner.linkDestino ? (
+              <a href={banner.linkDestino} target="_blank" rel="noopener noreferrer">
+                <img src={banner.imagen} alt={banner.ubicacion} className={styles.bannerImg} />
+              </a>
+            ) : (
+              <img src={banner.imagen} alt={banner.ubicacion} className={styles.bannerImg} />
+            )}
+          </div>
+        ))}
       </div>
     )
   }
@@ -70,17 +83,22 @@ export default function FeriasClientContent({ banners }: { banners: any[] }) {
 
       <section className={styles.container}>
         {/* 1. Presentación */}
-        <BannerBlock banner={getBanner('feria-1')} />
+        <BannerGroup tag='feria-1' />
 
-        {/* 2. Cronograma */}
+        {/* 2. Cronograma (Aquí podés repetir feria-2 en el Excel y salen todos) */}
         <h2 className={styles.sectionTitle}>Cronograma de fechas de futuras Ferias</h2>
-        <BannerBlock banner={getBanner('feria-2')} />
+        <BannerGroup tag='feria-2' />
 
-        {/* 3. Ferias Anteriores */}
+        {/* 3. Ferias Anteriores (Con botón a la nueva página) */}
         <h2 className={styles.sectionTitle}>Ferias anteriores</h2>
-        <BannerBlock banner={getBanner('feria-3')} />
+        <BannerGroup tag='feria-3' />
+        <div style={{ textAlign: 'center', marginTop: '10px', marginBottom: '30px' }}>
+          <Link href="/ferias/anteriores" className={styles.uploadLink} style={{ background: '#000', color: 'white', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '12px 25px' }}>
+            VER HISTORIAL DE FERIAS <ChevronRight size={18} />
+          </Link>
+        </div>
 
-        {/* 4. Módulo de Subida */}
+        {/* 4. Módulo de Subida (Tu código intacto) */}
         <div className={styles.uploadBox}>
           <p>¿Tenés fotos de nuestras ferias?</p>
           <input 
@@ -98,9 +116,11 @@ export default function FeriasClientContent({ banners }: { banners: any[] }) {
         </div>
 
         {/* 5. Más Fotos */}
-        {bannersRestantes.length > 0 && <h2 className={styles.sectionTitle}>Más fotos</h2>}
+        {bannersRestantes.length > 0 && <h2 className={styles.sectionTitle}>Galería Extra</h2>}
         {bannersRestantes.map((banner, index) => (
-          <BannerBlock key={index} banner={banner} />
+          <div key={index} className={styles.bannerWrapper}>
+             <img src={banner.imagen} alt="Extra" className={styles.bannerImg} />
+          </div>
         ))}
       </section>
     </main>

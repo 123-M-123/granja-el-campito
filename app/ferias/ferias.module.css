@@ -2,7 +2,6 @@
 
 .page {
   padding: 60px 16px;
-  color: white;
   min-height: 100vh;
 }
 
@@ -22,7 +21,8 @@
   font-family: 'Eras', sans-serif;
   font-weight: 600;
   font-size: 16px;
-  color: #d9f5e3;
+  color: #064f2a;
+  opacity: 0.8;
   max-width: 600px;
   margin: 0 auto;
 }
@@ -30,25 +30,23 @@
 .container {
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: 20px;
   max-width: 1000px;
   margin: 0 auto;
 }
 
-/* =========================
-   ESTILO DEL BANNER
-========================= */
-
 .bannerWrapper {
   width: 100%;
-  border-radius: 1.3rem; /* Puntas bien redondeadas */
+  border-radius: 1.3rem;
   overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
   transition: transform 0.3s ease;
+  background: white;
+  margin-bottom: 10px;
 }
 
 .bannerWrapper:hover {
-  transform: scale(1.02); /* Efecto sutil al pasar el mouse */
+  transform: scale(1.01);
 }
 
 .bannerImg {
@@ -58,70 +56,45 @@
   object-fit: cover;
 }
 
-.noData {
-  text-align: center;
-  font-family: 'Eras', sans-serif;
-  opacity: 0.7;
-  margin-top: 40px;
-}
-
-/* DESKTOP */
-@media (min-width: 768px) {
-  .hero h1 { font-size: 64px; }
-  .hero p { font-size: 18px; }
-}
-
-/* Títulos entre banners */
+/* Títulos de Secciones */
 .sectionTitle {
   font-family: 'Eras', sans-serif;
-  font-weight: 600;
+  font-weight: 700;
   font-size: 24px;
   color: #064f2a;
-  text-align: center;
-  margin: 20px 0 10px;
+  text-align: left;
+  margin: 30px 0 15px;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  border-bottom: 3px solid #064f2a;
+  display: inline-block;
 }
 
-/* Caja de subida de fotos */
+/* Caja de subida */
 .uploadBox {
-  background: rgba(6, 79, 42, 0.1);
+  background: rgba(6, 79, 42, 0.05);
   border: 2px dashed #064f2a;
   border-radius: 1.5rem;
   padding: 30px;
   text-align: center;
-  margin: 20px 0;
-}
-
-.uploadBox p {
-  color: #064f2a;
-  font-weight: 700;
-  margin-bottom: 10px;
-  font-family: 'Eras', sans-serif;
+  margin: 40px 0;
 }
 
 .uploadLink {
   display: inline-block;
   background: #064f2a;
   color: white;
-  padding: 12px 25px;
+  padding: 14px 30px;
   border-radius: 50px;
   text-decoration: none;
   font-weight: 700;
   font-size: 14px;
-  transition: transform 0.2s ease;
+  cursor: pointer;
+  border: none;
 }
 
-.uploadLink:hover {
-  transform: scale(1.05);
-  background: #086d3a;
-}
-
-@media (min-width: 768px) {
-  .sectionTitle {
-    font-size: 32px;
-    margin: 40px 0 20px;
-  }
+.historyBtn {
+  background: #333;
+  margin-top: 10px;
 }
 
 .fileInput {
@@ -129,6 +102,10 @@
   padding: 10px;
   border-radius: 10px;
   border: 1px solid #064f2a;
-  font-family: 'Eras', sans-serif;
-  font-size: 14px;
+  margin-bottom: 15px;
+}
+
+@media (min-width: 768px) {
+  .hero h1 { font-size: 64px; }
+  .sectionTitle { font-size: 32px; }
 }
