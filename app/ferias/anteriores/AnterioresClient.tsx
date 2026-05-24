@@ -9,8 +9,8 @@ export default function AnterioresClient({ banners }: { banners: any[] }) {
   return (
     <main className={styles.page}>
       <header className={styles.hero}>
-        <HistoryIcon size={60} color="white" style={{ marginBottom: '15px' }} />
-        <h1>Archivo Histórico</h1>
+        <HistoryIcon size={40} color="white" style={{ marginBottom: '15px' }} />
+        
         <p>Reviví nuestros encuentros desde el año 2020</p>
       </header>
 

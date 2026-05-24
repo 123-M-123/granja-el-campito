@@ -80,7 +80,7 @@ export default function FeriasClientContent({ banners }: { banners: any[] }) {
         
         <div style={{ textAlign: 'center', margin: '20px 0' }}>
           <Link href="/ferias/anteriores" className={`${styles.uploadLink} ${styles.historyBtn}`}>
-            <HistoryIcon size={18} style={{ marginRight: '8px', verticalAlign: 'middle' }} />
+           
             EXPLORAR ARCHIVO 
           </Link>
         </div>
