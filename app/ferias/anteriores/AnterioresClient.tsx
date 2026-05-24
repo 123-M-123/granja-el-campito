@@ -1,6 +1,6 @@
 'use client'
 import Link from 'next/link'
-import { ArrowLeft, History } from 'lucide-react'
+import { ArrowLeft, History as HistoryIcon } from 'lucide-react'
 import styles from '../ferias.module.css'
 
 export default function AnterioresClient({ banners }: { banners: any[] }) {
@@ -9,14 +9,14 @@ export default function AnterioresClient({ banners }: { banners: any[] }) {
   return (
     <main className={styles.page}>
       <header className={styles.hero}>
-        <History size={60} color="white" style={{ marginBottom: '15px' }} />
+        <HistoryIcon size={60} color="white" style={{ marginBottom: '15px' }} />
         <h1>Archivo Histórico</h1>
-        <p>Reviví nuestros mejores momentos desde el 2020</p>
+        <p>Reviví nuestros encuentros desde el año 2020</p>
       </header>
 
       <section className={styles.container}>
-        <Link href="/ferias" style={{ color: 'white', fontWeight: 800, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '20px' }}>
-          <ArrowLeft size={24} /> VOLVER A FERIAS ACTUALES
+        <Link href="/ferias" style={{ color: 'white', fontWeight: 800, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '30px' }}>
+          <ArrowLeft size={24} /> VOLVER A FERIAS
         </Link>
 
         {años.map(año => {
@@ -26,7 +26,6 @@ export default function AnterioresClient({ banners }: { banners: any[] }) {
           return (
             <div key={año} style={{ marginTop: '50px' }}>
               <h2 className={styles.sectionTitle}>Ediciones {año}</h2>
-              {/* 🚀 Grilla de 3 columnas configurada en el CSS */}
               <div className={styles.gridAnteriores}>
                 {fotos.map((f, i) => (
                   <div key={i} className={styles.bannerWrapper}>
@@ -40,7 +39,7 @@ export default function AnterioresClient({ banners }: { banners: any[] }) {
       </section>
 
       <footer style={{ textAlign: 'center', padding: '60px 0' }}>
-          <Link href="/" className={styles.uploadLink}>VOLVER A LA TIENDA</Link>
+          <Link href="/ferias" className={styles.uploadLink}>VOLVER A FERIAS</Link>
       </footer>
     </main>
   )

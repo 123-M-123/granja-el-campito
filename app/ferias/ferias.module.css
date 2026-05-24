@@ -3,7 +3,7 @@
 .page {
   padding: 60px 16px;
   min-height: 100vh;
-  background: #064f2a; /* 🟢 Fondo Verde El Campito */
+  background: #009245; /* 🟢 Fondo Verde El Campito */
   color: white;
 }
 
@@ -44,7 +44,6 @@
   overflow: hidden;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
   transition: transform 0.3s ease;
-  background: rgba(255,255,255,0.1);
 }
 
 .bannerImg {
