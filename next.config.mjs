@@ -41,7 +41,17 @@ const nextConfig = {
           },
         ],
       },
-    ]
+       {
+        source: "/:path*",
+        headers: [
+          {
+            key: 'Content-Security-Policy',
+            // Esto permite que Marcos te vea desde el panel central
+            value: "frame-ancestors 'self' https://tienda-de-tiendas.vercel.app http://localhost:3000",
+          },
+        ],
+      },
+    ];
   },
 }
 
