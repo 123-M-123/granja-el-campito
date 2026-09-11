@@ -4,6 +4,8 @@ import { GeistSans } from "geist/font/sans"
 import { GeistMono } from "geist/font/mono"
 import { Analytics } from "@vercel/analytics/next"
 import ConditionalHeader from "./components/ConditionalHeader"
+import CintillaAviso from "./components/CintillaAviso" // 👈 NUEVO
+import Footer from "./components/Footer" // 👈 NUEVO: Footer global
 import "./globals.css"
 import BackButton from "./components/BackButton"
 
@@ -57,7 +59,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="es" translate="no">
       <head>
         <meta name="theme-color" content="#008a29" />
-
         <meta name="google-site-verification" content="c43EWcKPaKQuTZ0w9M0U0iLPzJEgoEQmVTxKVhzfn8I" />
 
         {/* Google tag (gtag.js) */}
@@ -75,10 +76,19 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </Script>
       </head>
       <body className={`${GeistSans.variable} ${GeistMono.variable}`}>
+        {/* 📢 Cintilla arriba de todo */}
+        <CintillaAviso />
+
+        {/* 🧭 Header condicional */}
         <ConditionalHeader />
+
+        {/* 📄 Contenido de cada página */}
         <main>{children}</main>
 
-        {/* 👇 BOTÓN VOLVER GLOBAL */}
+        {/* 🦶 Footer visible en toda la web */}
+        <Footer />
+
+        {/* 🔙 Botón Volver flotante global */}
         <BackButton />
 
         <Analytics />

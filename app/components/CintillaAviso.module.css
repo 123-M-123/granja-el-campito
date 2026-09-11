@@ -1,0 +1,43 @@
+.cintilla {
+  background: #043d21; /* Verde oscuro de El Campito */
+  color: #ffffff;
+  padding: 8px 16px;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-align: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  position: relative;
+  z-index: 1001; /* Por encima del contenido */
+}
+
+.texto {
+  margin: 0;
+  font-family: 'Eras', sans-serif;
+  letter-spacing: 0.5px;
+}
+
+.link {
+  color: #9df5be; /* Verde claro contrastante */
+  text-decoration: underline;
+}
+
+.icono {
+  display: inline-block;
+  animation: pulso 2s infinite ease-in-out;
+}
+
+@keyframes pulso {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.25); }
+  100% { transform: scale(1); }
+}
+
+@media (max-width: 768px) {
+  .cintilla {
+    font-size: 11px;
+    padding: 6px 10px;
+  }
+}

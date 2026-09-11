@@ -123,4 +123,4 @@ export async function getCategoriesFromSheets() {
     }
   });
   return Array.from(uniqueMap.values());
-}
+} 
