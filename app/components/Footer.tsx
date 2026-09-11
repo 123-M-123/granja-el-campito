@@ -71,7 +71,7 @@ export default function Footer() {
   }}
 >
   <a
-    href="https://tienda-de-tiendas.vercel.app"
+    href="https://tdt.ar"
     target="_blank"
     rel="noopener noreferrer"
     style={{
@@ -94,7 +94,7 @@ export default function Footer() {
           }}
         >
           <a
-            href="https://tienda-de-tiendas.vercel.app"
+            href="https://tdt.ar"
             style={{
               color: '#9de2c9', opacity: 0.75,
               textDecoration: 'none',
@@ -112,7 +112,7 @@ export default function Footer() {
           }}
         >
           <a
-            href="mailto:tiendadtiendas@gmail.com"
+            href="mailto:info@tdt.ar"
             style={{
               color: '#9de2c9', opacity: 0.75,
               textDecoration: 'none',
