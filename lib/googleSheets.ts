@@ -32,7 +32,7 @@ function getDriveDirectLink(url: string, version: string = "1") {
 }
 
 /**
- * 📦 PRODUCTOS: Lectura con mapeo estricto y recargo del 10%
+ * 📦 PRODUCTOS: Lectura con mapeo estricto, recargo del 10% y filtro de Stock > 0
  */
 export async function getProductsFromSheets() {
   try {
@@ -43,7 +43,14 @@ export async function getProductsFromSheets() {
     if (!rows) return [];
 
     return rows
-      .filter((row: any) => sociosElCampito.includes(row[0]?.trim().toLowerCase()))
+      .filter((row: any) => {
+        const emailValido = sociosElCampito.includes(row[0]?.trim().toLowerCase());
+        const tieneNombre = !!row[2]?.toString().trim();
+        // 🛑 FILTRO DE STOCK: Si es 0, menor a 0 o no tiene número, se oculta de toda la web
+        const tieneStock = (Number(row[7]) || 0) > 0;
+
+        return emailValido && tieneNombre && tieneStock;
+      })
       .map((row: any) => {
         const precioBase = Number(row[3]) || 0;
         const catRaw = row[6]?.toString().trim() || "sin categoría";
@@ -123,4 +130,4 @@ export async function getCategoriesFromSheets() {
     }
   });
   return Array.from(uniqueMap.values());
-} 
+}

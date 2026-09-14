@@ -428,3 +428,11 @@ html {
     display: block;
   }
 }
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+main {
+  flex: 1; /* Empuja el footer al fondo automáticamente */
+}

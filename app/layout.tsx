@@ -4,7 +4,7 @@ import { GeistSans } from "geist/font/sans"
 import { GeistMono } from "geist/font/mono"
 import { Analytics } from "@vercel/analytics/next"
 import ConditionalHeader from "./components/ConditionalHeader"
-import CintillaAviso from "./components/CintillaAviso" // 👈 NUEVO
+
 import Footer from "./components/Footer" // 👈 NUEVO: Footer global
 import "./globals.css"
 import BackButton from "./components/BackButton"
@@ -76,8 +76,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </Script>
       </head>
       <body className={`${GeistSans.variable} ${GeistMono.variable}`}>
-        {/* 📢 Cintilla arriba de todo */}
-        <CintillaAviso />
+      
 
         {/* 🧭 Header condicional */}
         <ConditionalHeader />

@@ -13,7 +13,7 @@ function AppContent() {
       
       <HeroSection />
 
-       <Footer />
+       
 
       
     </div>
