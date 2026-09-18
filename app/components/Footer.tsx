@@ -46,7 +46,7 @@ export default function Footer() {
       </footer>
 
       {/* ESPACIO RESERVADO para que no tape contenido */}
-      <div style={{ height: '75px' }} />
+      <div style={{ height: '60px' }} />
 
       {/* FOOTER TU MARCA (fijo abajo SIEMPRE) */}
       <footer
