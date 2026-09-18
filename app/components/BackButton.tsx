@@ -24,7 +24,7 @@ export default function BackButton() {
       onClick={handleBack}
       style={{
         position: 'fixed',
-        bottom: '80px',
+        bottom: '110px',
         left: '20px',
         zIndex: 200,
         background: '#0f3d2e',

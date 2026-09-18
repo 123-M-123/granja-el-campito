@@ -86,23 +86,7 @@ export default function Footer() {
     <ExternalLink size={13} strokeWidth={2} />
   </a>
 </p>
-        <p
-          style={{
-            fontSize: '0.85rem',
-            lineHeight: '1.4',
-            margin: 0,
-          }}
-        >
-          <a
-            href="https://tdt.ar"
-            style={{
-              color: '#9de2c9', opacity: 0.75,
-              textDecoration: 'none',
-            }}
-          >
-            Promo Micro Emp 50% off hasta Dic 2026
-          </a>
-        </p>
+        
 
         <p
           style={{

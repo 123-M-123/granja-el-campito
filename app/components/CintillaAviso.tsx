@@ -6,7 +6,7 @@ export default function CintillaAviso() {
       <span className={styles.icono}>📢</span>
       <p className={styles.texto}>
         Próximamente nuevo dominio oficial:{" "}
-        <strong className={styles.dominio}>www.granja-el-campito.tdt.ar</strong>
+        <strong className={styles.dominio}>www.elcampito.tdt.ar</strong>
       </p>
     </aside>
   )
