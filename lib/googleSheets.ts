@@ -1,3 +1,4 @@
+// C:\Users\Marcos\proyectos ordenados 1y2\el-campito\lib\googleSheets.ts
 import { google } from 'googleapis';
 import { slugify } from './utils';
 
@@ -32,47 +33,26 @@ function getDriveDirectLink(url: string, version: string = "1") {
 }
 
 /**
- * 📦 PRODUCTOS: Lectura con mapeo estricto, recargo del 10% y filtro de Stock > 0
+ * 📦 PRODUCTOS: Lectura ultrarrápida desde Supabase vía tdt.ar (Bypass de Google Sheets API)
+ * Frena el consumo masivo de CPU en Vercel.
  */
 export async function getProductsFromSheets() {
+  const GA_ID_CAMPITO = "534606659"; // gaId oficial de El Campito
+
   try {
-    const range = "'Carga de productos'!A2:O"; 
-    const response = await sheets.spreadsheets.values.get({ spreadsheetId: CLIENT_ID, range });
-    const rows = response.data.values;
-    
-    if (!rows) return [];
+    const res = await fetch(`https://tdt.ar/api/tienda/productos?gaId=${GA_ID_CAMPITO}`, {
+      next: { revalidate: 60 } // 👈 Caché de 1 minuto en Vercel Edge
+    });
 
-    return rows
-      .filter((row: any) => {
-        const emailValido = sociosElCampito.includes(row[0]?.trim().toLowerCase());
-        const tieneNombre = !!row[2]?.toString().trim();
-        // 🛑 FILTRO DE STOCK: Si es 0, menor a 0 o no tiene número, se oculta de toda la web
-        const tieneStock = (Number(row[7]) || 0) > 0;
+    if (!res.ok) {
+      console.error("❌ Error consultando API Supabase de productos:", res.status);
+      return [];
+    }
 
-        return emailValido && tieneNombre && tieneStock;
-      })
-      .map((row: any) => {
-        const precioBase = Number(row[3]) || 0;
-        const catRaw = row[6]?.toString().trim() || "sin categoría";
-        const catSlug = slugify(catRaw.replace('*', ''));
-        const esEspecial = catRaw.startsWith('*');
-
-        return {
-          id: row[1]?.toString() || "",
-          nombre: row[2]?.toString() || "",
-          // 🚜 Lógica El Campito: +10% en precio lista
-          precio: Math.round(precioBase * 1.111),
-          precioTransfer: precioBase,
-          descripcion: row[4] || "",
-          imagen: getDriveDirectLink(row[5] || "", "1"), // Productos usan v=1 por ahora
-          categoria: catRaw.replace('*', '').trim(),
-          categoriaSlug: catSlug,
-          tipo: esEspecial ? 'especial' : 'normal',
-          stock: Number(row[7]) || 0,
-        };
-      });
+    const data = await res.json();
+    return data.productos || [];
   } catch (error: any) {
-    console.error("🔥 Error Sheets El Campito:", error.message);
+    console.error("🔥 Error de conexión productos:", error.message);
     return [];
   }
 }
@@ -124,10 +104,13 @@ export async function savePaymentToMaster(paymentData: any[]) {
 export async function getCategoriesFromSheets() {
   const products = await getProductsFromSheets();
   const uniqueMap = new Map();
-  products.forEach(p => {
+  
+  // 👈 FIX: Agregamos (p: any) para eliminar el error ts(7006)
+  products.forEach((p: any) => {
     if (!uniqueMap.has(p.categoriaSlug)) {
       uniqueMap.set(p.categoriaSlug, { label: p.categoria, slug: p.categoriaSlug, tipo: p.tipo });
     }
   });
+  
   return Array.from(uniqueMap.values());
 }
