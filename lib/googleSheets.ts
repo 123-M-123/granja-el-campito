@@ -34,7 +34,6 @@ function getDriveDirectLink(url: string, version: string = "1") {
 
 /**
  * 📦 PRODUCTOS: Lectura ultrarrápida desde Supabase vía tdt.ar (Bypass de Google Sheets API)
- * Frena el consumo masivo de CPU en Vercel.
  */
 export async function getProductsFromSheets() {
   const GA_ID_CAMPITO = "534606659"; // gaId oficial de El Campito
@@ -52,35 +51,41 @@ export async function getProductsFromSheets() {
     const data = await res.json();
     return data.productos || [];
   } catch (error: any) {
-    console.error("🔥 Error de conexión productos:", error.message);
+    console.error("🔥 Error de conexión productos El Campito:", error.message);
     return [];
   }
 }
 
 /**
- * 🚩 BANNERS: Con Cache Busting Real (Columna E)
+ * 🚩 BANNERS: Lectura ultrarrápida desde Supabase vía tdt.ar (Conserva Link de Destino y Versión)
  */
 export async function getBannersFromSheets() {
+  const EMAIL_VENDEDOR = "elianamarti90@gmail.com";
+
   try {
-    const range = "'Baners Publicidad'!A2:E"; 
-    const response = await sheets.spreadsheets.values.get({ spreadsheetId: MASTER_ID, range });
-    const rows = response.data.values;
-    if (!rows) return [];
+    const res = await fetch(`https://tdt.ar/api/tienda/banners?vendedor=${EMAIL_VENDEDOR}`, {
+      next: { revalidate: 60 } // 👈 Caché Edge de 1 minuto en Vercel
+    });
 
-    return rows
-      .filter((row: any) => sociosElCampito.includes(row[0]?.trim().toLowerCase()))
-      .map((row: any) => {
-        const urlOriginal = row[1] || "";
-        const version = row[4] || "1"; // Columna E
+    if (!res.ok) {
+      console.error("❌ Error consultando banners de El Campito:", res.status);
+      return [];
+    }
 
-        return {
-          // 🚀 Usamos el link directo con la versión del Excel
-          imagen: getDriveDirectLink(urlOriginal, version),
-          ubicacion: row[2]?.toString().toLowerCase().trim() || "",
-          linkDestino: row[3] || null
-        };
-      });
-  } catch (error: any) { return []; }
+    const data = await res.json();
+    const rawBanners = data.banners || [];
+
+    return rawBanners.map((b: any) => ({
+      imagen: b.imagen,
+      ubicacion: b.ubicacion,
+      // Si el link es "#" o vacío, lo deja en null para no abrir pestañas en blanco
+      linkDestino: b.linkDestino && b.linkDestino !== "#" ? b.linkDestino : null,
+      version: b.version || "1",
+    }));
+  } catch (error: any) {
+    console.error("🔥 Error de conexión banners El Campito:", error.message);
+    return [];
+  }
 }
 
 /**
@@ -104,13 +109,12 @@ export async function savePaymentToMaster(paymentData: any[]) {
 export async function getCategoriesFromSheets() {
   const products = await getProductsFromSheets();
   const uniqueMap = new Map();
-  
-  // 👈 FIX: Agregamos (p: any) para eliminar el error ts(7006)
+
   products.forEach((p: any) => {
     if (!uniqueMap.has(p.categoriaSlug)) {
       uniqueMap.set(p.categoriaSlug, { label: p.categoria, slug: p.categoriaSlug, tipo: p.tipo });
     }
   });
-  
+
   return Array.from(uniqueMap.values());
 }
