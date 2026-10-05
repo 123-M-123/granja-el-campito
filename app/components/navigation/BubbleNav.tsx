@@ -13,10 +13,12 @@ type Item = {
 }
 
 const desktopItems: Item[] = [
-  { href: '/quienes-somos', label: 'logo', x: 50, y:-10, size: 250, delay: 0 },
+  { href: '/quienes-somos', label: 'logo', x: 50, y: -10, size: 250, delay: 0 },
   { href: '/miel', label: 'miel', x: 78, y: -10, size: 240, delay: 1 },
   { href: '/huevos', label: 'huevos', x: 20, y: 25, size: 130, delay: 2 },
   { href: '/corderos', label: 'corderos', x: 73, y: 30, size: 150, delay: 1.5 },
+  // 📰 NUEVA BURBUJA BLOG (Entre corderos x:73 y el margen derecho x:100)
+  { href: '/blog', label: 'blog', x: 88, y: 28, size: 110, delay: 2.2 },
   { href: '/ferias', label: 'ferias', x: 20, y: -5, size: 225, delay: 0.5 },
   { href: '/precios', label: 'precios', x: 35, y: 10, size: 160, delay: 2.5 },
   { href: '/envios', label: 'envios', x: 65, y: 5, size: 150, delay: 3.5 },
@@ -27,6 +29,8 @@ const mobileItems: Item[] = [
   { href: '/quienes-somos', label: 'logo', x: 50, y: 17, size: 240, delay: 0 },
   { href: '/miel', label: 'miel', x: 75, y: 55, size: 225, delay: 1 },
   { href: '/huevos', label: 'huevos', x: 25, y: 82, size: 120, delay: 2 },
+  // 📰 NUEVA BURBUJA BLOG (Entre ferias y:56 y huevos y:82)
+  { href: '/blog', label: 'blog', x: 16, y: 70, size: 90, delay: 1.8 },
   { href: '/corderos', label: 'corderos', x: 80, y: 73, size: 115, delay: 1.5 },
   { href: '/ferias', label: 'ferias', x: 21, y: 56, size: 185, delay: 0.5 },
   { href: '/precios', label: 'precios', x: 45, y: 71, size: 160, delay: 2.5 },
@@ -108,6 +112,7 @@ export default function BubbleNav() {
                 ? '/logo-b.png'
                 : `/burbujas/${item.label}.png`
             }
+            alt={item.label}
             style={{
               width: '100%',
               height: '100%',
