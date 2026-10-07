@@ -11,234 +11,423 @@ import {
   ExternalLink, 
   Sparkles, 
   CheckCircle2, 
-  MapPin 
+  MapPin,
+  Clock,
+  BookOpen
 } from 'lucide-react'
 
-// 🛡️ TIPADO ESTRICTO DE FRAMER MOTION (Soluciona el error ts(2322))
-const containerVariants: Variants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.15 }
-  }
-}
-
-const cardVariants: Variants = {
-  hidden: { opacity: 0, y: 30 },
+// Animación para revelado al hacer scroll (Scroll Reveal)
+const cardScrollVariants: Variants = {
+  hidden: { opacity: 0, y: 45 },
   visible: { 
     opacity: 1, 
     y: 0, 
-    transition: { duration: 0.5, ease: "easeOut" as const } 
+    transition: { duration: 0.6, ease: "easeOut" as const } 
   }
 }
 
 export default function BlogHubPage() {
+  // Función para scroll suave compensando la barra superior fija
+  const handleScrollTo = (e: React.MouseEvent, id: string) => {
+    e.preventDefault();
+    const elem = document.getElementById(id);
+    if (elem) {
+      elem.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
   return (
     <main style={{
       minHeight: '100vh',
       background: 'linear-gradient(180deg, #064f2a 0%, #032b17 100%)',
       color: '#ffffff',
-      padding: '40px 16px 80px',
+      padding: '25px 16px 90px',
       fontFamily: 'Eras, sans-serif'
     }}>
-      <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
+      <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
 
-        {/* 🌿 CABECERA DEL BLOG */}
-        <header style={{ textAlign: 'center', marginBottom: '50px' }}>
+        {/* =========================================================
+            🖼️ 1. PORTADA RESPONSIVA (CELULAR VS ESCRITORIO)
+        ========================================================= */}
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.98 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5 }}
+          style={{
+            width: '100%',
+            borderRadius: '26px',
+            overflow: 'hidden',
+            boxShadow: '0 20px 45px rgba(0,0,0,0.4)',
+            marginBottom: '28px',
+            background: 'rgba(0,0,0,0.2)'
+          }}
+        >
+          <picture style={{ width: '100%', display: 'block' }}>
+            <source media="(max-width: 767px)" srcSet="/blog-cel.jpg" />
+            <source media="(min-width: 768px)" srcSet="/blog-esc.jpg" />
+            <img 
+              src="/blog-esc.jpg" 
+              alt="Portada Bitácora El Campito Cañuelas" 
+              style={{
+                width: '100%',
+                height: 'auto',
+                display: 'block',
+                objectFit: 'cover'
+              }}
+            />
+          </picture>
+        </motion.div>
+
+        {/* =========================================================
+            🔘 2. BOTONERA RÁPIDA 2x2 (NAVEGACIÓN CON SCROLL SUAVE)
+        ========================================================= */}
+        <section aria-label="Navegación rápida de secciones" style={{ marginBottom: '45px' }}>
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(2, 1fr)',
+            gap: '14px',
+            width: '100%'
+          }}>
+            {/* 1. SALUD */}
+            <a 
+              href="#salud" 
+              onClick={(e) => handleScrollTo(e, 'salud')} 
+              style={{ ...quickBtnStyle, border: '2px solid rgba(239, 68, 68, 0.45)', background: 'rgba(239, 68, 68, 0.18)' }}
+            >
+              <HeartPulse size={24} color="#fca5a5" />
+              <span style={{ color: '#ffffff', fontWeight: 800, fontSize: '16px' }}>Salud</span>
+            </a>
+
+            {/* 2. PRODUCCIÓN */}
+            <a 
+              href="#produccion" 
+              onClick={(e) => handleScrollTo(e, 'produccion')} 
+              style={{ ...quickBtnStyle, border: '2px solid rgba(34, 197, 94, 0.45)', background: 'rgba(34, 197, 94, 0.18)' }}
+            >
+              <Sprout size={24} color="#86efac" />
+              <span style={{ color: '#ffffff', fontWeight: 800, fontSize: '16px' }}>Producción</span>
+            </a>
+
+            {/* 3. TRADICIÓN */}
+            <a 
+              href="#tradicion" 
+              onClick={(e) => handleScrollTo(e, 'tradicion')} 
+              style={{ ...quickBtnStyle, border: '2px solid rgba(234, 179, 8, 0.45)', background: 'rgba(234, 179, 8, 0.18)' }}
+            >
+              <Wheat size={24} color="#fde047" />
+              <span style={{ color: '#ffffff', fontWeight: 800, fontSize: '16px' }}>Tradición</span>
+            </a>
+
+            {/* 4. NOTICIAS */}
+            <a 
+              href="#noticias" 
+              onClick={(e) => handleScrollTo(e, 'noticias')} 
+              style={{ ...quickBtnStyle, border: '2px solid rgba(56, 189, 248, 0.45)', background: 'rgba(56, 189, 248, 0.18)' }}
+            >
+              <Newspaper size={24} color="#7dd3fc" />
+              <span style={{ color: '#ffffff', fontWeight: 800, fontSize: '16px' }}>Noticias</span>
+            </a>
+          </div>
+        </section>
+
+        {/* 🌿 CABECERA EDITORIAL */}
+        <header style={{ textAlign: 'center', marginBottom: '55px' }}>
           <div style={{
             display: 'inline-flex',
             alignItems: 'center',
             gap: '8px',
-            background: 'rgba(255,255,255,0.15)',
-            padding: '6px 18px',
+            background: 'rgba(255,255,255,0.14)',
+            padding: '7px 22px',
             borderRadius: '50px',
-            marginBottom: '15px',
+            marginBottom: '18px',
             fontSize: '13px',
             color: '#bbf7d0',
-            fontWeight: 700
+            fontWeight: 800,
+            letterSpacing: '0.8px'
           }}>
             <Sparkles size={16} />
-            <span>BITÁCORA RURAL & BIENESTAR</span>
+            <span>BITÁCORA RURAL, CIENCIA & ALIMENTO VIVO</span>
           </div>
           
           <h1 style={{
-            fontSize: 'clamp(32px, 5vw, 48px)',
-            fontWeight: 800,
+            fontSize: 'clamp(32px, 5vw, 50px)',
+            fontWeight: 900,
             lineHeight: 1.15,
-            marginBottom: '15px',
+            marginBottom: '16px',
             color: '#ffffff'
           }}>
             Saberes de Nuestra Tierra
           </h1>
           
           <p style={{
-            fontSize: '16px',
+            fontSize: '17px',
             color: '#d9f5e3',
-            maxWidth: '680px',
+            maxWidth: '720px',
             margin: '0 auto',
-            lineHeight: 1.5
+            lineHeight: 1.55
           }}>
-            De nuestras colmenas y pasturas en Cañuelas directamente a tu hogar: ciencia natural, métodos limpios de producción y vida de campo.
+            De nuestras colmenas y pasturas en Cañuelas directamente a tu hogar: nutrición biológica, respeto por el suelo y crónicas de la comunidad productiva.
           </p>
         </header>
 
-        {/* 📚 GRILLA DE LAS 4 SECCIONES MAESTRAS */}
-        <motion.div 
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-            gap: '25px',
-            marginBottom: '60px'
-          }}
-        >
+        {/* =========================================================
+            📚 GRILLA DE LAS 4 SECCIONES (HORIZONTAL, AMPLIA Y CON SCROLL REVEAL)
+        ========================================================= */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(460px, 1fr))', // 👈 Diseño horizontal amplio
+          gap: '32px',
+          marginBottom: '65px'
+        }}>
 
           {/* =========================================================
-              SECCIÓN 1: SALUD Y NUTRICIÓN
+              SECCIÓN 1: SALUD Y NUTRICIÓN (#salud)
           ========================================================= */}
-          <motion.article variants={cardVariants} whileHover={{ y: -6 }} style={cardStyle}>
-            <div style={{ ...badgeStyle, background: 'rgba(239, 68, 68, 0.2)', color: '#fca5a5', border: '1px solid rgba(239,68,68,0.3)' }}>
-              <HeartPulse size={16} />
-              <span>Salud & Alimento Vivo</span>
+          <motion.article 
+            id="salud"
+            variants={cardScrollVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.15 }} // 👈 Aparece suave al scrollear
+            whileHover={{ y: -6, transition: { duration: 0.2 } }}
+            style={{ ...cardStyle, scrollMarginTop: '160px' }}
+          >
+            {/* 💧 MARCA DE AGUA GIGANTE AL FONDO */}
+            <div style={{ ...watermarkStyle, color: '#ef4444' }}>
+              <HeartPulse size={210} />
             </div>
 
-            <h2 style={cardTitleStyle}>El Poder Terapéutico de la Miel Pura y los Huevos de Pastoreo</h2>
-            <p style={cardDescStyle}>
-              Descubrí por qué la miel auténtica cristaliza y cómo los huevos de gallinas criadas en libertad multiplican su aporte de Omega 3 y Vitamina D.
-            </p>
+            <div style={{ position: 'relative', zIndex: 1 }}>
+              {/* Encabezado con Icono Grande */}
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px' }}>
+                <div style={{ ...iconHeaderBoxStyle, background: 'rgba(239, 68, 68, 0.2)', color: '#fca5a5' }}>
+                  <HeartPulse size={28} />
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '12px', color: '#fecaca', fontWeight: 700 }}>
+                  <Clock size={14} />
+                  <span>Lectura: 4 min</span>
+                </div>
+              </div>
 
-            <ul style={listStyle}>
-              <li><CheckCircle2 size={14} color="#86efac" /> <strong>Miel cruda:</strong> Enzimas vivas vs. miel industrial pasteurizada.</li>
-              <li><CheckCircle2 size={14} color="#86efac" /> <strong>Propóleo y Polen:</strong> El antibiótico natural de las abejas.</li>
-              <li><CheckCircle2 size={14} color="#86efac" /> <strong>Yemas doradas:</strong> Nutrientes de pastura real sin químicos.</li>
-            </ul>
+              <div style={{ ...badgeStyle, background: 'rgba(239, 68, 68, 0.22)', color: '#fca5a5', border: '1px solid rgba(239,68,68,0.35)' }}>
+                <span>Salud & Alimento Vivo</span>
+              </div>
 
-            <Link href="/blog/salud" style={btnLinkStyle}>
-              <span>Explorar Artículos de Salud</span>
-              <ArrowRight size={18} />
-            </Link>
+              <h2 style={cardTitleStyle}>El Poder Terapéutico de la Miel Pura y los Huevos de Pastoreo</h2>
+              
+              <p style={cardDescStyle}>
+                Descubrí por qué la miel auténtica cristaliza como sello de pureza biológica y cómo las gallinas criadas en libertad multiplican su aporte de nutrientes sin colorantes sintéticos.
+              </p>
+
+              <ul style={listStyle}>
+                <li><CheckCircle2 size={15} color="#86efac" /> <strong>Miel cruda:</strong> Conserva enzimas activas (*diastasa e invertasa*) y antioxidantes polifenólicos.</li>
+                <li><CheckCircle2 size={15} color="#86efac" /> <strong>Propóleo y Polen:</strong> El escudo inmunológico y bactericida natural generado en la colmena.</li>
+                <li><CheckCircle2 size={15} color="#86efac" /> <strong>Huevos pastoriles:</strong> Yemas doradas por pasto verde real, con el triple de Vitamina D y Omega 3.</li>
+                <li><CheckCircle2 size={15} color="#86efac" /> <strong>Sin pasteurizar:</strong> Mantenemos intactas las propiedades antisépticas que el calor destruye.</li>
+              </ul>
+
+              <Link href="/blog/salud" style={btnLinkStyle}>
+                <span>Leer Nota Completa de Salud</span>
+                <ArrowRight size={18} />
+              </Link>
+            </div>
           </motion.article>
 
           {/* =========================================================
-              SECCIÓN 2: PRODUCCIÓN AGROECOLÓGICA
+              SECCIÓN 2: PRODUCCIÓN AGROECOLÓGICA (#produccion)
           ========================================================= */}
-          <motion.article variants={cardVariants} whileHover={{ y: -6 }} style={cardStyle}>
-            <div style={{ ...badgeStyle, background: 'rgba(34, 197, 94, 0.2)', color: '#86efac', border: '1px solid rgba(34,197,94,0.3)' }}>
-              <Sprout size={16} />
-              <span>Suelo Vivo & Manejo Limpio</span>
+          <motion.article 
+            id="produccion"
+            variants={cardScrollVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.15 }}
+            whileHover={{ y: -6, transition: { duration: 0.2 } }}
+            style={{ ...cardStyle, scrollMarginTop: '160px' }}
+          >
+            {/* 💧 MARCA DE AGUA GIGANTE AL FONDO */}
+            <div style={{ ...watermarkStyle, color: '#22c55e' }}>
+              <Sprout size={210} />
             </div>
 
-            <h2 style={cardTitleStyle}>Cómo Producir Alimentos Limpios sin Agrotóxicos</h2>
-            <p style={cardDescStyle}>
-              El secreto detrás de nuestra granja en Cañuelas: regeneración de suelos, apicultura no extractiva y respeto irrestricto por los ciclos biológicos.
-            </p>
+            <div style={{ position: 'relative', zIndex: 1 }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px' }}>
+                <div style={{ ...iconHeaderBoxStyle, background: 'rgba(34, 197, 94, 0.2)', color: '#86efac' }}>
+                  <Sprout size={28} />
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '12px', color: '#bbf7d0', fontWeight: 700 }}>
+                  <Clock size={14} />
+                  <span>Lectura: 5 min</span>
+                </div>
+              </div>
 
-            <ul style={listStyle}>
-              <li><CheckCircle2 size={14} color="#86efac" /> <strong>Suelo fértil:</strong> La clave de los nutrientes en el forraje.</li>
-              <li><CheckCircle2 size={14} color="#86efac" /> <strong>Colmenas cuidadas:</strong> Cosecha sustentable de miel.</li>
-              <li><CheckCircle2 size={14} color="#86efac" /> <strong>Pastoreo rotativo:</strong> Corderos y aves en equilibrio.</li>
-            </ul>
+              <div style={{ ...badgeStyle, background: 'rgba(34, 197, 94, 0.22)', color: '#86efac', border: '1px solid rgba(34,197,94,0.35)' }}>
+                <span>Suelo Vivo & Manejo Limpio</span>
+              </div>
 
-            <Link href="/blog/produccion" style={btnLinkStyle}>
-              <span>Conocer Métodos de Producción</span>
-              <ArrowRight size={18} />
-            </Link>
+              <h2 style={cardTitleStyle}>Cómo Producir Alimentos Limpios Cuidando los Ciclos de la Tierra</h2>
+              
+              <p style={cardDescStyle}>
+                El secreto de nuestra chacra en Cañuelas: fertilidad natural del suelo, bienestar animal irrestricto y una apicultura que cuida la colmena antes que el volumen comercial.
+              </p>
+
+              <ul style={listStyle}>
+                <li><CheckCircle2 size={15} color="#86efac" /> <strong>Suelo vivo:</strong> Microbiología sana que nutre las pasturas sin fertilizantes de síntesis.</li>
+                <li><CheckCircle2 size={15} color="#86efac" /> <strong>Apicultura no extractiva:</strong> Dejamos reservas de miel para que las abejas invernen sin jarabes.</li>
+                <li><CheckCircle2 size={15} color="#86efac" /> <strong>Rotación de pasturas:</strong> Aves y corderos pastorean en parcelas frescas evitando parásitos.</li>
+                <li><CheckCircle2 size={15} color="#86efac" /> <strong>Cero venenos:</strong> Prohibición absoluta de glifosato y químicos residuales en todo el campo.</li>
+              </ul>
+
+              <Link href="/blog/produccion" style={btnLinkStyle}>
+                <span>Conocer Métodos de Producción</span>
+                <ArrowRight size={18} />
+              </Link>
+            </div>
           </motion.article>
 
           {/* =========================================================
-              SECCIÓN 3: CULTURA DE CAMPO & IDENTIDAD
+              SECCIÓN 3: CULTURA DE CAMPO & IDENTIDAD (#tradicion)
           ========================================================= */}
-          <motion.article variants={cardVariants} whileHover={{ y: -6 }} style={cardStyle}>
-            <div style={{ ...badgeStyle, background: 'rgba(234, 179, 8, 0.2)', color: '#fde047', border: '1px solid rgba(234,179,8,0.3)' }}>
-              <Wheat size={16} />
-              <span>Tradición Criolla & Cocina</span>
+          <motion.article 
+            id="tradicion"
+            variants={cardScrollVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.15 }}
+            whileHover={{ y: -6, transition: { duration: 0.2 } }}
+            style={{ ...cardStyle, scrollMarginTop: '160px' }}
+          >
+            {/* 💧 MARCA DE AGUA GIGANTE AL FONDO */}
+            <div style={{ ...watermarkStyle, color: '#eab308' }}>
+              <Wheat size={210} />
             </div>
 
-            <h2 style={cardTitleStyle}>Historias de Chacra, Uribelarrea y Recetario Criollo</h2>
-            <p style={cardDescStyle}>
-              Tradiciones gastronómicas del campo bonaerense. Recetas caseras con miel pura, secretos del pan de campo y el valor del productor familiar.
-            </p>
+            <div style={{ position: 'relative', zIndex: 1 }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px' }}>
+                <div style={{ ...iconHeaderBoxStyle, background: 'rgba(234, 179, 8, 0.2)', color: '#fde047' }}>
+                  <Wheat size={28} />
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '12px', color: '#fef08a', fontWeight: 700 }}>
+                  <Clock size={14} />
+                  <span>Lectura: 6 min</span>
+                </div>
+              </div>
 
-            <ul style={listStyle}>
-              <li><CheckCircle2 size={14} color="#86efac" /> <strong>Recetario tradicional:</strong> Pan de miel, budines e infusiones.</li>
-              <li><CheckCircle2 size={14} color="#86efac" /> <strong>Uribelarrea histórica:</strong> El polo turístico de la cuenca lechera.</li>
-              <li><CheckCircle2 size={14} color="#86efac" /> <strong>Consumo local:</strong> Del productor al vecino sin intermediarios.</li>
-            </ul>
+              <div style={{ ...badgeStyle, background: 'rgba(234, 179, 8, 0.22)', color: '#fde047', border: '1px solid rgba(234,179,8,0.35)' }}>
+                <span>Tradición Criolla & Cocina</span>
+              </div>
 
-            <Link href="/blog/cultura" style={btnLinkStyle}>
-              <span>Leer Notas de Cultura Criolla</span>
-              <ArrowRight size={18} />
-            </Link>
+              <h2 style={cardTitleStyle}>Historias de Chacra, Uribelarrea y el Recetario Tradicional</h2>
+              
+              <p style={cardDescStyle}>
+                La identidad gastronómica de la cuenca bonaerense: el encanto histórico de Uribelarrea, recetas caseras transmitidas por generaciones y el valor del productor de cercanía.
+              </p>
+
+              <ul style={listStyle}>
+                <li><CheckCircle2 size={15} color="#86efac" /> <strong>Recetario tradicional:</strong> Pan de miel de campo, budines caseros e infusiones digestivas.</li>
+                <li><CheckCircle2 size={15} color="#86efac" /> <strong>Uribelarrea histórica:</strong> El epicentro gastronómico y turístico de la tradición tambera.</li>
+                <li><CheckCircle2 size={15} color="#86efac" /> <strong>Carnes y derivados:</strong> Cordero pastoril criado a cielo abierto en pastizales naturales.</li>
+                <li><CheckCircle2 size={15} color="#86efac" /> <strong>Comercio justo:</strong> Venta directa del puestero al vecino, acortando la cadena de intermediarios.</li>
+              </ul>
+
+              <Link href="/blog/cultura" style={btnLinkStyle}>
+                <span>Leer Notas de Tradición</span>
+                <ArrowRight size={18} />
+              </Link>
+            </div>
           </motion.article>
 
           {/* =========================================================
-              SECCIÓN 4: MEDIOS LOCALES & COMUNIDAD CAÑUELAS
+              SECCIÓN 4: MEDIOS LOCALES & COMUNIDAD (#noticias)
           ========================================================= */}
-          <motion.article variants={cardVariants} whileHover={{ y: -6 }} style={{ ...cardStyle, border: '2px solid rgba(134, 239, 172, 0.4)' }}>
-            <div style={{ ...badgeStyle, background: 'rgba(56, 189, 248, 0.2)', color: '#7dd3fc', border: '1px solid rgba(56,189,248,0.3)' }}>
-              <Newspaper size={16} />
-              <span>Prensa & Comunidad Cañuelas</span>
+          <motion.article 
+            id="noticias"
+            variants={cardScrollVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.15 }}
+            whileHover={{ y: -6, transition: { duration: 0.2 } }}
+            style={{ ...cardStyle, border: '2px solid rgba(134, 239, 172, 0.45)', scrollMarginTop: '160px' }}
+          >
+            {/* 💧 MARCA DE AGUA GIGANTE AL FONDO */}
+            <div style={{ ...watermarkStyle, color: '#38bdf8' }}>
+              <Newspaper size={210} />
             </div>
 
-            <h2 style={cardTitleStyle}>El Campito en las Ferias y Medios de la Región</h2>
-            <p style={cardDescStyle}>
-              Noticias sobre la Feria Rural de Cañuelas (Ruta 205 Km 65.200) y menciones de nuestra granja en los principales periódicos y portales de noticias locales:
-            </p>
+            <div style={{ position: 'relative', zIndex: 1 }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px' }}>
+                <div style={{ ...iconHeaderBoxStyle, background: 'rgba(56, 189, 248, 0.2)', color: '#7dd3fc' }}>
+                  <Newspaper size={28} />
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '12px', color: '#bae6fd', fontWeight: 700 }}>
+                  <BookOpen size={14} />
+                  <span>Medios Cañuelas</span>
+                </div>
+              </div>
 
-            {/* ENLACES A DIARIOS REALES DE CAÑUELAS */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', margin: '15px 0 20px' }}>
-              <a 
-                href="https://www.infocanuelas.com" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                style={mediaLinkStyle}
-              >
-                <span>📰 <strong>InfoCañuelas:</strong> Crónicas rurales y cobertura regional</span>
-                <ExternalLink size={14} />
-              </a>
+              <div style={{ ...badgeStyle, background: 'rgba(56, 189, 248, 0.22)', color: '#7dd3fc', border: '1px solid rgba(56,189,248,0.35)' }}>
+                <span>Prensa & Comunidad Cañuelas</span>
+              </div>
 
-              <a 
-                href="https://www.elciudadano.com.ar" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                style={mediaLinkStyle}
-              >
-                <span>🗞️ <strong>El Ciudadano de Cañuelas:</strong> Actualidad productiva</span>
-                <ExternalLink size={14} />
-              </a>
+              <h2 style={cardTitleStyle}>El Campito en las Ferias y Medios de Comunicación de la Región</h2>
+              
+              <p style={cardDescStyle}>
+                Nuestra participación en la Feria Rural de Cañuelas (Ruta 205 Km 65.200) y las crónicas de los principales diarios y radios del distrito sobre el crecimiento de la agroecología:
+              </p>
 
-              <a 
-                href="https://www.nacpopcanuelas.com" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                style={mediaLinkStyle}
-              >
-                <span>📻 <strong>NacPop Cañuelas:</strong> Voces de los productores locales</span>
-                <ExternalLink size={14} />
-              </a>
+              {/* ENLACES A DIARIOS REALES DE CAÑUELAS */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '9px', margin: '18px 0 24px' }}>
+                <a 
+                  href="https://www.infocanuelas.com" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  style={mediaLinkStyle}
+                >
+                  <span>📰 <strong>InfoCañuelas:</strong> Crónicas rurales, actualidad y ferias</span>
+                  <ExternalLink size={15} />
+                </a>
+
+                <a 
+                  href="https://www.elciudadano.com.ar" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  style={mediaLinkStyle}
+                >
+                  <span>🗞️ <strong>El Ciudadano de Cañuelas:</strong> Actualidad agropecuaria local</span>
+                  <ExternalLink size={15} />
+                </a>
+
+                <a 
+                  href="https://www.nacpopcanuelas.com" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  style={mediaLinkStyle}
+                >
+                  <span>📻 <strong>NacPop Cañuelas:</strong> Voces de los productores y economía regional</span>
+                  <ExternalLink size={15} />
+                </a>
+              </div>
+
+              <Link href="/blog/comunidad" style={btnLinkStyle}>
+                <span>Ver Nuestra Agenda en Ferias</span>
+                <ArrowRight size={18} />
+              </Link>
             </div>
-
-            <Link href="/blog/comunidad" style={btnLinkStyle}>
-              <span>Ver Nuestra Agenda en Ferias</span>
-              <ArrowRight size={18} />
-            </Link>
           </motion.article>
 
-        </motion.div>
+        </div>
 
         {/* 🗺️ PIE DE PÁGINA DEL BLOG */}
         <div style={{
           textAlign: 'center',
-          borderTop: '1px solid rgba(255,255,255,0.15)',
-          paddingTop: '30px',
+          borderTop: '1px solid rgba(255,255,255,0.18)',
+          paddingTop: '32px',
           color: '#d9f5e3',
-          fontSize: '14px'
+          fontSize: '15px'
         }}>
-          <p style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-            <MapPin size={16} color="#86efac" />
-            <span>Granja Agroecológica El Campito · Cañuelas, Provincia de Buenos Aires</span>
+          <p style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
+            <MapPin size={18} color="#86efac" />
+            <span>Granja Agroecológica El Campito · Cañuelas, Provincia de Buenos Aires · Producción Artesanal</span>
           </p>
         </div>
 
@@ -248,56 +437,92 @@ export default function BlogHubPage() {
 }
 
 // =========================================================
-// 🎨 ESTILOS MODULARES EN LÍNEA
+// 🎨 ESTILOS MODULARES EN LÍNEA (ROBUSTOS Y RESPONSIVOS)
 // =========================================================
+const quickBtnStyle: React.CSSProperties = {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  gap: '12px',
+  padding: '16px 12px',
+  borderRadius: '18px',
+  textDecoration: 'none',
+  backdropFilter: 'blur(12px)',
+  boxShadow: '0 6px 18px rgba(0,0,0,0.22)',
+  transition: 'transform 0.2s ease, filter 0.2s ease',
+  cursor: 'pointer'
+}
+
 const cardStyle: React.CSSProperties = {
   background: 'rgba(255, 255, 255, 0.08)',
-  backdropFilter: 'blur(10px)',
-  border: '1px solid rgba(255, 255, 255, 0.15)',
-  borderRadius: '24px',
-  padding: '28px',
+  backdropFilter: 'blur(12px)',
+  border: '1px solid rgba(255, 255, 255, 0.16)',
+  borderRadius: '26px',
+  padding: '32px',
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'space-between',
-  boxShadow: '0 10px 30px rgba(0,0,0,0.25)',
+  boxShadow: '0 15px 35px rgba(0,0,0,0.3)',
+  position: 'relative',
+  overflow: 'hidden' // 👈 Clave para contener la marca de agua gigante sin scroll horizontal
+}
+
+const watermarkStyle: React.CSSProperties = {
+  position: 'absolute',
+  right: '-35px',
+  bottom: '-35px',
+  opacity: 0.065, // 👈 Marca de agua tenue elegante
+  pointerEvents: 'none',
+  transform: 'rotate(-10deg)',
+  zIndex: 0
+}
+
+const iconHeaderBoxStyle: React.CSSProperties = {
+  width: '54px',
+  height: '54px',
+  borderRadius: '16px',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  boxShadow: '0 4px 15px rgba(0,0,0,0.15)'
 }
 
 const badgeStyle: React.CSSProperties = {
   display: 'inline-flex',
   alignItems: 'center',
   gap: '6px',
-  padding: '5px 12px',
+  padding: '6px 14px',
   borderRadius: '50px',
   fontSize: '12px',
-  fontWeight: 700,
+  fontWeight: 800,
   textTransform: 'uppercase',
-  marginBottom: '15px',
+  marginBottom: '16px',
   width: 'fit-content',
 }
 
 const cardTitleStyle: React.CSSProperties = {
-  fontSize: '20px',
-  fontWeight: 800,
-  lineHeight: 1.25,
+  fontSize: '22px',
+  fontWeight: 900,
+  lineHeight: 1.28,
   color: '#ffffff',
-  marginBottom: '12px',
+  marginBottom: '14px',
 }
 
 const cardDescStyle: React.CSSProperties = {
-  fontSize: '14px',
+  fontSize: '15px',
   color: '#e2e8f0',
-  lineHeight: 1.5,
-  marginBottom: '16px',
+  lineHeight: 1.55,
+  marginBottom: '18px',
 }
 
 const listStyle: React.CSSProperties = {
   listStyle: 'none',
   padding: 0,
-  margin: '0 0 20px 0',
+  margin: '0 0 24px 0',
   display: 'flex',
   flexDirection: 'column',
-  gap: '8px',
-  fontSize: '13px',
+  gap: '10px',
+  fontSize: '13.5px',
   color: '#d9f5e3',
 }
 
@@ -307,26 +532,29 @@ const btnLinkStyle: React.CSSProperties = {
   justifyContent: 'space-between',
   background: '#ffffff',
   color: '#064f2a',
-  padding: '12px 20px',
+  padding: '13px 22px',
   borderRadius: '50px',
-  fontWeight: 800,
+  fontWeight: 900,
   fontSize: '13px',
   textDecoration: 'none',
   textTransform: 'uppercase',
-  boxShadow: '0 4px 15px rgba(0,0,0,0.2)',
+  boxShadow: '0 6px 18px rgba(0,0,0,0.22)',
   transition: 'transform 0.2s',
   marginTop: 'auto',
+  position: 'relative',
+  zIndex: 2
 }
 
 const mediaLinkStyle: React.CSSProperties = {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',
-  padding: '8px 12px',
-  background: 'rgba(0, 0, 0, 0.2)',
-  borderRadius: '10px',
+  padding: '10px 14px',
+  background: 'rgba(0, 0, 0, 0.25)',
+  borderRadius: '12px',
   color: '#ffffff',
   textDecoration: 'none',
-  fontSize: '12px',
-  border: '1px solid rgba(255,255,255,0.1)',
+  fontSize: '12.5px',
+  border: '1px solid rgba(255,255,255,0.12)',
+  transition: 'background 0.2s ease',
 }
