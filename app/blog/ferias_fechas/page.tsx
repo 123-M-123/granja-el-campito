@@ -56,8 +56,7 @@ const FERIAS_DATA = [
     nombreFallback: 'Plaza San Martín',
     bannerJpg: '/ferias/plaza-sm.jpg',
     fechas: [
-      'Sábado 17 · 11 a 17 hs',
-      'Sábado 24 · 11 a 17 hs'
+      'Próximas jornadas a confirmar'
     ]
   },
   {
