@@ -1,15 +1,45 @@
 /* app/ferias/ferias.module.css */
 
 .page {
-  padding: 60px 16px;
+  padding: 40px 16px 80px;
   min-height: 100vh;
   background: #009245; /* 🟢 Fondo Verde El Campito */
   color: white;
 }
 
+/* 🔘 NAVEGACIÓN SUPERIOR SUTIL */
+.topNav {
+  max-width: 1000px;
+  margin: 0 auto 20px;
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.homeLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 50px;
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  text-decoration: none;
+  font-family: 'Eras', sans-serif;
+  font-size: 13.5px;
+  font-weight: 700;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.homeLink:hover {
+  transform: scale(1.04);
+  background: rgba(255, 255, 255, 0.18);
+}
+
 .hero {
   text-align: center;
-  margin-bottom: 50px;
+  margin-bottom: 45px;
 }
 
 .hero h1 {
@@ -30,6 +60,29 @@
   opacity: 0.9;
 }
 
+/* 📅 BOTÓN CTA DESTACADO A LA NUEVA AGENDA */
+.ctaCronogramaBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 30px;
+  border-radius: 50px;
+  background: #ffffff;
+  color: #064f2a;
+  font-family: 'Eras', sans-serif;
+  font-weight: 900;
+  font-size: 14.5px;
+  text-decoration: none;
+  text-transform: uppercase;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.ctaCronogramaBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(0,0,0,0.4);
+}
+
 .container {
   display: flex;
   flex-direction: column;
@@ -37,16 +90,17 @@
   max-width: 1000px;
   margin: 0 auto;
 }
-.bannerWrapper:hover {
-  transform: scale(1.02);
-  transition: transform 0.3s ease;
-}
+
 .bannerWrapper {
   width: 100%;
-
+  border-radius: 16px;
   overflow: hidden;
-
   transition: transform 0.3s ease;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+}
+
+.bannerWrapper:hover {
+  transform: scale(1.02);
 }
 
 .bannerImg {
@@ -66,6 +120,36 @@
   text-transform: uppercase;
   border-left: 5px solid #d9f5e3;
   padding-left: 15px;
+}
+
+/* 📍 SEPARADOR ESTÉTICO: UBICACIÓN DIRECTA */
+.ubicacionSeparador {
+  margin: 35px 0 15px;
+  padding: 24px 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  text-align: center;
+  width: 100%;
+}
+
+.ubicacionTitulo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-family: 'Eras', sans-serif;
+  font-size: 22px;
+  font-weight: 800;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.ubicacionSub {
+  font-family: 'Eras', sans-serif;
+  font-size: 14.5px;
+  color: #d9f5e3;
+  margin: 6px 0 0 0;
+  font-weight: 600;
 }
 
 /* 📤 CAJA DE SUBIDA (REPARADA) */
@@ -124,7 +208,7 @@
 /* 🧱 GRILLA DE 3 COLUMNAS PARA HISTORIAL */
 .gridAnteriores {
   display: grid;
-  grid-template-columns: repeat(2, 1fr); /* 2 en mobile para que se vea algo */
+  grid-template-columns: repeat(2, 1fr);
   gap: 12px;
   width: 100%;
 }
@@ -133,7 +217,7 @@
   .hero h1 { font-size: 64px; }
   .sectionTitle { font-size: 32px; }
   .gridAnteriores {
-    grid-template-columns: repeat(3, 1fr); /* 3 en desktop como pediste */
+    grid-template-columns: repeat(3, 1fr);
     gap: 20px;
   }
 }

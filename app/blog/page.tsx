@@ -415,7 +415,7 @@ export default function BlogHubPage() {
                 </a>
               </div>
 
-              <Link href="/blog/comunidad" style={btnLinkStyle}>
+              <Link href="/blog/ferias_fechas" style={btnLinkStyle}>
                 <span>Ver Nuestra Agenda en Ferias</span>
                 <ArrowRight size={18} />
               </Link>
