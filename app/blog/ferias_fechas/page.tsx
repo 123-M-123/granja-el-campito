@@ -46,7 +46,7 @@ const FERIAS_DATA = [
     nombreFallback: 'Feria Rural Cañuelas',
     bannerJpg: '/ferias/rural.jpg',
     fechas: [
-      'Domingo 11 · 10 a 18 hs (Oct)'
+      'Domingo 11 (Oct)'
     ]
   },
   {
@@ -54,8 +54,7 @@ const FERIAS_DATA = [
     nombreFallback: 'Plaza San Martín',
     bannerJpg: '/ferias/plaza-sm.jpg',
     fechas: [
-      'Sábado 17 · 11 a 17 hs (Oct)',
-      'Sábado 24 · 11 a 17 hs (Oct)'
+      'Próximas jornadas a confirmar'
     ]
   },
   {
@@ -63,7 +62,7 @@ const FERIAS_DATA = [
     nombreFallback: 'Campo Cultura',
     bannerJpg: '/ferias/campo-cultura.jpg',
     fechas: [
-      'Próximas jornadas a confirmar (Oct)'
+      'Próximas jornadas a confirmar'
     ]
   }
 ]
