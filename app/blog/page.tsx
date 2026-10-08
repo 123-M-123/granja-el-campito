@@ -42,9 +42,11 @@ export default function BlogHubPage() {
       background: 'linear-gradient(180deg, #064f2a 0%, #032b17 100%)',
       color: '#ffffff',
       padding: '25px 16px 90px',
-      fontFamily: 'Eras, sans-serif'
+      fontFamily: 'Eras, sans-serif',
+      overflowX: 'hidden', // 👈 Escudo para anular cualquier scroll horizontal accidental en celulares
+      width: '100%'
     }}>
-      <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+      <div style={{ maxWidth: '1200px', margin: '0 auto', width: '100%' }}>
 
         {/* =========================================================
             🖼️ 1. PORTADA RESPONSIVA (CELULAR VS ESCRITORIO)
@@ -81,7 +83,7 @@ export default function BlogHubPage() {
         {/* =========================================================
             🔘 2. BOTONERA RÁPIDA 2x2 (NAVEGACIÓN CON SCROLL SUAVE)
         ========================================================= */}
-        <section aria-label="Navegación rápida de secciones" style={{ marginBottom: '45px' }}>
+        <section aria-label="Navegación rápida de secciones" style={{ marginBottom: '45px', width: '100%' }}>
           <div style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(2, 1fr)',
@@ -131,7 +133,7 @@ export default function BlogHubPage() {
         </section>
 
         {/* 🌿 CABECERA EDITORIAL */}
-        <header style={{ textAlign: 'center', marginBottom: '55px' }}>
+        <header style={{ textAlign: 'center', marginBottom: '55px', width: '100%' }}>
           <div style={{
             display: 'inline-flex',
             alignItems: 'center',
@@ -150,7 +152,7 @@ export default function BlogHubPage() {
           </div>
           
           <h1 style={{
-            fontSize: 'clamp(32px, 5vw, 50px)',
+            fontSize: 'clamp(28px, 5vw, 50px)',
             fontWeight: 900,
             lineHeight: 1.15,
             marginBottom: '16px',
@@ -171,13 +173,19 @@ export default function BlogHubPage() {
         </header>
 
         {/* =========================================================
-            📚 GRILLA DE LAS 4 SECCIONES (HORIZONTAL, AMPLIA Y CON SCROLL REVEAL)
+            📚 GRILLA DE LAS 4 SECCIONES (RESPONSIVE SIN DESBORDE)
+            
+            Nota Técnica de Arquitectura:
+            minmax(min(100%, 460px), 1fr) resuelve el bug:
+            - En celular (<460px): min(100%, 460px) toma 100%, evitando el corte derecho.
+            - En desktop (>460px): toma 460px y crea columnas paralelas amplias.
         ========================================================= */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(460px, 1fr))', // 👈 Diseño horizontal amplio
-          gap: '32px',
-          marginBottom: '65px'
+          gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 460px), 1fr))',
+          gap: '24px',
+          marginBottom: '65px',
+          width: '100%'
         }}>
 
           {/* =========================================================
@@ -188,7 +196,7 @@ export default function BlogHubPage() {
             variants={cardScrollVariants}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, amount: 0.15 }} // 👈 Aparece suave al scrollear
+            viewport={{ once: true, amount: 0.15 }}
             whileHover={{ y: -6, transition: { duration: 0.2 } }}
             style={{ ...cardStyle, scrollMarginTop: '160px' }}
           >
@@ -198,7 +206,6 @@ export default function BlogHubPage() {
             </div>
 
             <div style={{ position: 'relative', zIndex: 1 }}>
-              {/* Encabezado con Icono Grande */}
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px' }}>
                 <div style={{ ...iconHeaderBoxStyle, background: 'rgba(239, 68, 68, 0.2)', color: '#fca5a5' }}>
                   <HeartPulse size={28} />
@@ -458,20 +465,21 @@ const cardStyle: React.CSSProperties = {
   backdropFilter: 'blur(12px)',
   border: '1px solid rgba(255, 255, 255, 0.16)',
   borderRadius: '26px',
-  padding: '32px',
+  padding: 'clamp(20px, 4vw, 32px)', // 👈 Padding fluido que respira en pantallas chicas
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'space-between',
   boxShadow: '0 15px 35px rgba(0,0,0,0.3)',
   position: 'relative',
-  overflow: 'hidden' // 👈 Clave para contener la marca de agua gigante sin scroll horizontal
+  overflow: 'hidden',
+  width: '100%'
 }
 
 const watermarkStyle: React.CSSProperties = {
   position: 'absolute',
   right: '-35px',
   bottom: '-35px',
-  opacity: 0.065, // 👈 Marca de agua tenue elegante
+  opacity: 0.065,
   pointerEvents: 'none',
   transform: 'rotate(-10deg)',
   zIndex: 0
@@ -501,7 +509,7 @@ const badgeStyle: React.CSSProperties = {
 }
 
 const cardTitleStyle: React.CSSProperties = {
-  fontSize: '22px',
+  fontSize: 'clamp(19px, 3.5vw, 22px)',
   fontWeight: 900,
   lineHeight: 1.28,
   color: '#ffffff',

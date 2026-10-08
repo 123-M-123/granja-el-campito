@@ -12,6 +12,9 @@ type Item = {
   delay: number
 }
 
+// =========================================================================
+// 🖥️ ITEMS DE ESCRITORIO (INTACTO - NO SE MODIFICA EN ABSOLUTO)
+// =========================================================================
 const desktopItems: Item[] = [
   { href: '/quienes-somos', label: 'logo', x: 50, y: -10, size: 250, delay: 0 },
   { href: '/miel', label: 'miel', x: 78, y: -10, size: 240, delay: 1 },
@@ -25,17 +28,44 @@ const desktopItems: Item[] = [
   { href: '/wp', label: 'wp', x: 27, y: 30, size: 80, delay: 5 },
 ]
 
+// =========================================================================
+// 📱 ITEMS MÓVILES (RECALCULADOS: -15% DE TAMAÑO Y REORGANIZACIÓN ESPACIAL)
+//
+// Distribución en 3 Franjas Verticales:
+// 1. Zona Superior (y: 11%): Únicamente la burbuja 'logo' centrada.
+// 2. Zona Media (y: 24% a 43%): LIBRE para los 3 bloques de texto del Hero.
+// 3. Zona Inferior (y: 47% a 85%): Las 8 burbujas restantes con aire entre sí
+//    y aprovechando el espacio inferior disponible.
+// =========================================================================
 const mobileItems: Item[] = [
-  { href: '/quienes-somos', label: 'logo', x: 50, y: 17, size: 240, delay: 0 },
-  { href: '/miel', label: 'miel', x: 75, y: 55, size: 225, delay: 1 },
-  { href: '/huevos', label: 'huevos', x: 25, y: 82, size: 120, delay: 2 },
-  // 📰 NUEVA BURBUJA BLOG (Entre ferias y:56 y huevos y:82)
-  { href: '/blog', label: 'blog', x: 16, y: 70, size: 90, delay: 1.8 },
-  { href: '/corderos', label: 'corderos', x: 80, y: 73, size: 115, delay: 1.5 },
-  { href: '/ferias', label: 'ferias', x: 21, y: 56, size: 185, delay: 0.5 },
-  { href: '/precios', label: 'precios', x: 45, y: 71, size: 160, delay: 2.5 },
-  { href: '/envios', label: 'envios', x: 78, y: 83, size: 100, delay: 3.5 },
-  { href: '/wp', label: 'wp', x: 52, y: 84, size: 90, delay: 5 },
+  // 1. Logo principal (240 * 0.85 = 204px) - Arriba de todo, solo y centrado
+  { href: '/quienes-somos', label: 'logo', x: 50, y: 11, size: 204, delay: 0 },
+
+  // --- FRANJA MEDIA VACÍA: Aquí se lee limpiamente el texto del Hero ---
+
+  // 2. Ferias Regionales (185 * 0.85 = 158px) - Izquierda alta
+  { href: '/ferias', label: 'ferias', x: 22, y: 51, size: 158, delay: 0.5 },
+
+  // 3. Miel Envasada (225 * 0.85 = 191px) - Derecha alta
+  { href: '/miel', label: 'miel', x: 77, y: 49, size: 191, delay: 1 },
+
+  // 4. Lista de Precios 2026 (160 * 0.85 = 136px) - Centro dominante
+  { href: '/precios', label: 'precios', x: 49, y: 64, size: 136, delay: 2.5 },
+
+  // 5. Blog Rural (90 * 0.85 = 76px) - Lateral izquierdo
+  { href: '/blog', label: 'blog', x: 14, y: 68, size: 76, delay: 1.8 },
+
+  // 6. Corderos (115 * 0.85 = 98px) - Lateral derecho
+  { href: '/corderos', label: 'corderos', x: 84, y: 68, size: 98, delay: 1.5 },
+
+  // 7. Gallinas Libres / Huevos (120 * 0.85 = 102px) - Base izquierda
+  { href: '/huevos', label: 'huevos', x: 24, y: 82, size: 102, delay: 2 },
+
+  // 8. Botón WhatsApp Oficial (90 * 0.85 = 76px) - Base centro
+  { href: '/wp', label: 'wp', x: 50, y: 82, size: 76, delay: 5 },
+
+  // 9. Puntos de Distribución / Envíos (100 * 0.85 = 85px) - Base derecha
+  { href: '/envios', label: 'envios', x: 78, y: 83, size: 85, delay: 3.5 },
 ]
 
 export default function BubbleNav() {
@@ -71,9 +101,9 @@ export default function BubbleNav() {
       <style>{`
         @keyframes floatSoft {
           0% { transform: translate(-50%, -50%) translate(0px, 0px); }
-          25% { transform: translate(-50%, -50%) translate(6px, -10px); }
-          50% { transform: translate(-50%, -50%) translate(-6px, -14px); }
-          75% { transform: translate(-50%, -50%) translate(4px, -8px); }
+          25% { transform: translate(-50%, -50%) translate(5px, -8px); }
+          50% { transform: translate(-50%, -50%) translate(-5px, -11px); }
+          75% { transform: translate(-50%, -50%) translate(3px, -6px); }
           100% { transform: translate(-50%, -50%) translate(0px, 0px); }
         }
       `}</style>
