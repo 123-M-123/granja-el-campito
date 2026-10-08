@@ -6,11 +6,9 @@ import {
   Home, 
   ArrowLeft, 
   Calendar, 
-  Clock, 
   Camera, 
   Send, 
   Sparkles, 
-  CheckCircle2, 
   MapPin 
 } from 'lucide-react'
 
@@ -24,22 +22,22 @@ const cardScrollVariants: Variants = {
   }
 }
 
-// Datos de las 4 ferias oficiales
+// Datos de las 4 ferias oficiales con fallbacks enriquecidos (Octubre 2026)
 const FERIAS_DATA = [
   {
     id: 'uribelarrea',
     nombreFallback: 'Uribelarrea',
-    bannerJpg: '/ferias/uribelarrea.jpg', // 👈 Acá calza tu JPG con título y dirección
+    bannerJpg: '/ferias/uribelarrea.jpg',
     fechas: [
-      'Sábado 3 · 12 hs',
-      'Domingo 4 · 11 hs',
-      'Sábado 10 · 12 hs',
-      'Domingo 11 · 11 hs',
-      'Lunes 12 · 11 hs',
-      'Sábado 17 · 12 hs',
-      'Sábado 24 · 12 hs',
-      'Domingo 25 · 11 hs',
-      'Sábado 31 · 12 hs',
+      'Sábado 3 · 12 hs (Oct)',
+      'Domingo 4 · 11 hs (Oct)',
+      'Sábado 10 · 12 hs (Oct)',
+      'Domingo 11 · 11 hs (Oct)',
+      'Lunes 12 · 11 hs (Oct)',
+      'Sábado 17 · 12 hs (Oct)',
+      'Sábado 24 · 12 hs (Oct)',
+      'Domingo 25 · 11 hs (Oct)',
+      'Sábado 31 · 12 hs (Oct)',
       'Domingo 1 (Nov)'
     ]
   },
@@ -48,7 +46,7 @@ const FERIAS_DATA = [
     nombreFallback: 'Feria Rural Cañuelas',
     bannerJpg: '/ferias/rural.jpg',
     fechas: [
-      'Domingo 11 · 10 a 18 hs'
+      'Domingo 11 · 10 a 18 hs (Oct)'
     ]
   },
   {
@@ -56,7 +54,8 @@ const FERIAS_DATA = [
     nombreFallback: 'Plaza San Martín',
     bannerJpg: '/ferias/plaza-sm.jpg',
     fechas: [
-      'Próximas jornadas a confirmar'
+      'Sábado 17 · 11 a 17 hs (Oct)',
+      'Sábado 24 · 11 a 17 hs (Oct)'
     ]
   },
   {
@@ -64,7 +63,7 @@ const FERIAS_DATA = [
     nombreFallback: 'Campo Cultura',
     bannerJpg: '/ferias/campo-cultura.jpg',
     fechas: [
-      'Próximas jornadas a confirmar'
+      'Próximas jornadas a confirmar (Oct)'
     ]
   }
 ]
@@ -159,7 +158,7 @@ export default function FeriasFechasPage() {
             letterSpacing: '0.8px'
           }}>
             <Sparkles size={15} />
-            <span>AGENDA EN VIVO · TEMPORADA 2026</span>
+            <span>AGENDA EN VIVO · OCTUBRE 2026</span>
           </div>
 
           <h1 style={{
@@ -184,7 +183,7 @@ export default function FeriasFechasPage() {
         </header>
 
         {/* =========================================================
-            📚 3. GRILLA 2x2 DE LAS 4 FERIAS (SCROLL REVEAL EN CELULAR)
+            📚 3. GRILLA DE LAS 4 FERIAS (FOTOS ENTERAS SIN RECORTAR)
         ========================================================= */}
         <div style={{
           display: 'grid',
@@ -193,13 +192,13 @@ export default function FeriasFechasPage() {
           marginBottom: '55px',
           width: '100%'
         }}>
-          {FERIAS_DATA.map((feria, idx) => (
+          {FERIAS_DATA.map((feria) => (
             <motion.article
               key={feria.id}
               variants={cardScrollVariants}
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: true, amount: 0.15 }} // 👈 Aparece suave al scrollear en celular
+              viewport={{ once: true, amount: 0.15 }}
               style={{
                 background: 'rgba(255, 255, 255, 0.08)',
                 backdropFilter: 'blur(12px)',
@@ -212,34 +211,34 @@ export default function FeriasFechasPage() {
                 overflow: 'hidden'
               }}
             >
-              {/* 🖼️ SLOT JPG CON PROPORCIÓN ÁUREA Y ESQUINAS REDONDEADAS */}
+              {/* 🖼️ SLOT JPG: ANCHO FIJO (100%) Y ALTO ADAPTATIVO SIN RECORTAR */}
               <div style={{
                 width: '100%',
-                aspectRatio: '16 / 9', // 👈 Proporción fija y equilibrada para los 4 JPGs
                 borderRadius: '16px',
                 overflow: 'hidden',
                 boxShadow: '0 8px 22px rgba(0,0,0,0.35)',
                 marginBottom: '20px',
                 background: 'rgba(0,0,0,0.25)',
-                position: 'relative'
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
               }}>
                 <img 
                   src={feria.bannerJpg}
                   alt={`Feria ${feria.nombreFallback}`}
                   onError={(e) => {
-                    // Fallback estético si el archivo aún no fue subido a la carpeta public
                     e.currentTarget.src = '/burbujas/ferias.png'
                   }}
                   style={{
                     width: '100%',
-                    height: '100%',
-                    objectFit: 'cover',
-                    display: 'block'
+                    height: 'auto', // 👈 Se adapta naturalmente a la altura de la foto
+                    display: 'block',
+                    borderRadius: '16px'
                   }}
                 />
               </div>
 
-              {/* 🗓️ LISTADO DE FECHAS EN PÍLDORAS LIMPIAS (SIN TEXTO DUPLICADO) */}
+              {/* 🗓️ LISTADO DE FECHAS EN PÍLDORAS */}
               <div style={{
                 display: 'flex',
                 flexDirection: 'column',
@@ -273,7 +272,7 @@ export default function FeriasFechasPage() {
         </div>
 
         {/* =========================================================
-            📸 4. MÓDULO: ¿TENÉS FOTOS DE LA FERIA? SUBILAS ACÁ
+            📸 4. MÓDULO DE FOTOS DE FERIA
         ========================================================= */}
         <motion.section
           variants={cardScrollVariants}

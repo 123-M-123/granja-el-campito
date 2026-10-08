@@ -7,13 +7,11 @@ import {
   Home,
   Calendar,
   MapPin, 
-  ExternalLink, 
-  Camera, 
-  History as HistoryIcon 
+  ExternalLink 
 } from 'lucide-react' 
 import styles from './ferias.module.css'
 
-// 🎬 Animación suave al scrollear (Scroll Reveal)
+// 🎬 Animación scroll-reveal
 const scrollRevealVariants: Variants = {
   hidden: { opacity: 0, y: 28 },
   visible: { 
@@ -47,20 +45,16 @@ export default function FeriasClientContent({ banners }: { banners: any[] }) {
     } catch { setStatus('❌ Error de conexión') } finally { setUploading(false) }
   }
 
-  // 🔄 LÓGICA PARA GRUPOS: Filtra todos los banners de una ubicación (feria-1, feria-2, etc)
   const getBannerGroup = (slug: string) => banners.filter(b => b.ubicacion === slug)
 
-  // 🔄 LÓGICA PUNTO 5: Banners que no son del 1 al 3 y no son por año
   const bannersRestantes = banners.filter(b => {
     const parts = b.ubicacion.split('-')
     const num = parseInt(parts[1])
     return b.ubicacion.includes('feria') && num >= 4 && num < 2000 
   })
 
-  // Discriminamos dentro de feria-2 los banners informativos (cards) de los banners con link de Maps
-  const feria2Total = getBannerGroup('feria-2')
-  const feria2Cards = feria2Total.filter(b => !b.linkDestino || !b.linkDestino.includes('maps'))
-  const feria2Maps = feria2Total.filter(b => b.linkDestino && b.linkDestino.includes('maps'))
+  // Filtramos de feria-2 únicamente los que tienen link de Maps o Campo Cultura para dejarlos intactos
+  const feria2Maps = getBannerGroup('feria-2').filter(b => b.linkDestino && b.linkDestino !== '#')
 
   const BannerGroupRenderer = ({ items }: { items: any[] }) => {
     if (!items || items.length === 0) return null
@@ -85,7 +79,7 @@ export default function FeriasClientContent({ banners }: { banners: any[] }) {
     <main className={styles.page}>
 
       {/* =========================================================
-          🔘 0. NAVEGACIÓN SUPERIOR SUTIL (BOTÓN A INICIO)
+          🔘 0. NAVEGACIÓN SUPERIOR (BOTÓN INICIO)
       ========================================================= */}
       <div className={styles.topNav}>
         <Link href="/" className={styles.homeLink}>
@@ -95,7 +89,7 @@ export default function FeriasClientContent({ banners }: { banners: any[] }) {
       </div>
 
       {/* =========================================================
-          🌿 1. HERO PRINCIPAL (INTACTO SEGÚN REQUERIMIENTO)
+          🌿 1. HERO PRINCIPAL (INTACTO)
       ========================================================= */}
       <motion.section 
         className={styles.hero}
@@ -106,7 +100,7 @@ export default function FeriasClientContent({ banners }: { banners: any[] }) {
         <h1>Ferias y Eventos</h1>
         <p>Participamos en ferias locales. ¡Vení a visitarnos y probá nuestra miel pura!</p>
 
-        {/* 📅 NUEVO BOTÓN DE SALTO A LA PÁGINA DE FECHAS */}
+        {/* 📅 BOTÓN DIRECTO AL CRONOGRAMA */}
         <div style={{ marginTop: '24px' }}>
           <Link href="/blog/ferias_fechas" className={styles.ctaCronogramaBtn}>
             <Calendar size={18} color="#064f2a" />
@@ -130,48 +124,63 @@ export default function FeriasClientContent({ banners }: { banners: any[] }) {
         </motion.div>
 
         {/* =========================================================
-            📍 3. DÓNDE NOS PODÉS ENCONTRAR (Reemplaza título anterior)
+            📍 3. DÓNDE NOS PODÉS ENCONTRAR (FALLBACKS FIJOS)
         ========================================================= */}
         <motion.div
           variants={scrollRevealVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.15 }}
+          style={{ display: 'flex', flexDirection: 'column', gap: '15px', width: '100%' }}
         >
           <h2 className={styles.sectionTitle}>Dónde nos podés encontrar</h2>
           
-          {/* Si hay banners de presentación/fotos sin maps se renderizan acá */}
-          <BannerGroupRenderer items={feria2Cards.length > 0 ? feria2Cards : feria2Total} />
+          {/* FOTO 1: SOLO FERIAS (Ancho completo adaptativo) */}
+          <div className={styles.bannerWrapper}>
+            <img 
+              src="/ferias/solo ferias.jpg" 
+              alt="Ferias Uribelarrea y Cañuelas" 
+              className={styles.bannerImg}
+              onError={(e) => { e.currentTarget.src = '/ferias/solo-ferias.jpg' }}
+            />
+          </div>
+
+          {/* FOTO 2: AFICHE MES (Clickeable hacia la agenda de fechas) */}
+          <div className={styles.bannerWrapper}>
+            <Link href="/blog/ferias_fechas" title="Ver fechas del mes">
+              <img 
+                src="/ferias/mes-.jpg" 
+                alt="Cronograma Ferias Octubre 2026" 
+                className={styles.bannerImg}
+              />
+            </Link>
+          </div>
         </motion.div>
 
         {/* =========================================================
-            🗺️ 4. SEPARADOR ESTÉTICO: UBICACIÓN DIRECTA
-            (Solo iconos decorativos en el título; los banners de Maps
-            que ya tenés renderizan abajo intactos con sus redirecciones)
+            🗺️ 4. SEPARADOR: UBICACIÓN DIRECTA (MAPS INTACTOS)
         ========================================================= */}
-        {feria2Maps.length > 0 && (
-          <motion.div
-            variants={scrollRevealVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.15 }}
-            className={styles.ubicacionSeparador}
-          >
-            <div className={styles.ubicacionTitulo}>
-              <MapPin size={22} color="#86efac" />
-              <span>Ubicación directa</span>
-              <ExternalLink size={18} color="#86efac" style={{ opacity: 0.8 }} />
-            </div>
-            <p className={styles.ubicacionSub}>
-              Abrí la geolocalización desde tu celular
-            </p>
+        <motion.div
+          variants={scrollRevealVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.15 }}
+          className={styles.ubicacionSeparador}
+        >
+          <div className={styles.ubicacionTitulo}>
+            <MapPin size={22} color="#86efac" />
+            <span>Ubicación directa</span>
+            <ExternalLink size={18} color="#86efac" style={{ opacity: 0.8 }} />
+          </div>
+          <p className={styles.ubicacionSub}>
+            Abrí la geolocalización desde tu celular
+          </p>
 
-            {/* BANNERS DE MAPS QUE YA TIENEN SUS REDIRECCIONES */}
-            <div style={{ marginTop: '20px', width: '100%' }}>
-              <BannerGroupRenderer items={feria2Maps} />
-            </div>
-          </motion.div>
-        )}
+          {/* BANNERS DE MAPS QUE YA TIENEN SUS REDIRECCIONES */}
+          <div style={{ marginTop: '20px', width: '100%' }}>
+            <BannerGroupRenderer items={feria2Maps} />
+          </div>
+        </motion.div>
 
         {/* =========================================================
             🏛️ 5. FERIAS ANTERIORES (feria-3)
@@ -193,7 +202,7 @@ export default function FeriasClientContent({ banners }: { banners: any[] }) {
         </motion.div>
 
         {/* =========================================================
-            📸 6. MÓDULO DE SUBIDA DE FOTOS (PRESERVADO INTACTO)
+            📸 6. MÓDULO DE SUBIDA DE FOTOS (PRESERVADO)
         ========================================================= */}
         <motion.div
           variants={scrollRevealVariants}
@@ -218,7 +227,7 @@ export default function FeriasClientContent({ banners }: { banners: any[] }) {
         </motion.div>
 
         {/* =========================================================
-            🚀 7. GALERÍA EXTRA (RESTABLECIDO INTACTO)
+            🚀 7. GALERÍA EXTRA (RESTABLECIDO)
         ========================================================= */}
         {bannersRestantes.length > 0 && (
           <motion.div

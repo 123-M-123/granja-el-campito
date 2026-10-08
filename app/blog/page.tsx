@@ -415,10 +415,28 @@ export default function BlogHubPage() {
                 </a>
               </div>
 
-              <Link href="/blog/ferias_fechas" style={btnLinkStyle}>
-                <span>Ver Nuestra Agenda en Ferias</span>
-                <ArrowRight size={18} />
-              </Link>
+             {/* 🔘 DOBLE BOTÓN DE CONVERSIÓN EN LA TARJETA DE NOTICIAS */}
+<div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: 'auto' }}>
+  {/* Botón 1: Fechas de ferias */}
+  <Link href="/blog/ferias_fechas" style={btnLinkStyle}>
+    <span>Ver Cronograma de Fechas</span>
+    <ArrowRight size={18} />
+  </Link>
+
+  {/* Botón 2: Comunidad y Prensa */}
+  <Link 
+    href="/blog/comunidad" 
+    style={{
+      ...btnLinkStyle,
+      background: 'rgba(255, 255, 255, 0.15)',
+      color: '#ffffff',
+      border: '1px solid rgba(255, 255, 255, 0.25)'
+    }}
+  >
+    <span>Ver Notas de Prensa y Comunidad</span>
+    <ArrowRight size={18} />
+  </Link>
+</div>
             </div>
           </motion.article>
 
