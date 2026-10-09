@@ -25,12 +25,14 @@
   z-index: 2; /* por encima de burbujas */
   max-width: 768px; /* límite de ancho */
   width: 100%;
-  padding: 0 12px; /* resguardo para evitar que el texto toque los bordes */
+  padding: 0 12px;
 
-  /* Calibración milimétrica mobile: se ubica en el espacio limpio 
-     entre la burbuja superior del logo y la constelación inferior */
-  transform: translateY(-92px);
-  pointer-events: none; /* las burbujas por detrás siguen siendo clickeables si rozan bordes */
+  /* 🔥 CALIBRACIÓN CLAVE: 
+     Baja el bloque de texto a translateY(-20px) para que se ubique
+     exactamente en el espacio libre entre el logo (arriba) y 
+     las burbujas de Miel / Ferias (abajo). */
+  transform: translateY(-20px);
+  pointer-events: none;
 }
 
 /* ========================================================= */
@@ -42,7 +44,7 @@
   font-size: 17px; /* tamaño mobile */
 
   color: #064f2a;
-  line-height: 1.15; /* interlineado */
+  line-height: 1.15;
 }
 
 /* ========================================================= */
@@ -51,7 +53,7 @@
 .title {
   font-family: 'Eras', sans-serif;
   font-weight: 700; /* bold */
-  font-size: 32px; /* tamaño móvil calibrado para no empastar */
+  font-size: 32px; /* tamaño móvil calibrado */
 
   margin: 4px 0;
   line-height: 1.12;

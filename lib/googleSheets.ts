@@ -12,7 +12,7 @@ const auth = new google.auth.GoogleAuth({
 
 const sheets = google.sheets({ version: 'v4', auth });
 const MASTER_ID = process.env.MASTER_PAYMENTS_SHEET_ID;
-const CLIENT_ID = process.env.CLIENT_CONTENT_SHEET_ID;
+const CLIENT_ID = process.env.CLIENT_CONTENT_SHEET_ID || "1Qo_52MB9g0A8MKWzcZ5laAV599Xw7WS0WZ-GCKOe4yY";
 
 const sociosElCampito = ["elianamarti90@gmail.com", "exequiel.devita@gmail.com"];
 
@@ -117,4 +117,130 @@ export async function getCategoriesFromSheets() {
   });
 
   return Array.from(uniqueMap.values());
+}
+
+// =========================================================================
+// 🗓️ CRONOGRAMA DE FERIAS: Lectura directa desde Hoja 4 de El Campito
+// =========================================================================
+
+export interface FeriaFechaItem {
+  id: string
+  nombreFallback: string
+  bannerJpg: string
+  fechas: string[]
+  version: string
+}
+
+// Fallback seguro en caso de que Google Sheets esté caído o vacío
+const FERIAS_FALLBACK_DEFAULT: FeriaFechaItem[] = [
+  {
+    id: 'uribelarrea',
+    nombreFallback: 'Uribelarrea',
+    bannerJpg: '/ferias/uribelarrea.jpg',
+    fechas: [
+      'Sábado 3 · 12 hs (Oct)',
+      'Domingo 4 · 11 hs (Oct)',
+      'Sábado 10 · 12 hs (Oct)',
+      'Domingo 11 · 11 hs (Oct)',
+      'Lunes 12 · 11 hs (Oct)',
+      'Sábado 17 · 12 hs (Oct)',
+      'Sábado 24 · 12 hs (Oct)',
+      'Domingo 25 · 11 hs (Oct)',
+      'Sábado 31 · 12 hs (Oct)',
+      'Domingo 1 (Nov)'
+    ],
+    version: '1'
+  },
+  {
+    id: 'rural',
+    nombreFallback: 'Feria Rural Cañuelas',
+    bannerJpg: '/ferias/rural.jpg',
+    fechas: [
+      'Domingo 11 · 10 a 18 hs (Oct)'
+    ],
+    version: '1'
+  },
+  {
+    id: 'plaza-sm',
+    nombreFallback: 'Plaza San Martín',
+    bannerJpg: '/ferias/plaza-sm.jpg',
+    fechas: [
+      'Sábado 17 · 11 a 17 hs (Oct)',
+      'Sábado 24 · 11 a 17 hs (Oct)'
+    ],
+    version: '1'
+  },
+  {
+    id: 'campo-cultura',
+    nombreFallback: 'Campo Cultura',
+    bannerJpg: '/ferias/campo-cultura.jpg',
+    fechas: [
+      'Próximas jornadas a confirmar (Oct)'
+    ],
+    version: '1'
+  }
+];
+
+/**
+ * Helper para dividir texto de fechas separado por comas o saltos de línea
+ */
+function parsearFechasCrudas(texto: string): string[] {
+  if (!texto) return [];
+  return texto
+    .split(/[\n,;]+/)
+    .map(f => f.trim())
+    .filter(f => f.length > 0);
+}
+
+/**
+ * Consulta la Hoja 4 de la planilla de El Campito usando la Service Account oficial
+ */
+export async function getFeriasFechasFromSheets(): Promise<FeriaFechaItem[]> {
+  try {
+    const spreadsheetId = CLIENT_ID || "1Qo_52MB9g0A8MKWzcZ5laAV599Xw7WS0WZ-GCKOe4yY";
+
+    // Consultamos la pestaña Hoja 4 de columnas A hasta E
+    const response = await sheets.spreadsheets.values.get({
+      spreadsheetId,
+      range: "'Hoja 4'!A2:E20",
+    });
+
+    const rows = response.data.values;
+    if (!rows || rows.length === 0) {
+      console.warn("⚠️ Hoja 4 vacía en Sheets, usando fallback.");
+      return FERIAS_FALLBACK_DEFAULT;
+    }
+
+    const items: FeriaFechaItem[] = rows.map((row) => {
+      const idRaw = (row[0] || '').toLowerCase().trim();
+      const versionRaw = row[4] || '1';
+      
+      // Si el link de imagen es de Drive, lo convierte a lh3; si es ruta local, la preserva
+      let bannerFinal = row[1] ? row[1].trim() : `/ferias/${idRaw}.jpg`;
+      if (bannerFinal.includes('drive.google.com')) {
+        bannerFinal = getDriveDirectLink(bannerFinal, versionRaw);
+      }
+
+      // Nombre amigable para alt/título
+      const nombresMap: Record<string, string> = {
+        'uribelarrea': 'Uribelarrea',
+        'rural': 'Feria Rural Cañuelas',
+        'plaza-sm': 'Plaza San Martín',
+        'campo-cultura': 'Campo Cultura'
+      };
+
+      return {
+        id: idRaw,
+        nombreFallback: nombresMap[idRaw] || idRaw,
+        bannerJpg: bannerFinal,
+        fechas: parsearFechasCrudas(row[3] || ''),
+        version: versionRaw
+      };
+    }).filter(item => item.id.length > 0);
+
+    return items.length > 0 ? items : FERIAS_FALLBACK_DEFAULT;
+  } catch (error: any) {
+    console.error("🔥 Error consultando Hoja 4 de El Campito:", error.message);
+    return FERIAS_FALLBACK_DEFAULT;
+  }
 }

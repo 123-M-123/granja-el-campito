@@ -29,43 +29,43 @@ const desktopItems: Item[] = [
 ]
 
 // =========================================================================
-// 📱 ITEMS MÓVILES (RECALCULADOS: -15% DE TAMAÑO Y REORGANIZACIÓN ESPACIAL)
+// 📱 ITEMS MÓVILES (REACOMODADOS HACIA EL ESPACIO LIBRE INFERIOR)
 //
-// Distribución en 3 Franjas Verticales:
-// 1. Zona Superior (y: 11%): Únicamente la burbuja 'logo' centrada.
-// 2. Zona Media (y: 24% a 43%): LIBRE para los 3 bloques de texto del Hero.
-// 3. Zona Inferior (y: 47% a 85%): Las 8 burbujas restantes con aire entre sí
-//    y aprovechando el espacio inferior disponible.
+// Distribución Milimétrica:
+// 1. Logo (y: 19%): Libre del header, con margen superior limpio.
+// 2. Franja de Texto (y: 32% a 48%): Libre de cualquier burbuja invasora.
+// 3. Constelación de Burbujas (y: 60% a 90%): Ocupa el tercio inferior verde
+//    que antes quedaba desaprovechado.
 // =========================================================================
 const mobileItems: Item[] = [
-  // 1. Logo principal (240 * 0.85 = 204px) - Arriba de todo, solo y centrado
-  { href: '/quienes-somos', label: 'logo', x: 50, y: 11, size: 204, delay: 0 },
+  // 1. Logo principal (204px) - Baja de y:11 a y:19 para despegarse del header
+  { href: '/quienes-somos', label: 'logo', x: 50, y: 19, size: 204, delay: 0 },
 
-  // --- FRANJA MEDIA VACÍA: Aquí se lee limpiamente el texto del Hero ---
+  // --- FRANJA MEDIA TOTALMENTE LIMPIA PARA EL TEXTO DEL HERO ---
 
-  // 2. Ferias Regionales (185 * 0.85 = 158px) - Izquierda alta
-  { href: '/ferias', label: 'ferias', x: 22, y: 51, size: 158, delay: 0.5 },
+  // 2. Miel Envasada (191px) - Se corre a y:60 para no pisar el texto
+  { href: '/miel', label: 'miel', x: 77, y: 60, size: 191, delay: 1 },
 
-  // 3. Miel Envasada (225 * 0.85 = 191px) - Derecha alta
-  { href: '/miel', label: 'miel', x: 77, y: 49, size: 191, delay: 1 },
+  // 3. Ferias Regionales (158px) - Se corre a y:62 debajo del texto
+  { href: '/ferias', label: 'ferias', x: 22, y: 62, size: 158, delay: 0.5 },
 
-  // 4. Lista de Precios 2026 (160 * 0.85 = 136px) - Centro dominante
-  { href: '/precios', label: 'precios', x: 49, y: 64, size: 136, delay: 2.5 },
+  // 4. Lista de Precios 2026 (136px) - Centro dominante en y:73
+  { href: '/precios', label: 'precios', x: 49, y: 73, size: 136, delay: 2.5 },
 
-  // 5. Blog Rural (90 * 0.85 = 76px) - Lateral izquierdo
-  { href: '/blog', label: 'blog', x: 14, y: 68, size: 76, delay: 1.8 },
+  // 5. Blog Rural (76px) - Lateral izquierdo en y:76
+  { href: '/blog', label: 'blog', x: 14, y: 76, size: 76, delay: 1.8 },
 
-  // 6. Corderos (115 * 0.85 = 98px) - Lateral derecho
-  { href: '/corderos', label: 'corderos', x: 84, y: 68, size: 98, delay: 1.5 },
+  // 6. Corderos (98px) - Lateral derecho en y:76
+  { href: '/corderos', label: 'corderos', x: 84, y: 76, size: 98, delay: 1.5 },
 
-  // 7. Gallinas Libres / Huevos (120 * 0.85 = 102px) - Base izquierda
-  { href: '/huevos', label: 'huevos', x: 24, y: 82, size: 102, delay: 2 },
+  // 7. Gallinas Libres / Huevos (102px) - Base izquierda en y:89
+  { href: '/huevos', label: 'huevos', x: 24, y: 89, size: 102, delay: 2 },
 
-  // 8. Botón WhatsApp Oficial (90 * 0.85 = 76px) - Base centro
-  { href: '/wp', label: 'wp', x: 50, y: 82, size: 76, delay: 5 },
+  // 8. Botón WhatsApp Oficial (76px) - Base centro en y:89
+  { href: '/wp', label: 'wp', x: 50, y: 89, size: 76, delay: 5 },
 
-  // 9. Puntos de Distribución / Envíos (100 * 0.85 = 85px) - Base derecha
-  { href: '/envios', label: 'envios', x: 78, y: 83, size: 85, delay: 3.5 },
+  // 9. Puntos de Distribución / Envíos (85px) - Base derecha en y:90
+  { href: '/envios', label: 'envios', x: 78, y: 90, size: 85, delay: 3.5 },
 ]
 
 export default function BubbleNav() {
