@@ -3,25 +3,31 @@
 /* =========================
    VARIABLES GLOBALES
 ========================= */
+/* =========================================================
+   VARIABLES GLOBALES (CALIBRADAS CON HEADER + CINTILLA)
+========================================================= */
 
 :root {
   --background: #009245; /* 🎨 Verde base principal del sitio */
   --foreground: #ffffff; /* 🎨 Color de texto general */
 
-  /* 🔥 ALTURA HEADER (clave para layout global) */
+  /* 🔥 ALTURA HEADER BASE */
   --header-h-mobile: 85px;
-  --header-h-desktop:115px;
+  --header-h-desktop: 115px;
+
+  /* 📢 ALTURA DE LA CINTILLA / BANDERÍN SUPERIOR */
+  --cintilla-h: 36px;
 }
 
-/* =========================
-   BASE CON TIPOGRAFÍA ERAS BIEN DECLARADA
-========================= */
+/* =========================================================
+   BASE (EMPUJE GLOBAL UNIFICADO)
+========================================================= */
 
 body {
   margin: 0;
   padding: 0;
 
-  /* 🔤 Se declara 'Eras' universalmente y se fija 500 (Medium) por defecto */
+  /* 🔤 TIPOGRAFÍA ERAS REGLAMENTARIA */
   font-family: 'Eras', sans-serif;
   font-weight: 500;
 
@@ -30,15 +36,16 @@ body {
 
   overflow-x: hidden;
 
-  /* 🔥 EMPUJA TODO EL CONTENIDO DEBAJO DEL HEADER */
-  padding-top: var(--header-h-mobile);
-}
-@media (min-width: 768px) {
-  body {
-    padding-top: var(--header-h-desktop);
-  }
+  /* 🔥 EMPUJA TODAS LAS PÁGINAS POR DEBAJO DEL HEADER + LA CINTILLA (MOBILE) */
+  padding-top: calc(var(--header-h-mobile) + var(--cintilla-h));
 }
 
+@media (min-width: 768px) {
+  body {
+    /* 🔥 EMPUJE GLOBAL PARA ESCRITORIO (DESKTOP) */
+    padding-top: calc(var(--header-h-desktop) + var(--cintilla-h));
+  }
+}
 /* =========================
    LAYOUT BASE
 ========================= */
