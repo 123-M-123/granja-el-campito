@@ -6,14 +6,15 @@ import {
   Home, 
   ArrowLeft, 
   Calendar, 
+  CheckCircle2, 
+  CalendarPlus, 
   Camera, 
   Send, 
   Sparkles, 
   MapPin 
 } from 'lucide-react'
-import type { FeriaFechaItem } from '@/lib/googleSheets'
+import type { FeriaAgrupada } from '@/lib/feriasCampitoActions'
 
-// Animación scroll-reveal
 const cardScrollVariants: Variants = {
   hidden: { opacity: 0, y: 35 },
   visible: { 
@@ -26,7 +27,7 @@ const cardScrollVariants: Variants = {
 export default function FeriasFechasClientContent({ 
   ferias 
 }: { 
-  ferias: FeriaFechaItem[] 
+  ferias: FeriaAgrupada[] 
 }) {
   const telefonoWp = '5492262557322'
   const mensajeFoto = 'Hola Eliana! Tengo fotos de El Campito en la feria y se las quiero compartir'
@@ -44,9 +45,7 @@ export default function FeriasFechasClientContent({
     }}>
       <div style={{ maxWidth: '1100px', margin: '0 auto', width: '100%' }}>
 
-        {/* =========================================================
-            🔘 1. BARRA SUPERIOR DE NAVEGACIÓN (VOLVER Y HOME SUTIL)
-        ========================================================= */}
+        {/* NAVEGACIÓN SUPERIOR */}
         <div style={{
           display: 'flex',
           alignItems: 'center',
@@ -54,7 +53,6 @@ export default function FeriasFechasClientContent({
           marginBottom: '28px',
           width: '100%'
         }}>
-          {/* Volver a la página principal de ferias */}
           <Link 
             href="/ferias"
             style={{
@@ -68,15 +66,13 @@ export default function FeriasFechasClientContent({
               textDecoration: 'none',
               fontSize: '13.5px',
               fontWeight: 700,
-              boxShadow: '0 4px 14px rgba(0,0,0,0.2)',
-              transition: 'background 0.2s ease'
+              boxShadow: '0 4px 14px rgba(0,0,0,0.2)'
             }}
           >
             <ArrowLeft size={16} />
             <span>Volver a Ferias</span>
           </Link>
 
-          {/* Botón sutil de volver al Home del sitio */}
           <Link 
             href="/"
             style={{
@@ -90,8 +86,7 @@ export default function FeriasFechasClientContent({
               textDecoration: 'none',
               fontSize: '13.5px',
               fontWeight: 700,
-              border: '1px solid rgba(255,255,255,0.15)',
-              transition: 'transform 0.2s ease'
+              border: '1px solid rgba(255,255,255,0.15)'
             }}
           >
             <Home size={15} color="#86efac" />
@@ -99,9 +94,7 @@ export default function FeriasFechasClientContent({
           </Link>
         </div>
 
-        {/* =========================================================
-            🌿 2. CABECERA EDITORIAL
-        ========================================================= */}
+        {/* CABECERA */}
         <header style={{ textAlign: 'center', marginBottom: '45px' }}>
           <div style={{
             display: 'inline-flex',
@@ -117,7 +110,7 @@ export default function FeriasFechasClientContent({
             letterSpacing: '0.8px'
           }}>
             <Sparkles size={15} />
-            <span>AGENDA EN VIVO · TEMPORADA 2026</span>
+            <span>AGENDA EN VIVO · OCTUBRE 2026</span>
           </div>
 
           <h1 style={{
@@ -141,9 +134,7 @@ export default function FeriasFechasClientContent({
           </p>
         </header>
 
-        {/* =========================================================
-            📚 3. GRILLA DINÁMICA: CONECTADA 100% AL EXCEL
-        ========================================================= */}
+        {/* GRILLA DE LAS 4 FERIAS */}
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 480px), 1fr))',
@@ -170,7 +161,7 @@ export default function FeriasFechasClientContent({
                 overflow: 'hidden'
               }}
             >
-              {/* 🖼️ SLOT JPG: ANCHO COMPLETO Y ALTO ADAPTATIVO SIN RECORTES */}
+              {/* IMAGEN DE LA FERIA EN ANCHO COMPLETO */}
               <div style={{
                 width: '100%',
                 borderRadius: '16px',
@@ -184,20 +175,20 @@ export default function FeriasFechasClientContent({
               }}>
                 <img 
                   src={feria.bannerJpg}
-                  alt={`Feria ${feria.nombreFallback}`}
+                  alt={feria.nombre}
                   onError={(e) => {
                     e.currentTarget.src = `/ferias/${feria.id}.jpg`
                   }}
                   style={{
                     width: '100%',
-                    height: 'auto', // 👈 Entra el 100% del afiche sin recortar
+                    height: 'auto',
                     display: 'block',
                     borderRadius: '16px'
                   }}
                 />
               </div>
 
-              {/* 🗓️ LISTADO DE FECHAS DINÁMICAS LEÍDAS DE GOOGLE SHEETS */}
+              {/* LISTADO DE FECHAS NORMALIZADAS */}
               <div style={{
                 display: 'flex',
                 flexDirection: 'column',
@@ -205,24 +196,65 @@ export default function FeriasFechasClientContent({
                 marginTop: 'auto'
               }}>
                 {feria.fechas && feria.fechas.length > 0 ? (
-                  feria.fechas.map((fecha, fIdx) => (
+                  feria.fechas.map((item, fIdx) => (
                     <div 
                       key={fIdx}
                       style={{
                         display: 'flex',
                         alignItems: 'center',
+                        justifyContent: 'space-between',
                         gap: '10px',
                         padding: '10px 14px',
                         borderRadius: '12px',
-                        background: 'rgba(255, 255, 255, 0.09)',
-                        border: '1px solid rgba(255, 255, 255, 0.12)',
+                        background: item.yaPaso 
+                          ? 'rgba(0, 0, 0, 0.25)' // Píldora más oscura si ya pasó
+                          : 'rgba(255, 255, 255, 0.09)',
+                        border: item.yaPaso
+                          ? '1px solid rgba(134, 239, 172, 0.2)'
+                          : '1px solid rgba(255, 255, 255, 0.12)',
+                        opacity: item.yaPaso ? 0.7 : 1, // Opacidad sutil para fechas pasadas
                         fontSize: '14.5px',
                         color: '#ffffff',
                         fontWeight: 700
                       }}
                     >
-                      <Calendar size={16} color="#86efac" />
-                      <span>{fecha}</span>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '9px' }}>
+                        {item.yaPaso ? (
+                          <CheckCircle2 size={16} color="#86efac" /> // 👈 TILDE VERDE AUTOMÁTICA
+                        ) : (
+                          <Calendar size={16} color="#fde047" />
+                        )}
+                        <span>{item.textoDisplay}</span>
+                      </div>
+
+                      {/* BOTÓN DISPARADOR DE GOOGLE CALENDAR (Solo fechas futuras) */}
+                      {!item.yaPaso && item.calendarUrl && (
+                        <a
+                          href={item.calendarUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          title="Agendar en Google Calendar"
+                          style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '4px',
+                            background: 'rgba(34, 197, 94, 0.25)',
+                            border: '1px solid rgba(134, 239, 172, 0.4)',
+                            color: '#86efac',
+                            padding: '4px 10px',
+                            borderRadius: '50px',
+                            fontSize: '11px',
+                            fontWeight: 800,
+                            textDecoration: 'none',
+                            textTransform: 'uppercase',
+                            letterSpacing: '0.3px',
+                            cursor: 'pointer'
+                          }}
+                        >
+                          <CalendarPlus size={13} />
+                          <span>Agendar</span>
+                        </a>
+                      )}
                     </div>
                   ))
                 ) : (
@@ -243,9 +275,7 @@ export default function FeriasFechasClientContent({
           ))}
         </div>
 
-        {/* =========================================================
-            📸 4. MÓDULO DE FOTOS DE FERIA
-        ========================================================= */}
+        {/* MÓDULO DE FOTOS */}
         <motion.section
           variants={cardScrollVariants}
           initial="hidden"

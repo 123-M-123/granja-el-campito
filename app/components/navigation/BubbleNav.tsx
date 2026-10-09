@@ -39,33 +39,33 @@ const desktopItems: Item[] = [
 // =========================================================================
 const mobileItems: Item[] = [
   // 1. Logo principal (204px) - Baja de y:11 a y:19 para despegarse del header
-  { href: '/quienes-somos', label: 'logo', x: 50, y: 19, size: 204, delay: 0 },
+  { href: '/quienes-somos', label: 'logo', x: 50, y: 26, size: 204, delay: 0 },
 
   // --- FRANJA MEDIA TOTALMENTE LIMPIA PARA EL TEXTO DEL HERO ---
 
   // 2. Miel Envasada (191px) - Se corre a y:60 para no pisar el texto
-  { href: '/miel', label: 'miel', x: 77, y: 60, size: 191, delay: 1 },
+  { href: '/miel', label: 'miel', x: 77, y: 80, size: 191, delay: 1 },
 
   // 3. Ferias Regionales (158px) - Se corre a y:62 debajo del texto
-  { href: '/ferias', label: 'ferias', x: 22, y: 62, size: 158, delay: 0.5 },
+  { href: '/ferias', label: 'ferias', x: 22, y: 82, size: 158, delay: 0.5 },
 
   // 4. Lista de Precios 2026 (136px) - Centro dominante en y:73
-  { href: '/precios', label: 'precios', x: 49, y: 73, size: 136, delay: 2.5 },
+  { href: '/precios', label: 'precios', x: 49, y: 93, size: 136, delay: 2.5 },
 
   // 5. Blog Rural (76px) - Lateral izquierdo en y:76
-  { href: '/blog', label: 'blog', x: 14, y: 76, size: 76, delay: 1.8 },
+  { href: '/blog', label: 'blog', x: 14, y: 96, size: 76, delay: 1.8 },
 
   // 6. Corderos (98px) - Lateral derecho en y:76
-  { href: '/corderos', label: 'corderos', x: 84, y: 76, size: 98, delay: 1.5 },
+  { href: '/corderos', label: 'corderos', x: 84, y: 96, size: 98, delay: 1.5 },
 
   // 7. Gallinas Libres / Huevos (102px) - Base izquierda en y:89
-  { href: '/huevos', label: 'huevos', x: 24, y: 89, size: 102, delay: 2 },
+  { href: '/huevos', label: 'huevos', x: 24, y: 109, size: 102, delay: 2 },
 
   // 8. Botón WhatsApp Oficial (76px) - Base centro en y:89
-  { href: '/wp', label: 'wp', x: 50, y: 89, size: 76, delay: 5 },
+  { href: '/wp', label: 'wp', x: 50, y: 89, size: 96, delay: 5 },
 
   // 9. Puntos de Distribución / Envíos (85px) - Base derecha en y:90
-  { href: '/envios', label: 'envios', x: 78, y: 90, size: 85, delay: 3.5 },
+  { href: '/envios', label: 'envios', x: 78, y: 100, size: 85, delay: 3.5 },
 ]
 
 export default function BubbleNav() {

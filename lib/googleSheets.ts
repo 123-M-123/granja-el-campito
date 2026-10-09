@@ -120,7 +120,7 @@ export async function getCategoriesFromSheets() {
 }
 
 // =========================================================================
-// 🗓️ CRONOGRAMA DE FERIAS: Lectura directa desde Hoja 4 de El Campito
+// 🗓️ CRONOGRAMA DE FERIAS: Lectura directa desde Ferias_Fechas de El Campito
 // =========================================================================
 
 export interface FeriaFechaItem {
@@ -193,21 +193,21 @@ function parsearFechasCrudas(texto: string): string[] {
 }
 
 /**
- * Consulta la Hoja 4 de la planilla de El Campito usando la Service Account oficial
+ * Consulta la Ferias_Fechas de la planilla de El Campito usando la Service Account oficial
  */
 export async function getFeriasFechasFromSheets(): Promise<FeriaFechaItem[]> {
   try {
     const spreadsheetId = CLIENT_ID || "1Qo_52MB9g0A8MKWzcZ5laAV599Xw7WS0WZ-GCKOe4yY";
 
-    // Consultamos la pestaña Hoja 4 de columnas A hasta E
+    // Consultamos la pestaña Ferias_Fechas de columnas A hasta E
     const response = await sheets.spreadsheets.values.get({
       spreadsheetId,
-      range: "'Hoja 4'!A2:E20",
+      range: "'Ferias_Fechas'!A2:E20",
     });
 
     const rows = response.data.values;
     if (!rows || rows.length === 0) {
-      console.warn("⚠️ Hoja 4 vacía en Sheets, usando fallback.");
+      console.warn("⚠️ Ferias_Fechas vacía en Sheets, usando fallback.");
       return FERIAS_FALLBACK_DEFAULT;
     }
 
@@ -240,7 +240,7 @@ export async function getFeriasFechasFromSheets(): Promise<FeriaFechaItem[]> {
 
     return items.length > 0 ? items : FERIAS_FALLBACK_DEFAULT;
   } catch (error: any) {
-    console.error("🔥 Error consultando Hoja 4 de El Campito:", error.message);
+    console.error("🔥 Error consultando Ferias_Fechas de El Campito:", error.message);
     return FERIAS_FALLBACK_DEFAULT;
   }
 }
