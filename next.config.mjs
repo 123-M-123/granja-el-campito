@@ -35,19 +35,16 @@ const nextConfig = {
       {
         source: "/og/image.jpg",
         headers: [
-          {
-            key: "Cache-Control",
-            value: "public, max-age=0, must-revalidate",
-          },
+          { key: "Cache-Control", value: "public, max-age=0, must-revalidate" },
         ],
       },
-       {
+      {
         source: "/:path*",
         headers: [
           {
             key: 'Content-Security-Policy',
-            // Esto permite que Marcos te vea desde el panel central
-            value: "frame-ancestors 'self' https://tienda-de-tiendas.vercel.app http://localhost:3000",
+            // 🔓 AHORA PERMITE EMBEBER LA WEB EN TUS 3 DOMINIOS OFICIALES
+            value: "frame-ancestors 'self' https://tdt.ar https://www.tdt.ar https://tienda-de-tiendas.vercel.app http://localhost:3000",
           },
         ],
       },
