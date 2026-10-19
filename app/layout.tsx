@@ -13,12 +13,12 @@ export const metadata: Metadata = {
   title: "Granja Agroecológica - El Campito Cañuelas",
   description: "Somos distribuidores de: Huevos de Gallinas Libres, Miel Envasada y sus productos derivados, Origen Cañuelas",
   generator: "El Campito",
-  metadataBase: new URL("https://granja-el-campito.vercel.app"),
+  metadataBase: new URL("https://elcampito.tdt.ar"),
 
   openGraph: {
     title: "Granja Agroecológica | El Campito | Cañuelas",
     description: "Somos distribuidores de: Huevos de Gallinas Libres, Miel Envasada y sus productos derivados, Origen Cañuelas",
-    url: "https://granja-el-campito.vercel.app",
+    url: "https://elcampito.tdt.ar",
     siteName: "El Campito",
     images: [
       {

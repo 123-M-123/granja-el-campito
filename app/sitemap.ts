@@ -1,6 +1,6 @@
 import { MetadataRoute } from 'next'
 
-const baseUrl = 'https://granja-el-campito.vercel.app'
+const baseUrl = 'https://elcampito.tdt.ar'
 
 // 🔥 base SEO
 const productos = ['miel', 'huevos', 'cordero']

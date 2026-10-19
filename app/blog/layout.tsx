@@ -26,7 +26,7 @@ export const metadata: Metadata = {
     title: 'Bitácora de Campo & Salud Agroecológica · El Campito',
     description:
       'Descubrí la ciencia detrás de la miel pura, el valor de los huevos de gallinas libres y las historias vivas de nuestra granja en Cañuelas.',
-    url: 'https://granja-el-campito.vercel.app/blog',
+    url: 'https://elcampito.tdt.ar/blog',
     siteName: 'El Campito - Granja Agroecológica',
     locale: 'es_AR',
     type: 'website',

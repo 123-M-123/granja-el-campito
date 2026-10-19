@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Cronograma Ferias 2026 - El Campito",
     description: "Toda la info de nuestras próximas presentaciones: Cañuelas y Uribelarrea. ¡Vení a visitarnos!",
-    url: "https://granja-el-campito.vercel.app/ferias",
+    url: "https://elcampito.tdt.ar/ferias",
     siteName: "El Campito - Granja Agroecológica",
     images: [
       {

@@ -5,7 +5,7 @@ export default function CintillaAviso() {
     <aside className={styles.cintilla} aria-label="Aviso de dominio">
       <span className={styles.icono}>📢</span>
       <p className={styles.texto}>
-        Próximamente nuevo dominio oficial:{" "}
+        Entrá a:{" "}
         <strong className={styles.dominio}>www.elcampito.tdt.ar</strong>
       </p>
     </aside>

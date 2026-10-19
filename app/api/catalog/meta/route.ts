@@ -21,7 +21,7 @@ function escapeXml(unsafe: string) {
 export async function GET() {
   try {
     const products = await getProductsFromSheets();
-    const baseUrl = "https://granja-el-campito.vercel.app";
+    const baseUrl = "https://elcampito.tdt.ar";
 
     let xml = `<?xml version="1.0" encoding="UTF-8"?>
 <rss xmlns:g="http://base.google.com/ns/1.0" version="2.0">
@@ -30,7 +30,7 @@ export async function GET() {
     <link>${baseUrl}</link>
     <description>Feed de productos para Meta Ads e Instagram Shopping</description>`;
 
-    products.forEach((p) => {
+    products.forEach((p: any) => {
       const availability = p.stock > 0 ? "in stock" : "out of stock";
       
       const title = escapeXml(p.nombre);

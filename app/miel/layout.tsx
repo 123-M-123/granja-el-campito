@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Miel Pura Artesanal - El Campito",
     description: "Llevá a tu mesa la mejor miel de Cañuelas. Calidad premium garantizada por El Campito.",
-    url: "https://granja-el-campito.vercel.app/miel",
+    url: "https://elcampito.tdt.ar/miel",
     siteName: "El Campito - Granja Agroecológica",
     images: [
       {

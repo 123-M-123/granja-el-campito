@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Zonas de Envíos y Puntos de Distribución - El Campito",
     description: "Llegamos a todo AMBA. Centro logístico en Cañuelas, puntos de retiro en CABA (Caballito y Flores) y entregas seguras en Zona Sur y Oeste.",
-    url: "https://granja-el-campito.vercel.app/envios",
+    url: "https://elcampito.tdt.ar/envios",
     siteName: "El Campito - Granja Agroecológica",
     images: [
       {

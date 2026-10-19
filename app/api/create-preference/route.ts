@@ -34,7 +34,7 @@ export async function POST(req: Request) {
     const body = await req.json()
     const metodo = body.metodo || 'tarjeta'
     const vendedorEmail = body.vendedorEmail || "elianamarti90@gmail.com"; 
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://granja-el-campito.vercel.app";
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://elcampito.tdt.ar";
 
     // 1. 🟢 RESOLUCIÓN DINÁMICA DEL TOKEN (Consulta a tdt.ar)
     let tokenActivo = FALLBACK_ACCESS_TOKEN;

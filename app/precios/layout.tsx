@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Ventas Mayoristas y Distribución - El Campito",
     description: "Catálogo de productos agroecológicos origen Cañuelas. Precios especiales para comercios y revendedores.",
-    url: "https://granja-el-campito.vercel.app/precios",
+    url: "https://elcampito.tdt.ar/precios",
     siteName: "El Campito - Producción en Cañuelas",
     images: [
       {
