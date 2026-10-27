@@ -1,9 +1,8 @@
 /* =========================
-   HEADER (USA VARIABLES GLOBALES)
+   HEADER (USA VARIABLES GLOBALES DE TDT CON FALLBACK SEGURO)
 ========================= */
 
 .header {
-  /* 🔥 SOLO tamaños internos (la altura viene de globals.css) */
   --icon-size: 50px;
   --logo-size: 70px;
   --badge-size: 21px;
@@ -12,7 +11,7 @@
   top: 0;
   left: 0;
   width: 100%;
-  height: var(--header-h-mobile); /* 👈 sincronizado con globals */
+  height: var(--header-h-mobile);
 
   padding: 0 14px;
 
@@ -20,7 +19,8 @@
   align-items: center;
   justify-content: space-between;
 
-  background: #1f723f;
+  /* 🎨 Lee Oscuro 1 de TdT (ej: verde oscuro) con fallback al verde original #1f723f */
+  background: var(--color-oscuro-1, #1f723f);
   z-index: 1000;
 }
 
@@ -30,7 +30,7 @@
 
 @media (min-width: 768px) {
   .header {
-    height: var(--header-h-desktop); /* 👈 sincronizado con globals */
+    height: var(--header-h-desktop);
 
     --icon-size: 65px;
     --logo-size: 110px;
@@ -67,7 +67,7 @@
 .logo {
   height: var(--logo-size);
   object-fit: contain;
-  margin-top:-10;
+  margin-top: -10px;
 }
 
 /* =========================
@@ -81,7 +81,7 @@
 }
 
 /* =========================
-   BADGE
+   BADGE (BURBUJA CONTADOR)
 ========================= */
 
 .badge {
@@ -89,7 +89,8 @@
   top: -6px;
   right: -6px;
 
-  background: #ffcc00;
+  /* 🎨 Lee el color de Acento de TdT con fallback al amarillo #ffcc00 */
+  background: var(--color-acento, #ffcc00);
   color: black;
 
   font-size: 15px;

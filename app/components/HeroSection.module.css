@@ -2,35 +2,29 @@
 /* CONTENEDOR PRINCIPAL HERO                                 */
 /* ========================================================= */
 .hero {
-  position: relative; /* permite posicionar elementos internos */
-  width: 100%; /* ocupa todo el ancho */
-
-  /* altura mínima según header mobile */
+  position: relative;
+  width: 100%;
   min-height: calc(100vh - var(--header-h-mobile));
 
-  display: flex; /* layout flexible */
-  flex-direction: column; /* elementos en columna */
-  justify-content: center; /* centra vertical */
-  align-items: center; /* centra horizontal */
-  text-align: center; /* texto centrado */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 
-  overflow: visible; /* no corta burbujas */
-  padding: 8px 14px; /* espacio interno */
+  overflow: visible;
+  padding: 8px 14px;
 }
 
 /* ========================================================= */
 /* CONTENEDOR DEL TEXTO (MOBILE FIRST)                       */
 /* ========================================================= */
 .content {
-  z-index: 2; /* por encima de burbujas */
-  max-width: 768px; /* límite de ancho */
+  z-index: 2;
+  max-width: 768px;
   width: 100%;
   padding: 0 12px;
 
-  /* 🔥 CALIBRACIÓN CLAVE: 
-     Baja el bloque de texto a translateY(-20px) para que se ubique
-     exactamente en el espacio libre entre el logo (arriba) y 
-     las burbujas de Miel / Ferias (abajo). */
   transform: translateY(-20px);
   pointer-events: none;
 }
@@ -40,10 +34,11 @@
 /* ========================================================= */
 .kicker {
   font-family: 'Eras', sans-serif;
-  font-weight: 600; /* semi-bold */
-  font-size: 17px; /* tamaño mobile */
+  font-weight: 600;
+  font-size: 17px;
 
-  color: #064f2a;
+  /* 🎨 Lee Oscuro 2 de TdT con fallback seguro a #064f2a */
+  color: var(--color-oscuro-2, #064f2a);
   line-height: 1.15;
 }
 
@@ -52,12 +47,14 @@
 /* ========================================================= */
 .title {
   font-family: 'Eras', sans-serif;
-  font-weight: 700; /* bold */
-  font-size: 32px; /* tamaño móvil calibrado */
+  font-weight: 700;
+  font-size: 32px;
 
   margin: 4px 0;
   line-height: 1.12;
-  color: #ffffff;
+
+  /* 🎨 Lee Claro 1 de TdT con fallback a blanco #ffffff */
+  color: var(--color-claro-1, #ffffff);
 }
 
 /* ========================================================= */
@@ -66,32 +63,27 @@
 .subtitle {
   font-family: 'Eras', sans-serif;
   font-weight: 700;
-  font-size: 17px; /* mobile */
+  font-size: 17px;
 
-  color: #d9f5e3;
+  /* 🎨 Lee Claro 2 de TdT con fallback a #d9f5e3 */
+  color: var(--color-claro-2, #d9f5e3);
   line-height: 1.15;
 }
 
 /* ========================================================= */
-/* DESKTOP (>= 768px) - CONFIGURACIÓN INTACTA                */
+/* DESKTOP (>= 768px)                                        */
 /* ========================================================= */
 @media (min-width: 768px) {
-
-  /* ajusta altura según header desktop */
   .hero {
     min-height: calc(100vh - var(--header-h-desktop));
-
-    /* baja el hero completo (por header grande) */
     transform: translateY(195px);
   }
 
   .content {
-    /* En desktop se restaura translateY original */
     transform: translateY(-105px);
     pointer-events: auto;
   }
 
-  /* Control de tamaño en desktop */
   .title {
     font-size: 42px;
   }

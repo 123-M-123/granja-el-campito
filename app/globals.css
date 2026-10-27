@@ -1,15 +1,13 @@
 @import "tailwindcss";
 
-/* =========================
-   VARIABLES GLOBALES
-========================= */
 /* =========================================================
-   VARIABLES GLOBALES (CALIBRADAS CON HEADER + CINTILLA)
+   VARIABLES GLOBALES (CALIBRADAS CON TDT + HEADER + CINTILLA)
 ========================================================= */
 
 :root {
-  --background: #009245; /* 🎨 Verde base principal del sitio */
-  --foreground: #ffffff; /* 🎨 Color de texto general */
+  /* 🎨 CONEXIÓN VIVA A TDT CON FALLBACK SEGURO AL VERDE ORIGINAL */
+  --background: var(--color-medio-2, #009245);
+  --foreground: var(--color-claro-1, #ffffff);
 
   /* 🔥 ALTURA HEADER BASE */
   --header-h-mobile: 85px;
@@ -38,6 +36,9 @@ body {
 
   /* 🔥 EMPUJA TODAS LAS PÁGINAS POR DEBAJO DEL HEADER + LA CINTILLA (MOBILE) */
   padding-top: calc(var(--header-h-mobile) + var(--cintilla-h));
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 @media (min-width: 768px) {
@@ -46,12 +47,17 @@ body {
     padding-top: calc(var(--header-h-desktop) + var(--cintilla-h));
   }
 }
+
+main {
+  flex: 1; /* Empuja el footer al fondo automáticamente */
+}
+
 /* =========================
    LAYOUT BASE
 ========================= */
 
 .app-content {
-  min-height: 100vh; /* asegura pantalla completa */
+  min-height: 100vh;
   position: relative;
 }
 
@@ -66,7 +72,7 @@ body {
   width: 100%;
   height: 100%;
 
-  pointer-events: none; /* no bloquea clicks */
+  pointer-events: none;
   z-index: 0;
   overflow: hidden;
 }
@@ -123,7 +129,6 @@ body {
 
   cursor: pointer;
 
-  /* 🔥 limpia estilos default */
   background: transparent !important;
   border: none !important;
   box-shadow: none !important;
@@ -135,7 +140,6 @@ body {
   transition: transform 0.3s ease;
 }
 
-/* ✨ hover suave */
 .bubble-nav:hover {
   transform: scale(1.1);
 }
@@ -165,7 +169,6 @@ body {
   pointer-events: none;
 }
 
-/* ✨ brillo tipo agua */
 .bubble-nav::after {
   content: "";
   position: absolute;
@@ -231,24 +234,20 @@ body {
   }
 }
 
-/* columnas header */
 .left { display: flex; justify-content: flex-start; }
 .center { display: flex; justify-content: center; }
 .right { display: flex; justify-content: flex-end; }
 
-/* logo */
 .logo {
   width: 380px;
   height: auto;
 }
 
-/* iconos header */
 .icon {
   width: 65px;
   height: 65px;
 }
 
-/* MOBILE header */
 @media (max-width: 768px) {
   .logo {
     width: 60vw;
@@ -292,7 +291,6 @@ body {
   font-display: swap;
 }
 
-/* contorno texto */
 .text-outline {
   color: white;
   -webkit-text-stroke: 2px black;
@@ -333,19 +331,10 @@ body {
   border-radius: 12px;
 }
 
-/* evita saltos raros de scroll */
 html {
   overflow-y: scroll;
 }
 
-/* =========================
-   🎬 ENTRADA SUAVE (AJUSTADA)
-========================= */
-/*
-👉 ESTE es el efecto de aparición
-👉 ahora es MÁS LENTO y suave
-👉 podés tocar el tiempo (1.4s)
-*/
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -357,89 +346,46 @@ html {
   }
 }
 
-/* =========================
-   🌊 FLOTANTE SUAVE
-========================= */
-/*
-👉 efecto flotante constante tipo "lámina viva"
-👉 muy sutil para no molestar
-👉 podés tocar duración (8s)
-*/
 @keyframes float {
   0% { transform: translateY(0px); }
   50% { transform: translateY(-6px); }
   100% { transform: translateY(0px); }
 }
 
-/* =========================
-   🖼️ IMAGEN PRECIOS
-========================= */
-
 .precio-img {
   width: 100%;
   max-width: 900px;
-
   border-radius: 12px;
-
-  /* 🔥 sombra PRO (no se corta más) */
   box-shadow: 0 30px 60px rgba(0,0,0,0.5);
-
-  /* 🔥 clave: permite que la sombra NO se recorte */
   margin-bottom: 60px;
-
-  /* 🎬 animaciones */
   animation: fadeInUp 1.4s ease, float 8s ease-in-out infinite;
-
   transition: transform 0.3s ease;
 }
 
-/* hover solo desktop */
 @media (hover: hover) {
   .precio-img:hover {
     transform: scale(1.03);
   }
 }
 
-/* =========================
-   🗺️ MAPA ENVÍOS (IMÁGENES)
-========================= */
-
-/* base */
 .mapa-img {
   width: 100%;
   max-width: 900px;
   border-radius: 16px;
   margin: 0 auto;
-
-  /* 🔥 MISMO EFECTO QUE PRECIOS */
   box-shadow: 0 25px 50px rgba(0,0,0,0.5);
-
   animation: fadeInUp 1.4s ease, float 8s ease-in-out infinite;
 }
 
-/* 👉 ocultar mobile por default */
 .mapa-mobile {
   display: none;
 }
 
-/* =========================
-   📱 MOBILE
-========================= */
 @media (max-width: 768px) {
-
   .mapa-desktop {
     display: none;
   }
-
   .mapa-mobile {
     display: block;
   }
-}
-body {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-main {
-  flex: 1; /* Empuja el footer al fondo automáticamente */
 }
