@@ -1,12 +1,10 @@
-
-
 /**
  * =========================================================================
  * 🛡️ MOTOR DE TEMAS MULTI-TENANT: EL TRIPLE ESCUDO (TIENDA CLIENTE)
  * =========================================================================
  * 1. Fallback estático en memoria si internet se corta.
  * 2. Inyección de variables CSS nativas en :root en el Server Component (cero parpadeos).
- * 3. Caché Edge ultrarrápida con tolerancia a fallos.
+ * 3. Caché destruida para sincronización instantánea con tdt.ar en tiempo real.
  */
 
 export interface TiendaThemeConfig {
@@ -52,12 +50,14 @@ const THEME_FALLBACK: TiendaThemeConfig = {
 };
 
 /**
- * Consulta la configuración de diseño desde tdt.ar
+ * Consulta la configuración de diseño viva desde tdt.ar (sin caché para impacto inmediato)
  */
 export async function getThemeConfig(gaId: string = "534606659"): Promise<TiendaThemeConfig> {
   try {
-    const res = await fetch(`https://tdt.ar/api/tienda/config?gaId=${gaId}`, {
-      next: { revalidate: 60, tags: [`theme-config-${gaId}`] },
+    // 🟢 LECTURA EN TIEMPO REAL: Cache-busting con timestamp y no-store
+    const res = await fetch(`https://tdt.ar/api/tienda/config?gaId=${gaId}&t=${Date.now()}`, {
+      cache: "no-store",
+      headers: { "Cache-Control": "no-cache" },
     });
 
     if (!res.ok) return THEME_FALLBACK;
