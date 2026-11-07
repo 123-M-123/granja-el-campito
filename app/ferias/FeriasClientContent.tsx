@@ -1,4 +1,4 @@
-// el-campito/app/ferias/FeriasClientContent.tsx - Gestor Dinámico con Nombres Limpios y Respaldo Failsafe
+// el-campito/app/ferias/FeriasClientContent.tsx - 3 Pisos: Carpas + Anuncio Intermedio + Afiche del Mes
 'use client'
 
 import { useState, useEffect } from 'react'
@@ -45,37 +45,38 @@ export default function FeriasClientContent({ banners }: { banners: any[] }) {
     } catch { setStatus('❌ Error de conexión') } finally { setUploading(false) }
   }
 
-  // Helper que normaliza la búsqueda sin importar mayúsculas o minúsculas
   const getBannerGroup = (slug: string) => {
     const cleanSlug = slug.toLowerCase().trim()
     return (banners || []).filter(b => (b.ubicacion || '').toLowerCase().trim() === cleanSlug)
   }
 
   // =========================================================================
-  // 🧭 RESOLUCIÓN ORDENADA Y LIMPIA DE LO QUE ANTES ERA "FERIA-2"
+  // 🧭 RESOLUCIÓN DE LOS 3 PISOS DE "DÓNDE NOS PODÉS ENCONTRAR"
   // =========================================================================
 
-  // 1. ANUNCIO FERIA NUEVA: Busca 'anuncio-feria-nueva'. Si no está, busca el primer 'feria-2' sin link
-  const bannersAnuncioNuevo = getBannerGroup('anuncio-feria-nueva')
-  const bannerAnuncio = bannersAnuncioNuevo.length > 0 
-    ? bannersAnuncioNuevo[0]
-    : getBannerGroup('feria-2').find(b => !b.linkDestino || b.linkDestino === '#' || !b.linkDestino.includes('maps'))
+  // PISO 1 (ARRIBA): Foto fija de las dos carpas (Uribelarrea & Cañuelas)
+  const bannersPortada = getBannerGroup('feria-portada')
+  const bannerPortada = bannersPortada.length > 0 
+    ? bannersPortada[0]
+    : getBannerGroup('feria-2').find(b => (!b.linkDestino || b.linkDestino === '#' || !b.linkDestino.includes('maps')) && !(b.linkDestino || '').includes('blog/ferias_fechas'))
 
-  // 2. AFICHE DEL MES: Busca 'feria-mes'. Si no está, busca el 'feria-2' que linkee a 'blog/ferias_fechas'
+  // PISO 2 (INTERMEDIO - EL QUE QUERÍAS AGREGAR): Anuncio especial en el medio
+  const bannersIntermedio = getBannerGroup('anuncio-feria-nueva')
+  const bannerIntermedio = bannersIntermedio.length > 0 ? bannersIntermedio[0] : null
+
+  // PISO 3 (ABAJO): Afiche del mes vigente (Noviembre/Diciembre con link a fechas)
   const bannersMes = getBannerGroup('feria-mes')
   const bannerMesDinamico = bannersMes.length > 0
     ? bannersMes[0]
     : getBannerGroup('feria-2').find(b => (b.linkDestino || '').includes('blog/ferias_fechas') || (b.linkDestino || '').includes('fechas'))
 
-  // 3. MAPAS: Busca 'feria-maps'. Si no está, busca los 'feria-2' que tengan link a Google Maps
+  // 4. MAPAS: Los botones de Google Maps con links directos
   const bannersMapsNuevos = getBannerGroup('feria-maps')
   const feriaMaps = bannersMapsNuevos.length > 0
     ? bannersMapsNuevos
     : getBannerGroup('feria-2').filter(b => (b.linkDestino || '').includes('maps') || (b.linkDestino || '').includes('goo.gl'))
 
-  // =========================================================================
-  // 🛡️ LO QUE ESTÁ MÁS ABAJO QUEDA 100% INTACTO TAL CUAL ESTABA
-  // =========================================================================
+  // LO QUE ESTÁ MÁS ABAJO QUEDA 100% INTACTO
   const bannersRestantes = (banners || []).filter(b => {
     const parts = (b.ubicacion || '').split('-')
     const num = parseInt(parts[1])
@@ -104,9 +105,7 @@ export default function FeriasClientContent({ banners }: { banners: any[] }) {
   return (
     <main className={styles.page}>
 
-      {/* =========================================================
-          🔘 0. NAVEGACIÓN SUPERIOR (BOTÓN INICIO)
-      ========================================================= */}
+      {/* 🔘 0. NAVEGACIÓN SUPERIOR */}
       <div className={styles.topNav}>
         <Link href="/" className={styles.homeLink}>
           <Home size={15} color="#86efac" />
@@ -114,9 +113,7 @@ export default function FeriasClientContent({ banners }: { banners: any[] }) {
         </Link>
       </div>
 
-      {/* =========================================================
-          🌿 1. HERO PRINCIPAL (INTACTO)
-      ========================================================= */}
+      {/* 🌿 1. HERO PRINCIPAL */}
       <motion.section 
         className={styles.hero}
         initial={{ opacity: 0, y: -15 }}
@@ -136,9 +133,7 @@ export default function FeriasClientContent({ banners }: { banners: any[] }) {
 
       <section className={styles.container}>
 
-        {/* =========================================================
-            🖼️ 2. PRESENTACIÓN (feria-1) - INTACTO
-        ========================================================= */}
+        {/* 🖼️ 2. PRESENTACIÓN (feria-1) */}
         <motion.div
           variants={scrollRevealVariants}
           initial="hidden"
@@ -149,7 +144,7 @@ export default function FeriasClientContent({ banners }: { banners: any[] }) {
         </motion.div>
 
         {/* =========================================================
-            📍 3. DÓNDE NOS PODÉS ENCONTRAR (100% DINÁMICO)
+            📍 3. DÓNDE NOS PODÉS ENCONTRAR (3 PISOS EN ORDEN)
         ========================================================= */}
         <motion.div
           variants={scrollRevealVariants}
@@ -160,30 +155,34 @@ export default function FeriasClientContent({ banners }: { banners: any[] }) {
         >
           <h2 className={styles.sectionTitle}>Dónde nos podés encontrar</h2>
           
-          {/* FOTO 1: ANUNCIO FERIA NUEVA (Lee de Supabase/Sheets dinámico) */}
-          {bannerAnuncio ? (
-            <div className={styles.bannerWrapper}>
-              {bannerAnuncio.linkDestino && bannerAnuncio.linkDestino !== '#' ? (
-                <a href={bannerAnuncio.linkDestino} target="_blank" rel="noopener noreferrer">
-                  <img src={bannerAnuncio.imagen} alt="Anuncio Feria" className={styles.bannerImg} />
-                </a>
-              ) : (
-                <img src={bannerAnuncio.imagen} alt="Anuncio Feria" className={styles.bannerImg} />
-              )}
-            </div>
-          ) : (
-            // Fallback si todavía no cargaste la foto en el panel
-            <div className={styles.bannerWrapper}>
+          {/* PISO 1 (ARRIBA): LAS DOS CARPAS */}
+          <div className={styles.bannerWrapper}>
+            {bannerPortada ? (
+              <img src={bannerPortada.imagen} alt="Ferias Uribelarrea y Cañuelas" className={styles.bannerImg} />
+            ) : (
               <img 
                 src="/ferias/solo ferias.jpg" 
                 alt="Ferias Uribelarrea y Cañuelas" 
                 className={styles.bannerImg}
                 onError={(e) => { e.currentTarget.src = '/ferias/solo-ferias.jpg' }}
               />
+            )}
+          </div>
+
+          {/* 🟢 PISO 2 (EL QUE QUERÍAS ENTRE MEDIO): ANUNCIO FERIA NUEVA */}
+          {bannerIntermedio && (
+            <div className={styles.bannerWrapper}>
+              {bannerIntermedio.linkDestino && bannerIntermedio.linkDestino !== '#' ? (
+                <a href={bannerIntermedio.linkDestino} target="_blank" rel="noopener noreferrer">
+                  <img src={bannerIntermedio.imagen} alt="Anuncio Feria Especial" className={styles.bannerImg} />
+                </a>
+              ) : (
+                <img src={bannerIntermedio.imagen} alt="Anuncio Feria Especial" className={styles.bannerImg} />
+              )}
             </div>
           )}
 
-          {/* FOTO 2: AFICHE DEL MES (Noviembre/Diciembre - Dinámico y Clickeable al Cronograma) */}
+          {/* PISO 3 (ABAJO): EL CRONOGRAMA DEL MES (NOVIEMBRE 2026) */}
           {bannerMesDinamico && (
             <div className={styles.bannerWrapper}>
               <Link href="/blog/ferias_fechas" title="Ver fechas del mes">
@@ -197,9 +196,7 @@ export default function FeriasClientContent({ banners }: { banners: any[] }) {
           )}
         </motion.div>
 
-        {/* =========================================================
-            🗺️ 4. SEPARADOR: UBICACIÓN DIRECTA (MAPS EXCLUSIVOS)
-        ========================================================= */}
+        {/* 🗺️ 4. SEPARADOR: UBICACIÓN DIRECTA (MAPS) */}
         <motion.div
           variants={scrollRevealVariants}
           initial="hidden"
@@ -216,15 +213,12 @@ export default function FeriasClientContent({ banners }: { banners: any[] }) {
             Abrí la geolocalización desde tu celular
           </p>
 
-          {/* BANNERS DE MAPS EXCLUSIVOS (Sin el afiche del mes metido acá adentro) */}
           <div style={{ marginTop: '20px', width: '100%' }}>
             <BannerGroupRenderer items={feriaMaps} />
           </div>
         </motion.div>
 
-        {/* =========================================================
-            🏛️ 5. FERIAS ANTERIORES (feria-3) - 100% INTACTO
-        ========================================================= */}
+        {/* 🏛️ 5. FERIAS ANTERIORES (feria-3) - INTACTO */}
         <motion.div
           variants={scrollRevealVariants}
           initial="hidden"
@@ -241,9 +235,7 @@ export default function FeriasClientContent({ banners }: { banners: any[] }) {
           </div>
         </motion.div>
 
-        {/* =========================================================
-            📸 6. MÓDULO DE SUBIDA DE FOTOS - 100% INTACTO
-        ========================================================= */}
+        {/* 📸 6. MÓDULO DE SUBIDA DE FOTOS - INTACTO */}
         <motion.div
           variants={scrollRevealVariants}
           initial="hidden"
@@ -266,9 +258,7 @@ export default function FeriasClientContent({ banners }: { banners: any[] }) {
           {status && <p style={{ marginTop: '10px', color: 'white', fontWeight: 'bold', fontSize: '14px' }}>{status}</p>}
         </motion.div>
 
-        {/* =========================================================
-            🚀 7. GALERÍA EXTRA (feria-4 a feria-8) - 100% INTACTO
-        ========================================================= */}
+        {/* 🚀 7. GALERÍA EXTRA - INTACTO */}
         {bannersRestantes.length > 0 && (
           <motion.div
             variants={scrollRevealVariants}
