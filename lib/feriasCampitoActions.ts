@@ -1,3 +1,4 @@
+// el-campito/lib/feriasCampitoActions.ts - Gestor de Ferias con Expo Dulce de Leche + Conversor de Drive
 /**
  * =========================================================================
  * 🌿 ACCIONES DE DATOS: CRONOGRAMA DE FERIAS NORMALIZADO (1NF)
@@ -22,19 +23,38 @@ export interface FeriaAgrupada {
   version: string
 }
 
+// 🟢 CONVERTIDOR AUTOMÁTICO DE LINKS DE GOOGLE DRIVE A MINIATURA VISIBLE
+function limpiarLinkImagen(url: string, idFallback: string): string {
+  if (!url || !url.trim()) return `/ferias/${idFallback}.jpg`;
+  const clean = url.trim();
+
+  // Si es un link de Google Drive (/file/d/ o ?id=)
+  const driveRegex = /(?:id=|file\/d\/|\/d\/)([a-zA-Z0-9_-]{25,})/;
+  const match = clean.match(driveRegex);
+  if (match && match[1]) {
+    return `https://drive.google.com/thumbnail?id=${match[1]}&sz=w1000`;
+  }
+
+  return clean;
+}
+
 // Direcciones oficiales para el evento de Google Calendar
 const DIRECCIONES_MAP: Record<string, string> = {
   'uribelarrea': 'Av. Valeria de Crotto 305, Uribelarrea, Prov. de Buenos Aires',
   'rural': 'Predio Sociedad Rural Cañuelas, Ruta 205 Km 65.200, Cañuelas',
   'plaza-sm': 'Plaza San Martín, Centro de Cañuelas',
-  'campo-cultura': 'Campo Cultura, Ruta 6 Km 95, Cañuelas'
+  'campo-cultura': 'Campo Cultura, Ruta 6 Km 95, Cañuelas',
+  // 🟢 NUEVA FERIA HOMOLOGADA
+  'expo-dulce': 'Predio Expo Cañuelas, Ruta 205, Cañuelas, Prov. de Buenos Aires'
 };
 
 const NOMBRES_MAP: Record<string, string> = {
   'uribelarrea': 'Feria Uribelarrea · El Campito',
   'rural': 'Feria Rural Cañuelas · El Campito',
   'plaza-sm': 'Feria Plaza San Martín · El Campito',
-  'campo-cultura': 'Feria Campo Cultura · El Campito'
+  'campo-cultura': 'Feria Campo Cultura · El Campito',
+  // 🟢 NOMBRE OFICIAL PARA LA CABECERA Y EL CALENDARIO
+  'expo-dulce': 'Expo Cañuelas · Fiesta del Dulce de Leche'
 };
 
 /**
@@ -42,20 +62,16 @@ const NOMBRES_MAP: Record<string, string> = {
  */
 function evaluarSiYaPaso(fechaStr: string): boolean {
   try {
-    // Si la fecha viene como "03/10/2026" o similar
     const partes = fechaStr.match(/(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})/);
     if (!partes) return false;
 
     const dia = parseInt(partes[1], 10);
-    const mes = parseInt(partes[2], 10) - 1; // Mes base 0 en JS
+    const mes = parseInt(partes[2], 10) - 1;
     let anio = parseInt(partes[3], 10);
     if (anio < 100) anio += 2000;
-    if (anio === 206) anio = 2026; // Fix de posibles typos tipo "0206"
+    if (anio === 206) anio = 2026;
 
-    // Fin del día de la feria (23:59:59)
     const finDelDiaFeria = new Date(anio, mes, dia, 23, 59, 59);
-
-    // Momento actual
     const ahora = new Date();
 
     return ahora.getTime() > finDelDiaFeria.getTime();
@@ -78,8 +94,6 @@ function armarGoogleCalendarUrl(fechaStr: string, nombreFeria: string, direccion
     if (anio.length === 2) anio = '20' + anio;
     if (anio === '0206') anio = '2026';
 
-    // Formato de fecha para Google Calendar: YYYYMMDDTHHmmSS
-    // Por defecto fijamos de 11:00 hs a 18:00 hs
     const startIso = `${anio}${mes}${dia}T110000`;
     const endIso = `${anio}${mes}${dia}T180000`;
 
@@ -123,11 +137,10 @@ export async function getFeriasFechas(): Promise<FeriaAgrupada[]> {
 
     if (rows.length === 0) return [];
 
-    // Mapa de agrupación por Feria_ID
     const feriasMap = new Map<string, FeriaAgrupada>();
 
-    // Inicializamos el orden estricto de las 4 ferias
-    const ordenOficial = ['uribelarrea', 'rural', 'plaza-sm', 'campo-cultura'];
+    // 🟢 ORDEN OFICIAL: Incluye 'expo-dulce' en el listado
+    const ordenOficial = ['uribelarrea', 'rural', 'expo-dulce', 'campo-cultura', 'plaza-sm'];
     for (const id of ordenOficial) {
       feriasMap.set(id, {
         id,
@@ -143,21 +156,27 @@ export async function getFeriasFechas(): Promise<FeriaAgrupada[]> {
       const idRaw = (row[0] || '').toLowerCase().trim();
       if (!idRaw) continue;
 
-      let feria = feriasMap.get(idRaw);
+      // Normalizador de alias por si en el Excel tipean variantes
+      let idNormalizado = idRaw;
+      if (idRaw.includes('dulc') || idRaw.includes('expo')) {
+        idNormalizado = 'expo-dulce';
+      }
+
+      let feria = feriasMap.get(idNormalizado);
       if (!feria) {
         feria = {
-          id: idRaw,
-          nombre: NOMBRES_MAP[idRaw] || idRaw,
-          bannerJpg: `/ferias/${idRaw}.jpg`,
+          id: idNormalizado,
+          nombre: NOMBRES_MAP[idNormalizado] || idRaw,
+          bannerJpg: `/ferias/${idNormalizado}.jpg`,
           fechas: [],
           version: '1'
         };
-        feriasMap.set(idRaw, feria);
+        feriasMap.set(idNormalizado, feria);
       }
 
-      // Si la fila trae una imagen explícita, la actualizamos
-      if (row[1] && row[1].trim().length > 0) {
-        feria.bannerJpg = row[1].trim();
+      // 🟢 Si la fila trae una imagen explícita en Columna B (Drive o URL), la limpiamos y asignamos
+      if (row[1] && row[1].trim().length > 5) {
+        feria.bannerJpg = limpiarLinkImagen(row[1], idNormalizado);
       }
 
       if (row[4] && row[4].trim().length > 0) {
@@ -170,10 +189,9 @@ export async function getFeriasFechas(): Promise<FeriaAgrupada[]> {
 
       if (fechaTexto) {
         const yaPaso = evaluarSiYaPaso(fechaTexto);
-        const direccion = DIRECCIONES_MAP[idRaw] || 'Cañuelas, Prov. de Buenos Aires';
+        const direccion = DIRECCIONES_MAP[idNormalizado] || 'Cañuelas, Prov. de Buenos Aires';
         const calendarUrl = armarGoogleCalendarUrl(fechaTexto, feria.nombre, direccion);
 
-        // Si tiene día de semana en Columna C, lo usamos para el display
         let display = fechaTexto;
         if (diaSemana && !display.toLowerCase().includes(diaSemana.toLowerCase())) {
           display = `${diaSemana} ${fechaTexto}`;
@@ -189,7 +207,8 @@ export async function getFeriasFechas(): Promise<FeriaAgrupada[]> {
       }
     }
 
-    return Array.from(feriasMap.values());
+    // Devolvemos solo las ferias que tengan fechas o que sean las oficiales
+    return Array.from(feriasMap.values()).filter(f => f.fechas.length > 0 || ordenOficial.includes(f.id));
   } catch (error: any) {
     console.error("🔥 Error en feriasCampitoActions:", error.message);
     return [];
