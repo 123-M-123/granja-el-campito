@@ -18,7 +18,6 @@ const sociosElCampito = ["elianamarti90@gmail.com", "exequiel.devita@gmail.com"]
 
 /**
  * 🖼️ HELPER: Generador de Links Directos (Sin Redirección)
- * Resuelve el problema del caché en móviles permitiendo que ?v=X persista.
  */
 function getDriveDirectLink(url: string, version: string = "1") {
   if (!url || !url.includes("drive.google.com")) return url;
@@ -28,19 +27,19 @@ function getDriveDirectLink(url: string, version: string = "1") {
   
   if (!fileId) return url;
 
-  // Formato lh3 directo (s1000 = resolución 1000px)
   return `https://lh3.googleusercontent.com/d/${fileId}=s1000?v=${version}`;
 }
 
 /**
- * 📦 PRODUCTOS: Lectura ultrarrápida desde Supabase vía tdt.ar (Bypass de Google Sheets API)
+ * 📦 PRODUCTOS: Lectura ultrarrápida desde Supabase vía tdt.ar
  */
 export async function getProductsFromSheets() {
-  const GA_ID_CAMPITO = "534606659"; // gaId oficial de El Campito
+  const GA_ID_CAMPITO = "534606659";
 
   try {
-    const res = await fetch(`https://tdt.ar/api/tienda/productos?gaId=${GA_ID_CAMPITO}`, {
-      next: { revalidate: 60 } // 👈 Caché de 1 minuto en Vercel Edge
+    const res = await fetch(`https://tdt.ar/api/tienda/productos?gaId=${GA_ID_CAMPITO}&t=${Date.now()}`, {
+      cache: "no-store",
+      headers: { "Cache-Control": "no-cache" }
     });
 
     if (!res.ok) {
@@ -57,15 +56,21 @@ export async function getProductsFromSheets() {
 }
 
 /**
- * 🚩 BANNERS: Lectura ultrarrápida desde Supabase vía tdt.ar (Conserva Link de Destino y Versión)
+ * 🚩 BANNERS: Lectura ultrarrápida en tiempo real desde Supabase vía tdt.ar
+ * 🟢 BYPASS TOTAL DE CACHÉ: Usa no-store, timestamp y busca por Email y gaId simultáneamente
  */
 export async function getBannersFromSheets() {
   const EMAIL_VENDEDOR = "elianamarti90@gmail.com";
+  const GA_ID_CAMPITO = "534606659";
 
   try {
-    const res = await fetch(`https://tdt.ar/api/tienda/banners?vendedor=${EMAIL_VENDEDOR}`, {
-      next: { revalidate: 60 } // 👈 Caché Edge de 1 minuto en Vercel
-    });
+    const res = await fetch(
+      `https://tdt.ar/api/tienda/banners?vendedor=${EMAIL_VENDEDOR}&gaId=${GA_ID_CAMPITO}&t=${Date.now()}`, 
+      {
+        cache: "no-store",
+        headers: { "Cache-Control": "no-cache" }
+      }
+    );
 
     if (!res.ok) {
       console.error("❌ Error consultando banners de El Campito:", res.status);
@@ -78,7 +83,6 @@ export async function getBannersFromSheets() {
     return rawBanners.map((b: any) => ({
       imagen: b.imagen,
       ubicacion: b.ubicacion,
-      // Si el link es "#" o vacío, lo deja en null para no abrir pestañas en blanco
       linkDestino: b.linkDestino && b.linkDestino !== "#" ? b.linkDestino : null,
       version: b.version || "1",
     }));
@@ -119,10 +123,6 @@ export async function getCategoriesFromSheets() {
   return Array.from(uniqueMap.values());
 }
 
-// =========================================================================
-// 🗓️ CRONOGRAMA DE FERIAS: Lectura directa desde Ferias_Fechas de El Campito
-// =========================================================================
-
 export interface FeriaFechaItem {
   id: string
   nombreFallback: string
@@ -131,7 +131,6 @@ export interface FeriaFechaItem {
   version: string
 }
 
-// Fallback seguro en caso de que Google Sheets esté caído o vacío
 const FERIAS_FALLBACK_DEFAULT: FeriaFechaItem[] = [
   {
     id: 'uribelarrea',
@@ -140,14 +139,6 @@ const FERIAS_FALLBACK_DEFAULT: FeriaFechaItem[] = [
     fechas: [
       'Sábado 3 · 12 hs (Oct)',
       'Domingo 4 · 11 hs (Oct)',
-      'Sábado 10 · 12 hs (Oct)',
-      'Domingo 11 · 11 hs (Oct)',
-      'Lunes 12 · 11 hs (Oct)',
-      'Sábado 17 · 12 hs (Oct)',
-      'Sábado 24 · 12 hs (Oct)',
-      'Domingo 25 · 11 hs (Oct)',
-      'Sábado 31 · 12 hs (Oct)',
-      'Domingo 1 (Nov)'
     ],
     version: '1'
   },
@@ -155,35 +146,25 @@ const FERIAS_FALLBACK_DEFAULT: FeriaFechaItem[] = [
     id: 'rural',
     nombreFallback: 'Feria Rural Cañuelas',
     bannerJpg: '/ferias/rural.jpg',
-    fechas: [
-      'Domingo 11 · 10 a 18 hs (Oct)'
-    ],
+    fechas: ['Domingo 11 · 10 a 18 hs (Oct)'],
     version: '1'
   },
   {
     id: 'plaza-sm',
     nombreFallback: 'Plaza San Martín',
     bannerJpg: '/ferias/plaza-sm.jpg',
-    fechas: [
-      'Sábado 17 · 11 a 17 hs (Oct)',
-      'Sábado 24 · 11 a 17 hs (Oct)'
-    ],
+    fechas: ['Sábado 17 · 11 a 17 hs (Oct)'],
     version: '1'
   },
   {
     id: 'campo-cultura',
     nombreFallback: 'Campo Cultura',
     bannerJpg: '/ferias/campo-cultura.jpg',
-    fechas: [
-      'Próximas jornadas a confirmar (Oct)'
-    ],
+    fechas: ['Próximas jornadas a confirmar (Oct)'],
     version: '1'
   }
 ];
 
-/**
- * Helper para dividir texto de fechas separado por comas o saltos de línea
- */
 function parsearFechasCrudas(texto: string): string[] {
   if (!texto) return [];
   return texto
@@ -192,14 +173,10 @@ function parsearFechasCrudas(texto: string): string[] {
     .filter(f => f.length > 0);
 }
 
-/**
- * Consulta la Ferias_Fechas de la planilla de El Campito usando la Service Account oficial
- */
 export async function getFeriasFechasFromSheets(): Promise<FeriaFechaItem[]> {
   try {
     const spreadsheetId = CLIENT_ID || "1Qo_52MB9g0A8MKWzcZ5laAV599Xw7WS0WZ-GCKOe4yY";
 
-    // Consultamos la pestaña Ferias_Fechas de columnas A hasta E
     const response = await sheets.spreadsheets.values.get({
       spreadsheetId,
       range: "'Ferias_Fechas'!A2:E20",
@@ -215,13 +192,11 @@ export async function getFeriasFechasFromSheets(): Promise<FeriaFechaItem[]> {
       const idRaw = (row[0] || '').toLowerCase().trim();
       const versionRaw = row[4] || '1';
       
-      // Si el link de imagen es de Drive, lo convierte a lh3; si es ruta local, la preserva
       let bannerFinal = row[1] ? row[1].trim() : `/ferias/${idRaw}.jpg`;
       if (bannerFinal.includes('drive.google.com')) {
         bannerFinal = getDriveDirectLink(bannerFinal, versionRaw);
       }
 
-      // Nombre amigable para alt/título
       const nombresMap: Record<string, string> = {
         'uribelarrea': 'Uribelarrea',
         'rural': 'Feria Rural Cañuelas',
