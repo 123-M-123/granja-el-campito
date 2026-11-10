@@ -1,4 +1,4 @@
-// el-campito/app/ferias/FeriasClientContent.tsx - Renderizado Exacto con Separación de Mapas Blindada
+// el-campito/app/ferias/FeriasClientContent.tsx - Renderizado de Mapas sin Bloqueo de Links
 'use client'
 
 import { useState, useEffect } from 'react'
@@ -47,7 +47,6 @@ export default function FeriasClientContent({ banners }: { banners: any[] }) {
 
   const allBanners = banners || []
 
-  // Helper de búsqueda por tag
   const getBannerByTag = (tag: string) => {
     const clean = tag.toLowerCase().trim()
     return allBanners.find(b => (b.ubicacion || '').toLowerCase().trim() === clean)
@@ -57,7 +56,7 @@ export default function FeriasClientContent({ banners }: { banners: any[] }) {
   // 🧭 1. DÓNDE NOS PODÉS ENCONTRAR (3 PISOS BLINDADOS)
   // =========================================================================
 
-  // PISO 1 (ARRIBA): Foto fija de las dos carpas verdes
+  // PISO 1 (ARRIBA): Foto de las dos carpas verdes
   const bannerCarpas = getBannerByTag('feria-portada') || 
     allBanners.find(b => {
       const u = (b.ubicacion || '').toLowerCase().trim()
@@ -65,7 +64,7 @@ export default function FeriasClientContent({ banners }: { banners: any[] }) {
       return u === 'feria-2' && !link.includes('maps') && !link.includes('goo.gl') && !link.includes('fechas')
     })
 
-  // PISO 2 (EN EL MEDIO): El nuevo anuncio de la Expo Cañuelas
+  // 🟢 PISO 2 (EN EL MEDIO): El anuncio nuevo (Tierra de Oportunidades) - YA FUNCIONANDO
   const bannerEnElMedio = getBannerByTag('anuncio-feria-nueva')
 
   // PISO 3 (ABAJO): El afiche de Noviembre 2026 (linkea a las fechas)
@@ -76,17 +75,21 @@ export default function FeriasClientContent({ banners }: { banners: any[] }) {
     })
 
   // =========================================================================
-  // 🗺️ 2. UBICACIÓN DIRECTA: TODOS LOS MAPAS (Cero desapariciones)
-  // Cualquier banner que tenga link de Google Maps se muestra EXCLUSIVAMENTE acá
+  // 🗺️ 2. UBICACIÓN DIRECTA: TODOS LOS MAPAS (CON O SIN LINK)
+  // Se muestran los banners que tengan 'feria-maps' O que tengan link de Maps
   // =========================================================================
-  const mapsVistos = new Set<string>()
+  const imagenesVistas = new Set<string>()
   const bannersMaps = allBanners.filter(b => {
+    const u = (b.ubicacion || '').toLowerCase().trim()
     const link = (b.linkDestino || '').toLowerCase().trim()
-    const esGoogleMaps = link.includes('maps') || link.includes('goo.gl')
-    
-    // Si es de Maps y no lo agregamos todavía
-    if (esGoogleMaps && !mapsVistos.has(link)) {
-      mapsVistos.add(link)
+    const img = (b.imagen || '').trim()
+
+    // 🟢 REGLA LIBERADA: Si el usuario le puso 'feria-maps' entra SÍ O SÍ (tenga o no link)
+    const esTagDeMaps = u === 'feria-maps'
+    const esLinkDeMaps = (u === 'feria-2' || u.includes('map')) && (link.includes('maps') || link.includes('goo.gl'))
+
+    if ((esTagDeMaps || esLinkDeMaps) && img && !imagenesVistas.has(img)) {
+      imagenesVistas.add(img)
       return true
     }
     return false
@@ -177,10 +180,10 @@ export default function FeriasClientContent({ banners }: { banners: any[] }) {
             )}
           </div>
 
-          {/* 🟢 PISO 2 (EN EL MEDIO): ANUNCIO FERIA NUEVA (Expo Cañuelas) */}
+          {/* 🟢 PISO 2 (EN EL MEDIO): ANUNCIO FERIA NUEVA (Tierra de Oportunidades) */}
           {bannerEnElMedio && (
             <div className={styles.bannerWrapper}>
-              {bannerEnElMedio.linkDestino ? (
+              {bannerEnElMedio.linkDestino && bannerEnElMedio.linkDestino !== '#' ? (
                 <a href={bannerEnElMedio.linkDestino} target="_blank" rel="noopener noreferrer">
                   <img src={bannerEnElMedio.imagen} alt="Anuncio Feria" className={styles.bannerImg} />
                 </a>
@@ -205,7 +208,7 @@ export default function FeriasClientContent({ banners }: { banners: any[] }) {
         </motion.div>
 
         {/* =========================================================
-            🗺️ UBICACIÓN DIRECTA: TODOS LOS MAPAS SE RENDERIZAN ACÁ
+            🗺️ UBICACIÓN DIRECTA: TODOS LOS MAPAS (INCLUIDO EL MARRÓN)
         ========================================================= */}
         <motion.div
           variants={scrollRevealVariants}
@@ -223,13 +226,17 @@ export default function FeriasClientContent({ banners }: { banners: any[] }) {
             Abrí la geolocalización desde tu celular
           </p>
 
-          {/* 🟢 LISTADO COMPLETO DE BOTONES DE GOOGLE MAPS */}
+          {/* 🟢 LISTADO COMPLETO: RENDERIZA EL MARRÓN Y LOS VERDES */}
           <div style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', gap: '15px', width: '100%' }}>
             {bannersMaps.map((b, i) => (
               <div key={i} className={styles.bannerWrapper}>
-                <a href={b.linkDestino} target="_blank" rel="noopener noreferrer">
+                {b.linkDestino && b.linkDestino !== '#' ? (
+                  <a href={b.linkDestino} target="_blank" rel="noopener noreferrer">
+                    <img src={b.imagen} alt={b.ubicacion || 'Ubicación Google Maps'} className={styles.bannerImg} />
+                  </a>
+                ) : (
                   <img src={b.imagen} alt={b.ubicacion || 'Ubicación Google Maps'} className={styles.bannerImg} />
-                </a>
+                )}
               </div>
             ))}
           </div>
@@ -247,7 +254,7 @@ export default function FeriasClientContent({ banners }: { banners: any[] }) {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '15px', width: '100%' }}>
               {bannersFeria3.map((b, i) => (
                 <div key={i} className={styles.bannerWrapper}>
-                  {b.linkDestino ? (
+                  {b.linkDestino && b.linkDestino !== '#' ? (
                     <a href={b.linkDestino} target="_blank" rel="noopener noreferrer">
                       <img src={b.imagen} alt="Feria Anterior" className={styles.bannerImg} />
                     </a>
