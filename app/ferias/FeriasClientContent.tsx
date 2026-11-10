@@ -1,4 +1,4 @@
-// el-campito/app/ferias/FeriasClientContent.tsx - 3 Pisos: Carpas + Anuncio Intermedio + Afiche del Mes
+// el-campito/app/ferias/FeriasClientContent.tsx - Fusión Inteligente de Mapas (Cero Desapariciones)
 'use client'
 
 import { useState, useEffect } from 'react'
@@ -60,21 +60,35 @@ export default function FeriasClientContent({ banners }: { banners: any[] }) {
     ? bannersPortada[0]
     : getBannerGroup('feria-2').find(b => (!b.linkDestino || b.linkDestino === '#' || !b.linkDestino.includes('maps')) && !(b.linkDestino || '').includes('blog/ferias_fechas'))
 
-  // PISO 2 (INTERMEDIO - EL QUE QUERÍAS AGREGAR): Anuncio especial en el medio
+  // PISO 2 (INTERMEDIO): Anuncio especial en el medio
   const bannersIntermedio = getBannerGroup('anuncio-feria-nueva')
   const bannerIntermedio = bannersIntermedio.length > 0 ? bannersIntermedio[0] : null
 
-  // PISO 3 (ABAJO): Afiche del mes vigente (Noviembre/Diciembre con link a fechas)
+  // PISO 3 (ABAJO): Afiche del mes vigente (Noviembre 2026 con link a fechas)
   const bannersMes = getBannerGroup('feria-mes')
   const bannerMesDinamico = bannersMes.length > 0
     ? bannersMes[0]
     : getBannerGroup('feria-2').find(b => (b.linkDestino || '').includes('blog/ferias_fechas') || (b.linkDestino || '').includes('fechas'))
 
-  // 4. MAPAS: Los botones de Google Maps con links directos
-  const bannersMapsNuevos = getBannerGroup('feria-maps')
-  const feriaMaps = bannersMapsNuevos.length > 0
-    ? bannersMapsNuevos
-    : getBannerGroup('feria-2').filter(b => (b.linkDestino || '').includes('maps') || (b.linkDestino || '').includes('goo.gl'))
+  // =========================================================================
+  // 🟢 4. MAPAS: FUSIÓN TOTAL SIN DESAPARICIONES (feria-maps + feria-2 con Maps)
+  // Agrupa todos los mapas sin importar si están con el nombre nuevo o viejo
+  // =========================================================================
+  const todosLosMapas = (banners || []).filter(b => {
+    const u = (b.ubicacion || '').toLowerCase().trim()
+    const link = (b.linkDestino || '').toLowerCase().trim()
+    const esDeMaps = link.includes('maps') || link.includes('goo.gl')
+    return (u === 'feria-maps' || u === 'feria-2') && esDeMaps
+  });
+
+  // Deduplicamos por link de Google Maps para que no aparezca repetido ninguno
+  const linksVistos = new Set<string>()
+  const feriaMaps = todosLosMapas.filter(b => {
+    const linkLimpio = (b.linkDestino || '').trim()
+    if (!linkLimpio || linksVistos.has(linkLimpio)) return false
+    linksVistos.add(linkLimpio)
+    return true
+  })
 
   // LO QUE ESTÁ MÁS ABAJO QUEDA 100% INTACTO
   const bannersRestantes = (banners || []).filter(b => {
@@ -144,7 +158,7 @@ export default function FeriasClientContent({ banners }: { banners: any[] }) {
         </motion.div>
 
         {/* =========================================================
-            📍 3. DÓNDE NOS PODÉS ENCONTRAR (3 PISOS EN ORDEN)
+            📍 3. DÓNDE NOS PODÉS ENCONTRAR (LOS 3 PISOS EN ORDEN)
         ========================================================= */}
         <motion.div
           variants={scrollRevealVariants}
@@ -169,7 +183,7 @@ export default function FeriasClientContent({ banners }: { banners: any[] }) {
             )}
           </div>
 
-          {/* 🟢 PISO 2 (EL QUE QUERÍAS ENTRE MEDIO): ANUNCIO FERIA NUEVA */}
+          {/* PISO 2 (INTERMEDIO): ANUNCIO FERIA NUEVA */}
           {bannerIntermedio && (
             <div className={styles.bannerWrapper}>
               {bannerIntermedio.linkDestino && bannerIntermedio.linkDestino !== '#' ? (
@@ -182,7 +196,7 @@ export default function FeriasClientContent({ banners }: { banners: any[] }) {
             </div>
           )}
 
-          {/* PISO 3 (ABAJO): EL CRONOGRAMA DEL MES (NOVIEMBRE 2026) */}
+          {/* PISO 3 (ABAJO): EL CRONOGRAMA DE NOVIEMBRE 2026 */}
           {bannerMesDinamico && (
             <div className={styles.bannerWrapper}>
               <Link href="/blog/ferias_fechas" title="Ver fechas del mes">
@@ -196,7 +210,9 @@ export default function FeriasClientContent({ banners }: { banners: any[] }) {
           )}
         </motion.div>
 
-        {/* 🗺️ 4. SEPARADOR: UBICACIÓN DIRECTA (MAPS) */}
+        {/* =========================================================
+            🗺️ 4. SEPARADOR: UBICACIÓN DIRECTA (TODOS LOS MAPS ACTIVOS)
+        ========================================================= */}
         <motion.div
           variants={scrollRevealVariants}
           initial="hidden"
@@ -213,6 +229,7 @@ export default function FeriasClientContent({ banners }: { banners: any[] }) {
             Abrí la geolocalización desde tu celular
           </p>
 
+          {/* 🟢 MUESTRA LOS 3 BOTONES DE MAPS SIEMPRE */}
           <div style={{ marginTop: '20px', width: '100%' }}>
             <BannerGroupRenderer items={feriaMaps} />
           </div>
